@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
-import ProductFormModal from './ProductFormModal.tsx';
+import ProductFormModal from './ProductFormModal';
 import { productApi } from '../../../api/productApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import './ProductManagement.css';
 
 interface ProductItem {
@@ -159,7 +160,7 @@ const ProductManagement = () => {
             render: (item) => (
                 <div className="product-mgmt-info-cell">
                     <span className="product-mgmt-name-text">{item.name}</span>
-                    <span className="product-mgmt-type-badge">{item.productType.toUpperCase()}</span>
+                    <LuxuryStatusBadge label={item.productType.toUpperCase()} variant="info" />
                 </div>
             )
         },
@@ -168,8 +169,16 @@ const ProductManagement = () => {
             key: 'category',
             render: (item) => (
                 <div className="product-mgmt-hierarchy-cell">
-                    <span className="product-mgmt-category-badge">{item.category?.name || 'Uncategorized'}</span>
-                    {item.subcategory && <span className="product-mgmt-subcategory-text">{item.subcategory.name}</span>}
+                    <LuxuryStatusBadge 
+                        label={item.category?.name || 'Uncategorized'} 
+                        variant="warning" 
+                    />
+                    {item.subcategory && (
+                        <div className="product-mgmt-subcategory-wrapper">
+                            <span className="subcategory-arrow">↳</span>
+                            <span className="product-mgmt-subcategory-text">{item.subcategory.name}</span>
+                        </div>
+                    )}
                 </div>
             )
         },
@@ -183,19 +192,32 @@ const ProductManagement = () => {
                 </span>
             )
         },
+        {
+            header: 'Tax',
+            key: 'taxRule',
+            render: (item: any) => (
+                <div className="product-mgmt-tax-cell">
+                    {item.taxRule ? (
+                        <>
+                            <span className="tax-name">{item.taxRule.name}</span>
+                            <span className="tax-rate">({item.taxRule.rate}%)</span>
+                        </>
+                    ) : (
+                        <span className="tax-none">No Tax</span>
+                    )}
+                </div>
+            )
+        },
         { 
             header: 'Status', 
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div className="product-mgmt-toggle-wrapper" onClick={() => handleToggleStatus(item)}>
-                    <div className="product-mgmt-toggle-bg" style={{
-                        backgroundColor: item.isActive ? 'var(--success)' : 'rgba(255,255,255,0.1)'
-                    }}>
-                        <div className="product-mgmt-toggle-circle" style={{
-                            left: item.isActive ? '18px' : '2px'
-                        }} />
-                    </div>
+                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
+                    <LuxuryStatusBadge 
+                        label={item.isActive ? 'Active' : 'Inactive'}
+                        variant={item.isActive ? 'success' : 'danger'}
+                    />
                 </div>
             )
         },
@@ -211,6 +233,7 @@ const ProductManagement = () => {
             )
         }
     ];
+
 
     return (
         <div className="product-mgmt-container">

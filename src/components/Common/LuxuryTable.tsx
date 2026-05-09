@@ -2,6 +2,10 @@ import React from 'react';
 import LuxuryInput from './LuxuryInput';
 import LuxurySelect from './LuxurySelect';
 import LuxuryButton from './LuxuryButton';
+import LuxuryStatusBadge from './LuxuryStatusBadge';
+import LuxuryEmptyState from './LuxuryEmptyState';
+import LuxurySkeleton from './LuxurySkeleton';
+import LuxuryPageHeader from './LuxuryPageHeader';
 import './LuxuryTable.css';
 
 export interface ColumnDef<T> {
@@ -15,7 +19,7 @@ export interface ColumnDef<T> {
 interface LuxuryTableProps<T> {
     columns: ColumnDef<T>[];
     data: T[];
-    title: string;
+    title?: string;
     subtitle?: string;
     onAdd?: () => void;
     onExport?: () => void;
@@ -31,6 +35,9 @@ interface LuxuryTableProps<T> {
     sortConfig?: { key: string; direction: 'asc' | 'desc' };
     onSortChange?: (config: { key: string; direction: 'asc' | 'desc' }) => void;
     isLoading?: boolean;
+    emptyIcon?: string;
+    emptyTitle?: string;
+    emptyDescription?: string;
 }
 
 const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
@@ -52,6 +59,9 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
     sortConfig,
     onSortChange,
     isLoading = false,
+    emptyIcon = '💎',
+    emptyTitle = 'No Records Found',
+    emptyDescription = 'Our archives seem to be missing this selection. Try refining your search or add a new entry.'
 }: LuxuryTableProps<T>) => {
     
     const totalPages = Math.ceil(totalCount / rowsPerPage);
@@ -135,35 +145,28 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
 
     return (
         <div className="luxury-table-wrapper">
-            <div className="luxury-table-header">
-                <div className="luxury-table-header-title-group">
-                    <h3 className="luxury-table-title">{title}</h3>
-                    {subtitle && <p className="luxury-table-subtitle">{subtitle}</p>}
-                </div>
-                <div className="luxury-table-header-actions">
-                    {onImport && (
-                        <LuxuryButton variant="outline" onClick={onImport} icon="📤">
-                            Bulk Import
-                        </LuxuryButton>
-                    )}
-                    {onExport && (
-                        <LuxuryButton variant="outline" onClick={onExport} icon="📥">
-                            Export Excel
-                        </LuxuryButton>
-                    )}
-                    {onAdd && (
-                        <LuxuryButton variant="primary" onClick={onAdd} icon="+">
-                            {addButtonLabel}
-                        </LuxuryButton>
-                    )}
-                </div>
-            </div>
+            {(title || onAdd) && (
+                <LuxuryPageHeader
+                    title={title || ''}
+                    subtitle={subtitle}
+                    primaryAction={onAdd ? {
+                        label: addButtonLabel,
+                        onClick: onAdd,
+                        icon: "＋"
+                    } : undefined}
+                    secondaryAction={onExport ? {
+                        label: "Export Excel",
+                        onClick: onExport,
+                        icon: "📥"
+                    } : undefined}
+                />
+            )}
 
             <div className="luxury-table-filter-bar">
                 <div className="luxury-table-search-container">
                     <LuxuryInput
                         type="text"
-                        placeholder="Search..."
+                        placeholder="Search archives..."
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
                         icon="🔍"
@@ -174,25 +177,19 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                         value={String(rowsPerPage)} 
                         onChange={(val) => onRowsPerPageChange?.(Number(val))}
                         options={[
-                            { value: '10', label: '10' },
-                            { value: '25', label: '25' },
-                            { value: '50', label: '50' },
-                            { value: '100', label: '100' }
+                            { value: '10', label: '10 Entries' },
+                            { value: '25', label: '25 Entries' },
+                            { value: '50', label: '50 Entries' }
                         ]}
                         searchable={false}
-                        style={{ padding: '8px 12px', minWidth: '80px' }}
+                        style={{ padding: '8px 12px', minWidth: '120px' }}
                     />
                 </div>
             </div>
 
             <div className="luxury-table-scroll-container">
                 <div style={{ position: 'relative' }}>
-                    {isLoading && (
-                        <div className="luxury-table-loading-overlay">
-                            <div className="luxury-table-shimmer" />
-                        </div>
-                    )}
-                    <table className="luxury-table" style={{ opacity: isLoading ? 0.6 : 1 }}>
+                    <table className="luxury-table">
                         <thead>
                             <tr className="luxury-table-head-row">
                                 {columns.map((col, idx) => (
@@ -209,32 +206,9 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                                             {col.header}
                                             {col.sortable && (
                                                 <div className="luxury-table-sort-container">
-                                                    <svg 
-                                                        width="14" 
-                                                        height="14" 
-                                                        viewBox="0 0 24 24" 
-                                                        fill="none" 
-                                                        stroke="currentColor" 
-                                                        strokeWidth="3" 
-                                                        strokeLinecap="round" 
-                                                        strokeLinejoin="round"
-                                                        className="luxury-table-sort-svg"
-                                                        style={{
-                                                            color: sortConfig?.key === col.key ? 'var(--primary)' : 'rgba(255,255,255,0.2)'
-                                                        }}
-                                                    >
-                                                        <path 
-                                                            d="M7 4v16M7 20l-4-4M7 20l4-4" 
-                                                            style={{ 
-                                                                opacity: sortConfig?.key === col.key && sortConfig.direction === 'asc' ? 1 : 0.4,
-                                                            }} 
-                                                        />
-                                                        <path 
-                                                            d="M17 20V4M17 4l-4 4M17 4l4 4" 
-                                                            style={{ 
-                                                                opacity: sortConfig?.key === col.key && sortConfig.direction === 'desc' ? 1 : 0.4,
-                                                            }} 
-                                                        />
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="luxury-table-sort-svg">
+                                                        <path d="M7 4v16M7 20l-4-4M7 20l4-4" style={{ opacity: sortConfig?.key === col.key && sortConfig.direction === 'asc' ? 1 : 0.4 }} />
+                                                        <path d="M17 20V4M17 4l-4 4M17 4l4 4" style={{ opacity: sortConfig?.key === col.key && sortConfig.direction === 'desc' ? 1 : 0.4 }} />
                                                     </svg>
                                                 </div>
                                             )}
@@ -244,7 +218,17 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                             </tr>
                         </thead>
                         <tbody>
-                            {data && data.length > 0 ? (
+                            {isLoading ? (
+                                Array.from({ length: 5 }).map((_, rIdx) => (
+                                    <tr key={rIdx} className="luxury-table-row">
+                                        {columns.map((_, cIdx) => (
+                                            <td key={cIdx} className="luxury-table-cell">
+                                                <LuxurySkeleton variant="text" height={20} />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : data && data.length > 0 ? (
                                 data.map((item, rowIdx) => (
                                     <tr key={item._id || item.id || rowIdx} className="luxury-table-row">
                                         {columns.map((col, colIdx) => (
@@ -252,15 +236,10 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                                                 {col.render ? (
                                                     col.render(item, (currentPage - 1) * rowsPerPage + rowIdx)
                                                 ) : typeof item[col.key as keyof T] === 'boolean' ? (
-                                                    <span 
-                                                        className="luxury-table-status-badge"
-                                                        style={{
-                                                            backgroundColor: item[col.key as keyof T] ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
-                                                            color: item[col.key as keyof T] ? '#4CAF50' : '#F44336'
-                                                        }}
-                                                    >
-                                                        {item[col.key as keyof T] ? 'Active' : 'Inactive'}
-                                                    </span>
+                                                    <LuxuryStatusBadge 
+                                                        label={item[col.key as keyof T] ? 'Active' : 'Inactive'}
+                                                        variant={item[col.key as keyof T] ? 'success' : 'danger'}
+                                                    />
                                                 ) : (
                                                     (item[col.key as keyof T] as React.ReactNode)
                                                 )}
@@ -270,8 +249,14 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={columns.length} className="luxury-table-empty-cell">
-                                        {isLoading ? 'Loading luxury data...' : 'No data found'}
+                                    <td colSpan={columns.length}>
+                                        <LuxuryEmptyState 
+                                            icon={emptyIcon}
+                                            title={emptyTitle}
+                                            description={emptyDescription}
+                                            actionLabel={onAdd ? addButtonLabel : undefined}
+                                            onAction={onAdd}
+                                        />
                                     </td>
                                 </tr>
                             )}
@@ -286,3 +271,4 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
 };
 
 export default LuxuryTable;
+

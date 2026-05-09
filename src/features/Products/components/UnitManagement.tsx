@@ -4,6 +4,7 @@ import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import UnitFormModal from './UnitFormModal';
 import { unitApi } from '../../../api/unitApi';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import './UnitManagement.css';
 
 interface UnitItem {
@@ -117,21 +118,25 @@ const UnitManagement = () => {
     const getColumns = (): ColumnDef<UnitItem>[] => [
         { header: 'Sr.No', key: '_id', width: '60px', render: (_, index) => index + 1 },
         { header: 'Unit Name', key: 'name', sortable: true },
-        { header: 'Shorthand', key: 'shorthand', sortable: true, render: (item) => <span className="unit-mgmt-code-tag">{item.shorthand}</span> },
+        { 
+            header: 'Shorthand', 
+            key: 'shorthand', 
+            sortable: true, 
+            render: (item) => (
+                <LuxuryStatusBadge label={item.shorthand} variant="info" />
+            ) 
+        },
         { header: 'Description', key: 'description', render: (item) => item.description || '-' },
         { 
             header: 'Status', 
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div className="unit-mgmt-toggle-wrapper" onClick={() => handleToggleStatus(item)}>
-                    <div className="unit-mgmt-toggle-bg" style={{
-                        backgroundColor: item.isActive ? 'var(--success)' : 'rgba(255,255,255,0.1)'
-                    }}>
-                        <div className="unit-mgmt-toggle-circle" style={{
-                            left: item.isActive ? '18px' : '2px'
-                        }} />
-                    </div>
+                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
+                    <LuxuryStatusBadge 
+                        label={item.isActive ? 'Active' : 'Inactive'}
+                        variant={item.isActive ? 'success' : 'danger'}
+                    />
                 </div>
             )
         },
@@ -147,6 +152,7 @@ const UnitManagement = () => {
             )
         }
     ];
+
 
     return (
         <div className="unit-mgmt-container">

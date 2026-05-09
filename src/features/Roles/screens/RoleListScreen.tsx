@@ -14,6 +14,8 @@ interface Role {
     sidebarCount?: number;
 }
 
+import LuxuryPageHeader from '../../../components/Common/LuxuryPageHeader';
+
 const RoleListScreen = () => {
     const navigate = useNavigate();
     const { addToast } = useToast();
@@ -51,26 +53,21 @@ const RoleListScreen = () => {
 
     return (
         <div className="role-list-container">
-            <div className="role-list-header">
-                <div className="role-list-title-section">
-                    <h2 className="role-list-title">Roles & Authority</h2>
-                    <p className="role-list-subtitle">Manage administrative permissions and organizational hierarchy.</p>
-                </div>
-                <div className="role-list-header-actions">
-                    <button
-                        onClick={() => navigate('/roles/staff')}
-                        className="role-list-secondary-button"
-                    >
-                        VIEW STAFF
-                    </button>
-                    <button
-                        onClick={() => navigate('/roles/add')}
-                        className="role-list-add-button"
-                    >
-                        + ADD NEW ROLE
-                    </button>
-                </div>
-            </div>
+            <LuxuryPageHeader
+                title="Roles & Authority"
+                subtitle="Manage administrative permissions and organizational hierarchy."
+                primaryAction={{
+                    label: "ADD NEW ROLE",
+                    onClick: () => navigate('/roles/add'),
+                    icon: "＋"
+                }}
+                secondaryAction={{
+                    label: "VIEW STAFF",
+                    onClick: () => navigate('/roles/staff'),
+                    icon: "👥"
+                }}
+            />
+
 
             <div className="role-list-card-grid">
                 {roles.map((role) => (

@@ -9,6 +9,7 @@ import LuxurySelect from '../../../components/Common/LuxurySelect';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import LuxuryModal from '../../../components/Common/LuxuryModal';
+import LuxuryImageUpload from '../../../components/Common/LuxuryImageUpload';
 import { 
     categorySchema, 
     subcategorySchema, 
@@ -281,27 +282,16 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({ isOpen, onClose, 
                     </div>
                 </div>
 
-                <div className="category-form-group">
-                    <label className="category-form-label">Image Upload</label>
-                    <div className="category-form-upload-area">
-                        {imagePreview ? (
-                            <div className="category-form-preview-container">
-                                <img src={imagePreview} alt="Preview" className="category-form-preview" />
-                                {!isViewOnly && (
-                                    <button type="button" onClick={() => {setImage(null); setImagePreview(null);}} className="category-form-remove-image">Remove</button>
-                                )}
-                            </div>
-                        ) : (
-                            !isViewOnly && (
-                                <label className="category-form-dropzone">
-                                    <input type="file" onChange={handleImageChange} style={{ display: 'none' }} accept="image/*" />
-                                    <span className="category-form-upload-icon">🖼️</span>
-                                    <span className="category-form-upload-text">Click to upload luxury image</span>
-                                </label>
-                            )
-                        )}
-                    </div>
-                </div>
+                <LuxuryImageUpload 
+                    label="Collection Image"
+                    value={imagePreview || ''}
+                    onChange={(file) => {
+                        setImage(file as File);
+                        setImagePreview(URL.createObjectURL(file as File));
+                    }}
+                    disabled={isViewOnly}
+                />
+
             </div>
         </LuxuryModal>
     );

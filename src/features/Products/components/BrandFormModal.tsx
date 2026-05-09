@@ -8,6 +8,7 @@ import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import LuxuryModal from '../../../components/Common/LuxuryModal';
+import LuxuryImageUpload from '../../../components/Common/LuxuryImageUpload';
 import { brandSchema, BrandFormData } from '../screens/Brands.validation';
 import './BrandFormModal.css';
 
@@ -72,15 +73,6 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
         }
     }, [isOpen, initialData, reset]);
 
-    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setLogo(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setLogoPreview(reader.result as string);
-            reader.readAsDataURL(file);
-        }
-    };
 
     const onFormSubmit = async (data: BrandFormData) => {
         if (isViewOnly) return;
@@ -162,14 +154,17 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
                 {/* Section 2: Visuals & Ranking */}
                 <div className="brand-form-row">
                     <div className="brand-form-section" style={{ flex: 1 }}>
-                        <h3 className="brand-form-section-title">Brand Mark (Logo)</h3>
-                        <div className="brand-form-upload-box">
-                            {logoPreview ? (
-                                <img src={logoPreview} className="brand-form-preview" alt="Logo preview" />
-                            ) : <div className="brand-form-placeholder-box">Upload Logo</div>}
-                            {!isViewOnly && <input type="file" onChange={handleLogoChange} className="brand-form-file-input" accept="image/*" />}
-                        </div>
+                        <LuxuryImageUpload 
+                            label="Brand Mark (Logo)"
+                            value={logoPreview || ''}
+                            onChange={(file) => {
+                                setLogo(file as File);
+                                setLogoPreview(URL.createObjectURL(file as File));
+                            }}
+                            disabled={isViewOnly}
+                        />
                     </div>
+
                     <div className="brand-form-section" style={{ flex: 1 }}>
                         <h3 className="brand-form-section-title">Ranking & Visibility</h3>
                         <LuxuryInput 

@@ -93,6 +93,14 @@
     gap: 15px;
 }
 
+.product-form-field-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
 .product-form-upload-label {
     aspect-ratio: 1;
     border: 1px dashed var(--glass-border);

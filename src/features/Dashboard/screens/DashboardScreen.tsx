@@ -2,6 +2,9 @@ import React from 'react';
 import FashionLoader from '../../../components/Common/FashionLoader';
 import './DashboardScreen.css';
 
+import LuxuryPageHeader from '../../../components/Common/LuxuryPageHeader';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
+
 const DashboardScreen = () => {
     const [loading, setLoading] = React.useState(true);
 
@@ -14,30 +17,35 @@ const DashboardScreen = () => {
 
     if (loading) return <FashionLoader size="lg" message="Summoning the dashboard..." />;
 
+    const statsData = [
+        { title: 'TOTAL SALES', value: '$124,500', change: 12, isUp: true, icon: '📈' },
+        { title: 'ACTIVE ORDERS', value: '45', change: 5, isUp: true, icon: '📦' },
+        { title: 'NEW CUSTOMERS', value: '12', change: 3, isUp: true, icon: '✨' },
+        { title: 'PENDING REVIEWS', value: '8', change: 2, isUp: false, icon: '✍️' },
+    ];
+
     return (
         <div className="dashboard-container">
-            <div className="dashboard-header-row">
-                <div>
-                    <h2 className="dashboard-title">Welcome back, Alexa</h2>
-                    <p className="dashboard-subtitle">Here is what's happening with Vélour today.</p>
-                </div>
-            </div>
+            <LuxuryPageHeader 
+                title="Welcome back, Alexa"
+                subtitle="Here is what's happening with Vélour today."
+                primaryAction={{
+                    label: "EXPORT REPORT",
+                    onClick: () => console.log('Exporting...'),
+                    icon: "📊"
+                }}
+            />
 
             <div className="dashboard-stats-grid">
-                {[
-                    { label: 'TOTAL SALES', value: '$124,500', change: '+12%', icon: '📈' },
-                    { label: 'ACTIVE ORDERS', value: '45', change: '+5', icon: '📦' },
-                    { label: 'NEW CUSTOMERS', value: '12', change: '+3', icon: '✨' },
-                    { label: 'PENDING REVIEWS', value: '8', change: '-2', icon: '✍️' },
-                ].map((stat) => (
-                    <div key={stat.label} className="dashboard-stat-card">
-                        <div className="dashboard-card-header">
-                            <span className="dashboard-card-label">{stat.label}</span>
-                            <span className="dashboard-card-icon">{stat.icon}</span>
-                        </div>
-                        <div className="dashboard-card-value">{stat.value}</div>
-                        <div className="dashboard-card-change">{stat.change} <span className="dashboard-change-label">this week</span></div>
-                    </div>
+                {statsData.map((stat) => (
+                    <LuxuryStatsCard 
+                        key={stat.title}
+                        title={stat.title}
+                        value={stat.value}
+                        icon={stat.icon}
+                        trend={{ value: stat.change, isUp: stat.isUp }}
+                        description="vs last week"
+                    />
                 ))}
             </div>
 

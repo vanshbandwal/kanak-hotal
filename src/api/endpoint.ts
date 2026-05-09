@@ -83,3 +83,10 @@ export const STAFF_ENDPOINTS = {
 export const PERMISSION_ENDPOINTS = {
     ALL: '/v1/permission/all',
 };
+
+export const BANNER_ENDPOINTS = {
+    ALL: '/v1/banner',
+    CREATE: '/v1/banner/create',
+    UPDATE: (id: string) => `/v1/banner/update/${id}`,
+    DELETE: (id: string) => `/v1/banner/delete/${id}`,
+};

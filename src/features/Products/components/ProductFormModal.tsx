@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useForm, Controller, SubmitHandler, useFieldArray } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useForm, Controller, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productApi } from '../../../api/productApi';
 import { categoryApi } from '../../../api/categoryApi';
@@ -9,9 +9,12 @@ import { taxApi } from '../../../api/taxApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
-import LuxurySelect from '../../../components/Common/LuxurySelect';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
+import LuxurySelect from '../../../components/Common/LuxurySelect';
 import LuxuryModal from '../../../components/Common/LuxuryModal';
+import LuxuryTabs from '../../../components/Common/LuxuryTabs';
+import LuxuryImageUpload from '../../../components/Common/LuxuryImageUpload';
+import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import { productSchema, ProductFormData } from '../screens/Products.validation';
 import './ProductFormModal.css';
 
@@ -23,9 +26,10 @@ interface ProductFormModalProps {
     mode?: 'create' | 'edit' | 'view';
 }
 
-export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, onSuccess, initialData, mode = 'create' }) => {
+const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, onSuccess, initialData, mode = 'create' }) => {
     const { addToast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('identity');
     const isViewOnly = mode === 'view';
 
     // --- FORM SETUP ---
@@ -35,6 +39,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
         reset,
         control,
         watch,
+        setValue,
         formState: { errors }
     } = useForm<ProductFormData>({
         resolver: zodResolver(productSchema) as any,
@@ -77,6 +82,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
 
     const productType = watch('productType');
     const categoryId = watch('category');
+    const subcategoryId = watch('subcategory');
 
     const [mainImage, setMainImage] = useState<File | null>(null);
     const [mainImagePreview, setMainImagePreview] = useState<string | null>(null);
@@ -85,6 +91,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
 
     const [categories, setCategories] = useState<any[]>([]);
     const [subcategories, setSubcategories] = useState<any[]>([]);
+    const [subSubcategories, setSubSubcategories] = useState<any[]>([]);
     const [brands, setBrands] = useState<any[]>([]);
     const [units, setUnits] = useState<any[]>([]);
     const [taxes, setTaxes] = useState<any[]>([]);
@@ -100,7 +107,13 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
 
     useEffect(() => {
         if (categoryId) fetchSubcategories(categoryId);
+        else setSubcategories([]);
     }, [categoryId]);
+
+    useEffect(() => {
+        if (subcategoryId) fetchSubSubcategories(subcategoryId);
+        else setSubSubcategories([]);
+    }, [subcategoryId]);
 
     const loadDropdownData = async () => {
         try {
@@ -131,44 +144,61 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
         }
     };
 
+    const fetchSubSubcategories = async (subCatId: string) => {
+        try {
+            const { data } = await categoryApi.getAllSubSubcategories({ subcategoryId: subCatId });
+            setSubSubcategories(data?.data || data || []);
+        } catch (err) {
+            console.error("Error fetching sub-subcategories", err);
+        }
+    };
+
     const fillFormData = (data: any) => {
+        const item = data.data && Array.isArray(data.data) ? data.data[0] : data;
+
         reset({
-            name: data.name || '',
-            description: data.description || '',
-            brand: data.brand?._id || data.brand || '',
-            unit: data.unit?._id || data.unit || '',
-            productType: data.productType || 'single',
-            category: data.category?._id || data.category || '',
-            subcategory: data.subcategory?._id || data.subcategory || '',
-            subSubcategory: data.subSubcategory?._id || data.subSubcategory || '',
-            isVeg: data.isVeg ?? true,
-            spicyLevel: data.spicyLevel || 0,
-            prepTime: data.prepTime || 15,
-            calories: data.calories || 0,
-            price: data.price || 0,
-            salePrice: data.salePrice || 0,
-            stock: data.stock || 0,
-            sku: data.sku || '',
-            isActive: data.isActive ?? true,
-            isFeatured: data.isFeatured ?? false,
-            taxStatus: data.taxStatus || 'taxable',
-            priceIncludesTax: data.priceIncludesTax ?? false,
-            taxRule: data.taxRule?._id || data.taxRule || '',
-            variants: data.variants || [],
-            comboItems: data.comboItems?.map((item: any) => ({
-                product: item.product?._id || item.product,
-                quantity: item.quantity
+            name: item.name || '',
+            description: item.description || '',
+            brand: item.brand?._id || item.brand || '',
+            unit: item.unit?._id || item.unit || '',
+            productType: item.productType || 'single',
+            category: item.category?._id || item.category || item.categoryId?._id || item.categoryId || '',
+            subcategory: item.subcategory?._id || item.subcategory || item.subcategoryId?._id || item.subcategoryId || '',
+            subSubcategory: item.subSubcategory?._id || item.subSubcategory || '',
+            isVeg: item.isVeg ?? true,
+            spicyLevel: item.spicyLevel || 0,
+            prepTime: item.prepTime || 15,
+            calories: item.calories || 0,
+            price: item.price || 0,
+            salePrice: item.salePrice || 0,
+            stock: item.stock || 0,
+            sku: item.sku || '',
+            isActive: item.isActive ?? true,
+            isFeatured: item.isFeatured ?? false,
+            taxStatus: item.taxStatus || 'taxable',
+            priceIncludesTax: item.priceIncludesTax ?? false,
+            taxRule: item.taxRule?._id || item.taxRule || '',
+            variants: item.variants || [],
+            comboItems: item.comboItems?.map((v: any) => ({
+                product: v.product?._id || v.product,
+                quantity: v.quantity
             })) || []
         });
 
-        if (data.mainImage) setMainImagePreview(sanitizePath(data.mainImage));
-        if (data.images) setGalleryPreviews(data.images.map(sanitizePath));
+        const coverImage = item.mainImage || item.image;
+        if (coverImage) setMainImagePreview(sanitizePath(coverImage));
+        if (item.images) setGalleryPreviews(item.images.map(sanitizePath));
     };
 
     const sanitizePath = (path: string) => {
         if (!path) return '';
         if (path.startsWith('http')) return path;
-        return `${BASE_URL}/${path.replace(/\\/g, '/')}`;
+        
+        // Ensure path starts with a single slash and BASE_URL doesn't end with one
+        const cleanPath = path.startsWith('/') ? path : `/${path}`;
+        const cleanBase = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+        
+        return `${cleanBase}${cleanPath.replace(/\\/g, '/')}`;
     };
 
     const handleReset = () => {
@@ -201,6 +231,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
         setMainImagePreview(null);
         setGalleryImages([]);
         setGalleryPreviews([]);
+        setActiveTab('identity');
     };
 
     const onFormSubmit: SubmitHandler<ProductFormData> = async (data) => {
@@ -244,6 +275,13 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
 
     const modalTitle = initialData ? 'Refine Dish' : 'Create New Dish';
 
+    const tabs = [
+        { id: 'identity', label: 'Identity', icon: '🍳' },
+        { id: 'pricing', label: 'Pricing', icon: '💰' },
+        { id: 'category', label: 'Menu', icon: '📂' },
+        { id: 'media', label: 'Media', icon: '📸' }
+    ];
+
     return (
         <LuxuryModal
             isOpen={isOpen}
@@ -256,180 +294,282 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
             isViewOnly={isViewOnly}
         >
             <div className="product-form-container">
-                <div className="product-form-section">
-                    <h3 className="product-form-section-title">Culinary Identity</h3>
-                    <div className="product-form-row">
-                        <LuxuryInput label="Dish Name *" {...register('name')} error={errors.name?.message} disabled={isViewOnly} />
-                        <Controller
-                            name="productType"
-                            control={control}
-                            render={({ field }) => (
-                                <LuxurySelect
-                                    label="Service Style *"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    options={[
-                                        { value: 'single', label: 'Single Dish' },
-                                        { value: 'variant', label: 'Portions (Half/Full)' },
-                                        { value: 'combo', label: 'Meal Combo' }
-                                    ]}
-                                    disabled={isViewOnly}
-                                    error={errors.productType?.message}
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="product-form-row" style={{ alignItems: 'center', gap: '20px' }}>
-                        <div style={{ display: 'flex', gap: '15px' }}>
+                <LuxuryTabs 
+                    tabs={tabs} 
+                    activeTab={activeTab} 
+                    onChange={setActiveTab} 
+                />
+
+                {activeTab === 'identity' && (
+                    <div className="product-form-section">
+                        <div className="product-form-row">
+                            <LuxuryInput label="Dish Name *" {...register('name')} error={errors.name?.message} disabled={isViewOnly} />
                             <Controller
-                                name="isVeg"
+                                name="productType"
                                 control={control}
                                 render={({ field }) => (
-                                    <div onClick={() => !isViewOnly && field.onChange(!field.value)} className={`food-type-badge ${field.value ? 'veg' : 'non-veg'}`}>
-                                        {field.value ? '🟢 VEG' : '🔴 NON-VEG'}
-                                    </div>
+                                    <LuxurySelect
+                                        label="Service Style *"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        options={[
+                                            { value: 'single', label: 'Single Dish' },
+                                            { value: 'variant', label: 'Portions (Half/Full)' },
+                                            { value: 'combo', label: 'Meal Combo' }
+                                        ]}
+                                        disabled={isViewOnly}
+                                        error={errors.productType?.message}
+                                    />
                                 )}
                             />
                         </div>
-                        <LuxuryInput label="Prep Time (Min)" type="number" {...register('prepTime')} error={errors.prepTime?.message} disabled={isViewOnly} />
-                        <Controller
-                            name="spicyLevel"
-                            control={control}
-                            render={({ field }) => (
-                                <LuxurySelect
-                                    label="Spiciness"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    options={[
-                                        { value: 0, label: 'Not Spicy' },
-                                        { value: 1, label: 'Mild' },
-                                        { value: 2, label: 'Spicy' },
-                                        { value: 3, label: 'Extra Spicy' }
-                                    ]}
-                                    disabled={isViewOnly}
-                                    error={errors.spicyLevel?.message}
+                        <div className="product-form-row" style={{ alignItems: 'flex-end' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <label className="product-form-field-label">Dietary Type</label>
+                                <Controller
+                                    name="isVeg"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <LuxuryStatusBadge 
+                                            label={field.value ? 'VEG' : 'NON-VEG'}
+                                            variant={field.value ? 'success' : 'danger'}
+                                            icon={field.value ? '🟢' : '🔴'}
+                                            onClick={() => !isViewOnly && field.onChange(!field.value)}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                    </div>
-                </div>
-
-                <div className="product-form-section">
-                    <h3 className="product-form-section-title">Pricing & Portions</h3>
-                    {productType === 'single' && (
-                        <div className="product-form-row">
-                            <LuxuryInput label="Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
-                            <LuxuryInput label="Sale Price" type="number" {...register('salePrice')} error={errors.salePrice?.message} disabled={isViewOnly} />
-                        </div>
-                    )}
-
-                    {productType === 'variant' && (
-                        <div className="portion-management">
-                            {variantFields.map((field, index) => (
-                                <div key={field.id} className="portion-row">
-                                    <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
-                                    <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
-                                    <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
-                                    {!isViewOnly && <button type="button" onClick={() => removeVariant(index)} className="remove-row-btn">🗑️</button>}
-                                </div>
-                            ))}
-                            {!isViewOnly && (
-                                <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, sku: `P-${Date.now()}` })} variant="ghost" size="small">
-                                    + Add Portion
-                                </LuxuryButton>
-                            )}
-                        </div>
-                    )}
-
-                    {productType === 'combo' && (
-                        <div className="combo-management">
-                            {comboFields.map((field, index) => (
-                                <div key={field.id} className="portion-row">
-                                    <Controller
-                                        name={`comboItems.${index}.product` as any}
-                                        control={control}
-                                        render={({ field: selectField }) => (
-                                            <LuxurySelect
-                                                label="Select Dish"
-                                                value={selectField.value}
-                                                onChange={selectField.onChange}
-                                                options={allProducts.map(p => ({ value: p._id, label: p.name }))}
-                                                disabled={isViewOnly}
-                                            />
-                                        )}
-                                    />
-                                    <LuxuryInput label="Qty" type="number" {...register(`comboItems.${index}.quantity` as any)} disabled={isViewOnly} />
-                                    {!isViewOnly && <button type="button" onClick={() => removeCombo(index)} className="remove-row-btn">🗑️</button>}
-                                </div>
-                            ))}
-                            {!isViewOnly && (
-                                <LuxuryButton type="button" onClick={() => appendCombo({ product: '', quantity: 1 })} variant="ghost" size="small">
-                                    + Add Item to Meal
-                                </LuxuryButton>
-                            )}
-                            <div className="product-form-row" style={{ marginTop: '15px' }}>
-                                <LuxuryInput label="Combo Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
                             </div>
+                            <LuxuryInput label="Prep Time (Min)" type="number" {...register('prepTime')} error={errors.prepTime?.message} disabled={isViewOnly} />
                         </div>
-                    )}
-                </div>
-
-                <div className="product-form-section">
-                    <h3 className="product-form-section-title">Menu Category</h3>
-                    <div className="product-form-row">
-                        <Controller
-                            name="category"
-                            control={control}
-                            render={({ field }) => (
-                                <LuxurySelect
-                                    label="Category *"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    options={categories.map(c => ({ value: c._id, label: c.name }))}
-                                    placeholder="Select Category"
-                                    disabled={isViewOnly}
-                                    error={errors.category?.message}
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="brand"
-                            control={control}
-                            render={({ field }) => (
-                                <LuxurySelect
-                                    label="Branded Ingredient"
-                                    value={field.value || ''}
-                                    onChange={field.onChange}
-                                    options={brands.map(b => ({ value: b._id, label: b.name }))}
-                                    placeholder="Select Brand"
-                                    disabled={isViewOnly}
-                                />
-                            )}
-                        />
+                        <div className="product-form-row">
+                            <Controller
+                                name="spicyLevel"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Spiciness"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        options={[
+                                            { value: 0, label: 'Not Spicy' },
+                                            { value: 1, label: 'Mild' },
+                                            { value: 2, label: 'Spicy' },
+                                            { value: 3, label: 'Extra Spicy' }
+                                        ]}
+                                        disabled={isViewOnly}
+                                        error={errors.spicyLevel?.message}
+                                    />
+                                )}
+                            />
+                            <LuxuryInput 
+                                label="Description" 
+                                {...register('description')} 
+                                disabled={isViewOnly} 
+                                multiline 
+                                rows={2} 
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <div className="product-form-section">
-                    <h3 className="product-form-section-title">Dish Photos</h3>
-                    <div className="product-form-media-grid">
-                        <label className="product-form-upload-label">
-                            {mainImagePreview ? <img src={mainImagePreview} className="product-form-preview-img" alt="Dish preview" /> : <span className="upload-icon">📸 Upload Cover</span>}
-                            <input type="file" onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    setMainImage(file);
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => setMainImagePreview(reader.result as string);
-                                    reader.readAsDataURL(file);
-                                }
-                            }} style={{ display: 'none' }} accept="image/*" disabled={isViewOnly} />
-                        </label>
+                {activeTab === 'pricing' && (
+                    <div className="product-form-section">
+                        {productType === 'single' && (
+                            <div className="product-form-row">
+                                <LuxuryInput label="Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
+                                <LuxuryInput label="Sale Price" type="number" {...register('salePrice')} error={errors.salePrice?.message} disabled={isViewOnly} />
+                            </div>
+                        )}
+
+                        {productType === 'variant' && (
+                            <div className="portion-management">
+                                {variantFields.map((field, index) => (
+                                    <div key={field.id} className="portion-row">
+                                        <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
+                                        <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
+                                        <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
+                                        {!isViewOnly && <button type="button" onClick={() => removeVariant(index)} className="remove-row-btn">🗑️</button>}
+                                    </div>
+                                ))}
+                                {!isViewOnly && (
+                                    <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, sku: `P-${Date.now()}` })} variant="ghost" size="small">
+                                        + Add Portion
+                                    </LuxuryButton>
+                                )}
+                            </div>
+                        )}
+
+                        {productType === 'combo' && (
+                            <div className="combo-management">
+                                {comboFields.map((field, index) => (
+                                    <div key={field.id} className="portion-row">
+                                        <Controller
+                                            name={`comboItems.${index}.product` as any}
+                                            control={control}
+                                            render={({ field: selectField }) => (
+                                                <LuxurySelect
+                                                    label="Select Dish"
+                                                    value={selectField.value}
+                                                    onChange={selectField.onChange}
+                                                    options={allProducts.map(p => ({ value: p._id, label: p.name }))}
+                                                    disabled={isViewOnly}
+                                                />
+                                            )}
+                                        />
+                                        <LuxuryInput label="Qty" type="number" {...register(`comboItems.${index}.quantity` as any)} disabled={isViewOnly} />
+                                        {!isViewOnly && <button type="button" onClick={() => removeCombo(index)} className="remove-row-btn">🗑️</button>}
+                                    </div>
+                                ))}
+                                {!isViewOnly && (
+                                    <LuxuryButton type="button" onClick={() => appendCombo({ product: '', quantity: 1 })} variant="ghost" size="small">
+                                        + Add Item to Meal
+                                    </LuxuryButton>
+                                )}
+                                <div className="product-form-row" style={{ marginTop: '15px' }}>
+                                    <LuxuryInput label="Combo Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="product-form-section-title" style={{ marginTop: '30px' }}>Tax Configuration</div>
+                        <div className="product-form-row">
+                            <Controller
+                                name="taxStatus"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Tax Status"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        options={[
+                                            { value: 'taxable', label: 'Taxable' },
+                                            { value: 'none', label: 'Non-Taxable' }
+                                        ]}
+                                        disabled={isViewOnly}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="taxRule"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Tax Rule"
+                                        value={field.value || ''}
+                                        onChange={field.onChange}
+                                        options={taxes.map(t => ({ value: t._id, label: `${t.name} (${t.rate}%)` }))}
+                                        placeholder="Select Tax Rule"
+                                        disabled={isViewOnly || watch('taxStatus') === 'none'}
+                                    />
+                                )}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {activeTab === 'category' && (
+                    <div className="product-form-section">
+                        <div className="product-form-row">
+                            <Controller
+                                name="category"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Category *"
+                                        value={field.value}
+                                        onChange={(val) => {
+                                            field.onChange(val);
+                                            setValue('subcategory', '');
+                                            setValue('subSubcategory', '');
+                                        }}
+                                        options={categories.map(c => ({ value: c._id, label: c.name }))}
+                                        placeholder="Select Category"
+                                        disabled={isViewOnly}
+                                        error={errors.category?.message}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="subcategory"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Subcategory"
+                                        value={field.value || ''}
+                                        onChange={(val) => {
+                                            field.onChange(val);
+                                            setValue('subSubcategory', '');
+                                        }}
+                                        options={subcategories.map(s => ({ value: s._id, label: s.name }))}
+                                        placeholder="Select Subcategory"
+                                        disabled={isViewOnly || !categoryId}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="product-form-row" style={{ marginTop: '15px' }}>
+                            <Controller
+                                name="subSubcategory"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Sub-Subcategory"
+                                        value={field.value || ''}
+                                        onChange={field.onChange}
+                                        options={subSubcategories.map(ss => ({ value: ss._id, label: ss.name }))}
+                                        placeholder="Select Sub-Subcategory"
+                                        disabled={isViewOnly || !subcategoryId}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="brand"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxurySelect
+                                        label="Branded Ingredient"
+                                        value={field.value || ''}
+                                        onChange={field.onChange}
+                                        options={brands.map(b => ({ value: b._id, label: b.name }))}
+                                        placeholder="Select Brand"
+                                        disabled={isViewOnly}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'media' && (
+                    <div className="product-form-section">
+                        <div className="product-form-row">
+                            <LuxuryImageUpload 
+                                label="Cover Dish Photo"
+                                value={mainImagePreview || ''}
+                                onChange={(file) => {
+                                    setMainImage(file as File);
+                                    setMainImagePreview(URL.createObjectURL(file as File));
+                                }}
+                                disabled={isViewOnly}
+                            />
+                        </div>
+                        <div className="product-form-row" style={{ marginTop: '20px' }}>
+                            <LuxuryImageUpload 
+                                label="Gallery Photos"
+                                multiple
+                                value={galleryPreviews}
+                                onChange={(files) => {
+                                    setGalleryImages(files as File[]);
+                                    setGalleryPreviews((files as File[]).map(f => URL.createObjectURL(f)));
+                                }}
+                                disabled={isViewOnly}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </LuxuryModal>
     );
 };
 
 export default ProductFormModal;
-

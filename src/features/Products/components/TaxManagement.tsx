@@ -4,6 +4,7 @@ import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import TaxFormModal from './TaxFormModal';
 import { taxApi } from '../../../api/taxApi';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import './TaxManagement.css';
 
 interface TaxItem {
@@ -106,7 +107,7 @@ const TaxManagement = () => {
             header: 'Rate', 
             key: 'rate', 
             render: (item) => (
-                <span className="tax-mgmt-code-tag">
+                <span className="tax-mgmt-rate-text">
                     {item.type === 'percentage' ? `${item.rate}%` : `$${item.rate}`}
                 </span>
             ) 
@@ -115,12 +116,10 @@ const TaxManagement = () => {
             header: 'Type', 
             key: 'taxType', 
             render: (item) => (
-                <span className="tax-mgmt-type-tag" style={{
-                    backgroundColor: item.taxType === 'inclusive' ? 'rgba(46, 204, 113, 0.1)' : 'rgba(52, 152, 219, 0.1)',
-                    color: item.taxType === 'inclusive' ? '#2ecc71' : '#3498db'
-                }}>
-                    {item.taxType.charAt(0).toUpperCase() + item.taxType.slice(1)}
-                </span>
+                <LuxuryStatusBadge 
+                    label={item.taxType.toUpperCase()}
+                    variant={item.taxType === 'inclusive' ? 'success' : 'info'}
+                />
             ) 
         },
         { header: 'Description', key: 'description', render: (item) => item.description || '-' },
@@ -129,14 +128,11 @@ const TaxManagement = () => {
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div className="tax-mgmt-toggle-wrapper" onClick={() => handleToggleStatus(item)}>
-                    <div className="tax-mgmt-toggle-bg" style={{
-                        backgroundColor: item.isActive ? 'var(--success)' : 'rgba(255,255,255,0.1)'
-                    }}>
-                        <div className="tax-mgmt-toggle-circle" style={{
-                            left: item.isActive ? '18px' : '2px'
-                        }} />
-                    </div>
+                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
+                    <LuxuryStatusBadge 
+                        label={item.isActive ? 'Active' : 'Inactive'}
+                        variant={item.isActive ? 'success' : 'danger'}
+                    />
                 </div>
             )
         },
@@ -152,6 +148,7 @@ const TaxManagement = () => {
             )
         }
     ];
+
 
     return (
         <div className="tax-mgmt-container">

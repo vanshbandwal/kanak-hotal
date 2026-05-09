@@ -10,6 +10,7 @@ interface StaffMember {
 }
 import { useNavigate } from 'react-router-dom';
 import FashionLoader from '../../../components/Common/FashionLoader';
+import LuxuryPageHeader from '../../../components/Common/LuxuryPageHeader';
 import StaffFormModal from '../components/StaffFormModal';
 import './StaffListScreen.css';
 
@@ -39,26 +40,21 @@ const StaffListScreen = () => {
 
     return (
         <div className="staff-list-container">
-            <div className="staff-list-header">
-                <div className="staff-list-title-section">
-                    <h2 className="staff-list-title">Staff Members</h2>
-                    <p className="staff-list-subtitle">Manage administrative access and personnel profiles.</p>
-                </div>
-                <div className="staff-list-header-actions">
-                    <button
-                        onClick={() => navigate('/roles/list')}
-                        className="staff-list-secondary-button"
-                    >
-                        VIEW ROLES
-                    </button>
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                        className="staff-list-add-button"
-                    >
-                        + ADD NEW STAFF
-                    </button>
-                </div>
-            </div>
+            <LuxuryPageHeader
+                title="Staff Members"
+                subtitle="Manage administrative access and personnel profiles."
+                primaryAction={{
+                    label: "ADD NEW STAFF",
+                    onClick: () => setShowAddModal(true),
+                    icon: "＋"
+                }}
+                secondaryAction={{
+                    label: "VIEW ROLES",
+                    onClick: () => navigate('/roles/list'),
+                    icon: "🛡️"
+                }}
+            />
+
 
             <div className="staff-list-card-grid">
                 {staff.map((member) => (
