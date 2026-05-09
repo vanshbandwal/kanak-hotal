@@ -1,0 +1,68 @@
+.luxury-button {
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.luxury-button:disabled {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-secondary) !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}
+
+/* Variants */
+.luxury-button.variant-primary {
+    background-color: var(--primary);
+    color: var(--button-text);
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.luxury-button.variant-secondary {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-white);
+    border: 1px solid var(--glass-border);
+}
+
+.luxury-button.variant-outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.luxury-button.variant-danger {
+    background-color: rgba(255, 77, 77, 0.1);
+    color: var(--error);
+    border: 1px solid rgba(255, 77, 77, 0.2);
+}
+
+.luxury-button.variant-ghost {
+    background-color: transparent;
+    color: var(--text-secondary);
+}
+
+/* Sizes */
+.luxury-button.size-small {
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.luxury-button.size-medium {
+    padding: 12px 30px;
+    font-size: 13px;
+}
+
+.luxury-button.size-large {
+    padding: 15px 40px;
+    font-size: 13px;
+}
+
+.luxury-button-icon {
+    font-size: 14px;
+}

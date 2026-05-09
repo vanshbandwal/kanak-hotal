@@ -1,0 +1,68 @@
+.coupons-screen-title {
+    font-family: 'Georgia', serif;
+    color: var(--text-primary);
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.coupons-screen-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 5px;
+    letter-spacing: 0.5px;
+}
+
+.coupons-screen-content-card {
+    margin-top: 40px;
+    background-color: var(--glass-background);
+    backdrop-filter: blur(30px) saturate(180%);
+    padding: 60px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.coupons-screen-placeholder {
+    text-align: center;
+}
+
+.coupons-screen-placeholder-icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.coupons-screen-placeholder-title {
+    color: var(--text-white);
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.coupons-screen-placeholder-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.coupons-screen-add-button {
+    background-color: var(--primary);
+    color: var(--button-text);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.coupons-screen-add-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}

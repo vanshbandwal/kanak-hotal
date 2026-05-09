@@ -1,0 +1,129 @@
+.luxury-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    position: relative;
+}
+
+.luxury-select-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.luxury-select-trigger {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-white);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+}
+
+.luxury-select-trigger.open {
+    border-color: var(--primary) !important;
+}
+
+.luxury-select-trigger.error {
+    border-color: var(--error) !important;
+}
+
+.luxury-select-trigger.disabled {
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+.luxury-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.luxury-select-placeholder {
+    color: var(--text-light);
+}
+
+.luxury-select-arrow {
+    transition: transform 0.3s ease;
+    font-size: 10px;
+}
+
+.luxury-select-arrow.open {
+    transform: rotate(180deg);
+}
+
+.luxury-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background-color: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    z-index: 1000;
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.luxury-select-search-container {
+    padding: 8px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.luxury-select-search-input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 8px;
+    color: var(--text-white);
+    outline: none;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.luxury-select-options-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 4px 0;
+}
+
+.luxury-select-option {
+    padding: 10px 12px;
+    color: var(--text-white);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 13px;
+}
+
+.luxury-select-option:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.luxury-select-option.selected {
+    color: var(--primary) !important;
+    background-color: rgba(232, 201, 123, 0.1) !important;
+}
+
+.luxury-select-no-options {
+    padding: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 13px;
+}
+
+.luxury-select-error-text {
+    color: var(--error);
+    font-size: 10px;
+}

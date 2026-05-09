@@ -1,0 +1,21 @@
+.cms-screen-container {
+    padding: 40px;
+    color: var(--text-primary);
+}
+
+.cms-screen-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.cms-screen-content {
+    background-color: var(--surface-light);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.cms-screen-text {
+    color: var(--text-secondary);
+}

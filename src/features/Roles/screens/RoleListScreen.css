@@ -1,0 +1,230 @@
+.role-list-container {
+    padding: 15px;
+}
+
+.role-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.role-list-title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.role-list-title {
+    font-size: 24px;
+    color: var(--text-white);
+    font-family: 'Georgia', serif;
+    letter-spacing: 1.5px;
+    margin: 0;
+}
+
+.role-list-subtitle {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+}
+
+.role-list-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.role-list-add-button {
+    background-color: var(--primary);
+    color: var(--button-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--glow);
+}
+
+.role-list-secondary-button {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.role-list-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.role-list-card {
+    background-color: var(--surface);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.role-list-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.role-list-icon-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: rgba(232, 201, 123, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.role-list-shield-icon {
+    font-size: 18px;
+}
+
+.role-list-role-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.role-list-view-icon-button {
+    background: rgba(232, 201, 123, 0.1);
+    border: 1px solid var(--border);
+    font-size: 16px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: var(--primary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.role-list-view-icon-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+}
+
+.role-list-role-label {
+    color: var(--text-white);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.5px;
+}
+
+.role-list-system-name {
+    color: var(--text-secondary);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 1px 0 0 0;
+}
+
+.role-list-badge-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.role-list-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.04);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.role-list-badge-icon {
+    font-size: 12px;
+}
+
+.role-list-badge-text {
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.role-list-description {
+    color: var(--text-light);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    flex: 1;
+}
+
+.role-list-card-footer {
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 15px;
+}
+
+.role-list-edit-button {
+    flex: 2;
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-white);
+    border: 1px solid var(--border);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.role-list-edit-button:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.role-list-delete-button {
+    flex: 1;
+    background-color: rgba(239, 68, 68, 0.08);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.role-list-delete-button:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+.role-list-btn-icon {
+    font-size: 12px;
+}

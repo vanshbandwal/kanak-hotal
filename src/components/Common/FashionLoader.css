@@ -1,0 +1,103 @@
+.fashion-loader-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    transition: background-color 0.5s ease;
+}
+
+.fashion-loader-wrapper.full-screen {
+    height: 100vh;
+    position: fixed;
+}
+
+.fashion-loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.fashion-loader-animation-container {
+    position: relative;
+}
+
+.fashion-loader-svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.fashion-loader-stitch {
+    animation: stitchAnimation 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.fashion-loader-needle {
+    animation: needleHeadMotion 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.fashion-loader-tagline-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 300px;
+}
+
+.fashion-loader-tagline {
+    font-family: 'Playfair Display', 'DM Serif Display', serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+    min-height: 20px;
+}
+
+.fashion-loader-tagline.fading {
+    animation: fadeText 2s ease-in-out infinite;
+}
+
+.fashion-loader-luxury-bar {
+    width: 40px;
+    height: 1px;
+    opacity: 0.6;
+}
+
+@keyframes stitchAnimation {
+    0% { stroke-dashoffset: 400; stroke-opacity: 0.1; }
+    50% { stroke-opacity: 1; }
+    100% { stroke-dashoffset: 0; stroke-opacity: 0.1; }
+}
+
+@keyframes needleHeadMotion {
+    0% { transform: translate(10px, 90px) rotate(-45deg); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translate(50px, 10px) rotate(0deg); }
+    90% { opacity: 1; }
+    100% { transform: translate(90px, 90px) rotate(45deg); opacity: 0; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.98); }
+}
+
+@keyframes fadeText {
+    0%, 100% { opacity: 0; transform: translateY(5px); }
+    10%, 90% { opacity: 1; transform: translateY(0px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fashion-animation {
+        animation: pulse 2s infinite ease-in-out !important;
+    }
+    .needle-motion {
+        display: none !important;
+    }
+}

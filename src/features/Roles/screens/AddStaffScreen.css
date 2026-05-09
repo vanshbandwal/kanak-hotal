@@ -1,0 +1,104 @@
+.add-staff-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.add-staff-header {
+    margin-bottom: 40px;
+}
+
+.add-staff-title {
+    font-family: 'Georgia', serif;
+    color: var(--text-white);
+    font-size: 32px;
+    letter-spacing: 2px;
+    margin: 0 0 10px 0;
+}
+
+.add-staff-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.add-staff-content-card {
+    background-color: var(--surface);
+    padding: 50px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.add-staff-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.add-staff-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-staff-label {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.add-staff-input {
+    background-color: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    color: var(--text-white);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.add-staff-input:focus {
+    border-color: var(--primary);
+}
+
+.add-staff-select {
+    background-color: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    color: var(--text-white);
+    font-size: 15px;
+    outline: none;
+    cursor: pointer;
+}
+
+.add-staff-select:focus {
+    border-color: var(--primary);
+}
+
+.add-staff-add-button {
+    background-color: var(--primary);
+    color: var(--button-text);
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.add-staff-add-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.add-staff-add-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

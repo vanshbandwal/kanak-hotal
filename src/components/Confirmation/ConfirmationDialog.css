@@ -1,0 +1,120 @@
+.conf-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.conf-modal {
+    background-color: var(--surface);
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 32px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    position: relative;
+    animation: modal-scale-in 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.conf-modal.minimal {
+    border-radius: 0;
+    border: 0.5px solid #000000;
+    box-shadow: none;
+}
+
+.conf-icon-container {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.conf-title {
+    font-family: 'Georgia', serif;
+    color: var(--text-white);
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin: 0 0 10px 0;
+}
+
+.conf-title.minimal {
+    text-transform: uppercase;
+}
+
+.conf-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+    padding: 0 10px;
+}
+
+.conf-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.conf-confirm-btn {
+    background-color: var(--error);
+    color: #FFFFFF;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.conf-confirm-btn.minimal {
+    background-color: #000000;
+    border-radius: 0;
+    border: 0.5px solid #000000;
+    box-shadow: none;
+}
+
+.conf-cancel-btn {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.conf-cancel-btn.minimal {
+    border-radius: 0;
+    border: 0.5px solid #000000;
+}
+
+.conf-luxury-divider {
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+}
+
+@keyframes modal-scale-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

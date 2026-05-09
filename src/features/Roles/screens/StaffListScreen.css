@@ -1,0 +1,180 @@
+.staff-list-container {
+    padding: 15px;
+}
+
+.staff-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.staff-list-title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.staff-list-title {
+    font-size: 24px;
+    color: var(--text-white);
+    font-family: 'Georgia', serif;
+    letter-spacing: 1.5px;
+    margin: 0;
+}
+
+.staff-list-subtitle {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+}
+
+.staff-list-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.staff-list-add-button {
+    background-color: var(--primary);
+    color: var(--button-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--glow);
+}
+
+.staff-list-secondary-button {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.staff-list-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.staff-list-card {
+    background-color: var(--surface);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+}
+
+.staff-list-card:hover {
+    transform: translateY(-4px);
+}
+
+.staff-list-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.staff-list-avatar-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background-color: rgba(232, 201, 123, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.staff-list-avatar-icon {
+    font-size: 20px;
+}
+
+.staff-list-staff-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.staff-list-staff-name {
+    color: var(--text-white);
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    font-family: 'Georgia', serif;
+}
+
+.staff-list-staff-email {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin: 0;
+}
+
+.staff-list-badge-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.staff-list-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.04);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+}
+
+.staff-list-badge-icon {
+    font-size: 12px;
+}
+
+.staff-list-badge-text {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.staff-list-card-footer {
+    marginTop: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.staff-list-member-since {
+    font-size: 11px;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.staff-list-edit-button {
+    background-color: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.staff-list-edit-button:hover {
+    text-decoration: underline;
+}

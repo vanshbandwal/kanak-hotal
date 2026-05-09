@@ -1,0 +1,148 @@
+.landing-container {
+    padding-bottom: 40px;
+}
+
+.landing-hero {
+    padding: 60px 40px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(5, 3, 20, 0.4) 100%);
+    border-radius: 30px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    margin-bottom: 60px;
+}
+
+.landing-hero-content {
+    max-width: 800px;
+}
+
+.landing-app-name {
+    color: var(--primary);
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+}
+
+.landing-welcome-text {
+    color: var(--text-white);
+    font-family: 'Georgia', serif;
+    font-size: 42px;
+    margin: 10px 0 20px 0;
+    letter-spacing: 2px;
+}
+
+.landing-description {
+    color: var(--text-secondary);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.landing-cta-container {
+    display: flex;
+    gap: 20px;
+}
+
+.landing-primary-button {
+    background-color: var(--primary);
+    color: var(--button-text);
+    border: none;
+    padding: 15px 35px;
+    border-radius: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.landing-disabled-button {
+    background-color: rgba(212, 175, 55, 0.2);
+    color: rgba(5, 3, 20, 0.5);
+    border: none;
+    padding: 15px 35px;
+    border-radius: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: not-allowed;
+}
+
+.landing-secondary-button {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 15px 35px;
+    border-radius: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.landing-features-section {
+    margin-top: 20px;
+}
+
+.landing-section-title {
+    color: var(--text-white);
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.landing-features-grid {
+    display: flex;
+    gap: 30px;
+}
+
+.landing-feature-card {
+    flex: 1;
+    background-color: var(--surface-light);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.landing-feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.landing-feature-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.landing-feature-title {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.landing-feature-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.landing-alert {
+    margin-top: 60px;
+    background-color: rgba(255, 107, 107, 0.1);
+    padding: 20px 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.landing-alert-icon {
+    font-size: 24px;
+}
+
+.landing-alert-text {
+    color: #ff6b67;
+    font-size: 14px;
+    margin: 0;
+}

@@ -1,0 +1,46 @@
+.luxury-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.luxury-toggle-wrapper.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.luxury-toggle-track {
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    position: relative;
+    transition: background-color 0.3s ease;
+    border: 1px solid var(--glass-border);
+}
+
+.luxury-toggle-track.active {
+    background-color: var(--primary);
+}
+
+.luxury-toggle-thumb {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: left 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.luxury-toggle-thumb.active {
+    left: 21px;
+}
+
+.luxury-toggle-label {
+    color: var(--text-secondary);
+    font-size: 13px;
+}

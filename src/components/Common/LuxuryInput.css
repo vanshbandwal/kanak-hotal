@@ -1,0 +1,61 @@
+.luxury-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.luxury-input-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.luxury-input-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.luxury-input-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.luxury-input-field {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-white);
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.luxury-input-field.with-icon {
+    padding-left: 35px;
+}
+
+.luxury-input-field.error {
+    border-color: var(--error) !important;
+}
+
+.luxury-input-field:focus {
+    border-color: var(--primary) !important;
+}
+
+.luxury-input-field.multiline {
+    resize: none;
+}
+
+.luxury-input-error-text {
+    color: var(--error);
+    font-size: 10px;
+}

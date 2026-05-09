@@ -1,0 +1,128 @@
+.main-layout-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.main-layout-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-layout-content-wrapper.with-sidebar {
+    margin-left: 280px;
+}
+
+.main-layout-content-wrapper.with-sidebar.collapsed {
+    margin-left: 80px;
+}
+
+.main-layout-header {
+    height: 90px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--glass-background);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.main-layout-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-layout-menu-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-layout-breadcrumb {
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.main-layout-breadcrumb-active {
+    opacity: 0.9;
+}
+
+.main-layout-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.main-layout-theme-toggle {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    width: 45px;
+    height: 45px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--card-shadow);
+}
+
+.main-layout-theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.main-layout-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.main-layout-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #E8C97B 0%, #C9963A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A0F2C;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.main-layout-user-name {
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.main-layout-content {
+    padding: 40px;
+    flex: 1;
+}

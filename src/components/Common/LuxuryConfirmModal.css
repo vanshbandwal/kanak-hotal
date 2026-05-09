@@ -1,0 +1,112 @@
+.luxury-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.luxury-confirm-modal-card {
+    width: 400px;
+    background-color: var(--surface);
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.luxury-confirm-accent-bar {
+    height: 4px;
+    width: 100%;
+}
+
+.luxury-confirm-content {
+    padding: 40px 30px 30px;
+    textAlign: center;
+}
+
+.luxury-confirm-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.luxury-confirm-icon {
+    font-size: 24px;
+}
+
+.luxury-confirm-title {
+    font-family: 'Georgia', serif;
+    color: var(--text-white);
+    font-size: 22px;
+    margin: 0 0 10px;
+    letter-spacing: 1px;
+}
+
+.luxury-confirm-message {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 10px;
+}
+
+.luxury-confirm-footer {
+    padding: 0 30px 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.luxury-confirm-cancel-btn {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.luxury-confirm-cancel-btn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.luxury-confirm-confirm-btn {
+    flex: 1;
+    border: none;
+    color: var(--button-text);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.luxury-confirm-confirm-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.luxury-confirm-confirm-btn:disabled,
+.luxury-confirm-cancel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

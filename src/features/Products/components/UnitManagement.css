@@ -1,0 +1,78 @@
+.unit-mgmt-container {
+    width: 100%;
+}
+
+.unit-mgmt-code-tag {
+    background-color: rgba(232, 201, 123, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.unit-mgmt-toggle-wrapper {
+    cursor: pointer;
+}
+
+.unit-mgmt-toggle-bg {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.unit-mgmt-toggle-circle {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    transition: left 0.3s ease;
+}
+
+.unit-mgmt-actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+.unit-mgmt-view-btn {
+    background: rgba(232, 201, 123, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.unit-mgmt-view-btn:hover {
+    transform: scale(1.1);
+}
+
+.unit-mgmt-edit-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.unit-mgmt-edit-btn:hover {
+    transform: scale(1.1);
+}
+
+.unit-mgmt-delete-btn {
+    background: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.2);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.unit-mgmt-delete-btn:hover {
+    transform: scale(1.1);
+}

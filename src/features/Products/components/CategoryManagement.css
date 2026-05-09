@@ -1,0 +1,155 @@
+.category-mgmt-container {
+    width: 100%;
+}
+
+.category-mgmt-sub-tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 5px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.category-mgmt-sub-tab-button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    background-color: transparent;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.category-mgmt-sub-tab-button.active {
+    background-color: var(--primary);
+    color: var(--button-text);
+    box-shadow: 0 4px 15px var(--glow);
+}
+
+.category-mgmt-image-container {
+    width: 50px;
+    height: 50px;
+}
+
+.category-mgmt-table-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.category-mgmt-image-placeholder {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 1px solid var(--glass-border);
+}
+
+.category-mgmt-name-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.category-mgmt-name-text {
+    color: var(--text-white);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.category-mgmt-parent-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-mgmt-toggle-wrapper {
+    cursor: pointer;
+    width: fit-content;
+}
+
+.category-mgmt-toggle-bg {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.category-mgmt-toggle-circle {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    transition: left 0.3s ease;
+}
+
+.category-mgmt-location-badge {
+    background-color: rgba(232, 201, 123, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.category-mgmt-actions-cell {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.category-mgmt-view-btn {
+    background: rgba(232, 201, 123, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.category-mgmt-view-btn:hover {
+    transform: scale(1.1);
+}
+
+.category-mgmt-edit-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.category-mgmt-edit-btn:hover {
+    transform: scale(1.1);
+}
+
+.category-mgmt-delete-btn {
+    background: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.2);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.category-mgmt-delete-btn:hover {
+    transform: scale(1.1);
+}

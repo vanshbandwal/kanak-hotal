@@ -1,0 +1,92 @@
+.auth-layout-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+}
+
+.auth-layout-background-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.auth-layout-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, #050314 80%), 
+                 linear-gradient(45deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+    z-index: 1;
+}
+
+.auth-layout-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.auth-layout-card {
+    background-color: var(--glass-background);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 32px;
+    padding: 50px 40px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+}
+
+.auth-layout-logo-container {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.auth-layout-logo-text {
+    font-family: 'Georgia', serif;
+    color: var(--primary);
+    font-size: 40px;
+    letter-spacing: 12px;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.auth-layout-logo-subtext {
+    font-family: sans-serif;
+    color: var(--text-secondary);
+    font-size: 10px;
+    letter-spacing: 6px;
+    margin-top: 8px;
+    display: block;
+    opacity: 0.8;
+}
+
+.floating-icon {
+    position: absolute;
+    opacity: 0.2;
+    color: var(--primary);
+    animation: drift 25s infinite ease-in-out;
+    z-index: 2;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -50px) rotate(5deg); }
+    66% { transform: translate(-20px, 20px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes float-slow {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
