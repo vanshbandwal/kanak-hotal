@@ -1,84 +1,7 @@
-.category-form-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.category-form-modal-card {
-    width: 550px;
-    max-width: 90%;
-    background-color: var(--surface);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
+.category-form-container {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-}
-
-.category-form-header {
-    padding: 24px 30px;
-    border-bottom: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.category-form-title {
-    font-family: 'Georgia', serif;
-    color: var(--primary);
-    font-size: 24px;
-    margin: 0;
-    letter-spacing: 1px;
-}
-
-.category-form-close-button {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.category-form-body {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-}
-
-.category-form-scroll-area {
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 10px;
-}
-
-.category-form-scroll-area::-webkit-scrollbar {
-    width: 6px;
-}
-
-.category-form-scroll-area::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.category-form-scroll-area::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-}
-
-.category-form-group {
-    margin-bottom: 20px;
-}
-
-.category-form-group-half {
-    flex: 1;
-    margin-bottom: 20px;
+    gap: 20px;
 }
 
 .category-form-row {
@@ -86,17 +9,25 @@
     gap: 20px;
 }
 
-.category-form-label {
-    display: block;
-    color: var(--text-secondary);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
+.category-form-group-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
+.category-form-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Image Upload Area Styles */
 .category-form-upload-area {
     margin-top: 10px;
+    width: 100%;
 }
 
 .category-form-dropzone {
@@ -104,57 +35,62 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px;
     border: 2px dashed var(--glass-border);
     border-radius: 16px;
+    padding: 30px;
     cursor: pointer;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.02);
 }
 
 .category-form-dropzone:hover {
     border-color: var(--primary);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .category-form-upload-icon {
     font-size: 32px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .category-form-upload-text {
-    color: var(--text-secondary);
     font-size: 13px;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
 }
 
 .category-form-preview-container {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
 }
 
 .category-form-preview {
     width: 100%;
-    height: 100%;
+    height: 200px;
     object-fit: cover;
-    border-radius: 12px;
-    border: 1px solid var(--primary);
+    display: block;
 }
 
 .category-form-remove-image {
     position: absolute;
-    bottom: -25px;
-    left: 0;
-    right: 0;
-    background: none;
+    top: 10px;
+    right: 10px;
+    background-color: var(--error);
+    color: white;
     border: none;
-    color: #ff4d4d;
-    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
     cursor: pointer;
     font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.category-form-footer {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
+@media (max-width: 600px) {
+    .category-form-row {
+        flex-direction: column;
+    }
 }

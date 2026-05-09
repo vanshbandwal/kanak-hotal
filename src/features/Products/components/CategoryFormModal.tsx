@@ -8,6 +8,7 @@ import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxurySelect from '../../../components/Common/LuxurySelect';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import LuxuryModal from '../../../components/Common/LuxuryModal';
 import { 
     categorySchema, 
     subcategorySchema, 
@@ -183,139 +184,129 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({ isOpen, onClose, 
         onClose();
     };
 
-    if (!isOpen) return null;
+    const modalTitle = `${initialData ? (isViewOnly ? 'View' : 'Edit') : 'Add'} ${type.charAt(0).toUpperCase() + type.slice(1).replace('sub', 'Sub ')}`;
 
     return (
-        <div className="category-form-overlay">
-            <div className="category-form-modal-card">
-                <div className="category-form-header">
-                    <h2 className="category-form-title">{initialData ? (isViewOnly ? 'View' : 'Edit') : 'Add'} {type.charAt(0).toUpperCase() + type.slice(1).replace('sub', 'Sub ')}</h2>
-                    <button onClick={handleClose} className="category-form-close-button">&times;</button>
+        <LuxuryModal
+            isOpen={isOpen}
+            onClose={handleClose}
+            title={modalTitle}
+            size="md"
+            isLoading={isLoading}
+            onSubmit={handleSubmit(onFormSubmit)}
+            submitLabel={initialData ? 'Update Collection' : 'Add Collection'}
+            isViewOnly={isViewOnly}
+        >
+            <div className="category-form-container">
+                {/* Parent Selections */}
+                {(type === 'subcategory' || type === 'subsubcategory') && (
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <LuxurySelect
+                                label="Parent Category *"
+                                value={field.value}
+                                onChange={handleCategoryChange}
+                                options={categories.map(cat => ({ value: cat._id, label: cat.name }))}
+                                placeholder="Select Category"
+                                disabled={isViewOnly}
+                                error={errors.category?.message as string}
+                            />
+                        )}
+                    />
+                )}
+
+                {type === 'subsubcategory' && (
+                    <Controller
+                        name="subcategory"
+                        control={control}
+                        render={({ field }) => (
+                            <LuxurySelect
+                                label="Parent Subcategory *"
+                                value={field.value}
+                                onChange={field.onChange}
+                                options={subcategories.map(sub => ({ value: sub._id, label: sub.name }))}
+                                placeholder="Select Subcategory"
+                                disabled={isViewOnly || !selectedCategory}
+                                error={errors.subcategory?.message as string}
+                            />
+                        )}
+                    />
+                )}
+
+                <LuxuryInput 
+                    label="Name *" 
+                    {...register('name')}
+                    error={errors.name?.message as string}
+                    placeholder="e.g. Luxury Handbags"
+                    disabled={isViewOnly}
+                />
+
+                <LuxuryInput 
+                    label="Description" 
+                    {...register('description')}
+                    error={errors.description?.message as string}
+                    placeholder="Details about this collection..."
+                    disabled={isViewOnly}
+                    multiline
+                    rows={3}
+                />
+
+                <div className="category-form-row">
+                    <div className="category-form-group-half">
+                        <LuxuryInput 
+                            label="Order"
+                            type="number" 
+                            {...register('order')}
+                            error={errors.order?.message as string}
+                            disabled={isViewOnly}
+                        />
+                    </div>
+                    <div className="category-form-group-half">
+                        <label className="category-form-label">Status</label>
+                        <Controller
+                            name="isActive"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxuryToggle 
+                                    label={field.value ? 'Active' : 'Inactive'}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    disabled={isViewOnly}
+                                    activeColor="var(--success)"
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onFormSubmit)} className="category-form-body">
-                    <div className="category-form-scroll-area">
-                        {/* Parent Selections */}
-                        {(type === 'subcategory' || type === 'subsubcategory') && (
-                            <Controller
-                                name="category"
-                                control={control}
-                                render={({ field }) => (
-                                    <LuxurySelect
-                                        label="Parent Category *"
-                                        value={field.value}
-                                        onChange={handleCategoryChange}
-                                        options={categories.map(cat => ({ value: cat._id, label: cat.name }))}
-                                        placeholder="Select Category"
-                                        disabled={isViewOnly}
-                                        error={errors.category?.message as string}
-                                    />
-                                )}
-                            />
-                        )}
-
-                        {type === 'subsubcategory' && (
-                            <Controller
-                                name="subcategory"
-                                control={control}
-                                render={({ field }) => (
-                                    <LuxurySelect
-                                        label="Parent Subcategory *"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        options={subcategories.map(sub => ({ value: sub._id, label: sub.name }))}
-                                        placeholder="Select Subcategory"
-                                        disabled={isViewOnly || !selectedCategory}
-                                        error={errors.subcategory?.message as string}
-                                    />
-                                )}
-                            />
-                        )}
-
-                        <LuxuryInput 
-                            label="Name *" 
-                            {...register('name')}
-                            error={errors.name?.message as string}
-                            placeholder="e.g. Luxury Handbags"
-                            disabled={isViewOnly}
-                        />
-
-                        <LuxuryInput 
-                            label="Description" 
-                            {...register('description')}
-                            error={errors.description?.message as string}
-                            placeholder="Details about this collection..."
-                            disabled={isViewOnly}
-                            multiline
-                            rows={3}
-                        />
-
-                        <div className="category-form-row">
-                            <div className="category-form-group-half">
-                                <LuxuryInput 
-                                    label="Order"
-                                    type="number" 
-                                    {...register('order')}
-                                    error={errors.order?.message as string}
-                                    disabled={isViewOnly}
-                                />
-                            </div>
-                            <div className="category-form-group-half">
-                                <label className="category-form-label">Status</label>
-                                <Controller
-                                    name="isActive"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxuryToggle 
-                                            label={field.value ? 'Active' : 'Inactive'}
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            disabled={isViewOnly}
-                                            activeColor="var(--success)"
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="category-form-group">
-                            <label className="category-form-label">Image Upload</label>
-                            <div className="category-form-upload-area">
-                                {imagePreview ? (
-                                    <div className="category-form-preview-container">
-                                        <img src={imagePreview} alt="Preview" className="category-form-preview" />
-                                        {!isViewOnly && (
-                                            <button type="button" onClick={() => {setImage(null); setImagePreview(null);}} className="category-form-remove-image">Remove</button>
-                                        )}
-                                    </div>
-                                ) : (
-                                    !isViewOnly && (
-                                        <label className="category-form-dropzone">
-                                            <input type="file" onChange={handleImageChange} style={{ display: 'none' }} accept="image/*" />
-                                            <span className="category-form-upload-icon">🖼️</span>
-                                            <span className="category-form-upload-text">Click to upload luxury image</span>
-                                        </label>
-                                    )
+                <div className="category-form-group">
+                    <label className="category-form-label">Image Upload</label>
+                    <div className="category-form-upload-area">
+                        {imagePreview ? (
+                            <div className="category-form-preview-container">
+                                <img src={imagePreview} alt="Preview" className="category-form-preview" />
+                                {!isViewOnly && (
+                                    <button type="button" onClick={() => {setImage(null); setImagePreview(null);}} className="category-form-remove-image">Remove</button>
                                 )}
                             </div>
-                        </div>
-                    </div>
-
-                    <div className="category-form-footer">
-                        <LuxuryButton type="button" onClick={handleClose} variant="ghost">
-                            {isViewOnly ? 'Close' : 'Cancel'}
-                        </LuxuryButton>
-                        {!isViewOnly && (
-                            <LuxuryButton type="submit" disabled={isLoading}>
-                                {isLoading ? 'PROCESSING...' : `${initialData ? 'UPDATE' : 'ADD'} ${type.toUpperCase().replace('SUB', 'SUB ')}`}
-                            </LuxuryButton>
+                        ) : (
+                            !isViewOnly && (
+                                <label className="category-form-dropzone">
+                                    <input type="file" onChange={handleImageChange} style={{ display: 'none' }} accept="image/*" />
+                                    <span className="category-form-upload-icon">🖼️</span>
+                                    <span className="category-form-upload-text">Click to upload luxury image</span>
+                                </label>
+                            )
                         )}
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </LuxuryModal>
     );
 };
 
 export default CategoryFormModal;
+
 

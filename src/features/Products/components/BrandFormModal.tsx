@@ -7,6 +7,7 @@ import { useToast } from '../../../context/ToastContext';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import LuxuryModal from '../../../components/Common/LuxuryModal';
 import { brandSchema, BrandFormData } from '../screens/Brands.validation';
 import './BrandFormModal.css';
 
@@ -23,7 +24,7 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
     const [isLoading, setIsLoading] = useState(false);
     const isViewOnly = mode === 'view';
 
-    // Media State (handled separately as file input is tricky with hook form)
+    // Media State
     const [logo, setLogo] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
@@ -96,14 +97,14 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
             formData.append('logo', logo);
         }
 
-        const { data: responseData, error } = initialData 
+        const response = initialData 
             ? await brandApi.updateBrand(initialData._id, formData)
             : await brandApi.createBrand(formData);
 
         setIsLoading(false);
 
-        if (error) {
-            addToast('error', error);
+        if (response.error) {
+            addToast('error', response.error);
             return;
         }
 
@@ -112,105 +113,95 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
         onClose();
     };
 
-    if (!isOpen) return null;
+    const modalTitle = mode === 'create' ? 'Onboard Luxury Brand' : mode === 'edit' ? 'Refine Brand Profile' : 'Brand Insights';
 
     return (
-        <div className="brand-form-overlay">
-            <div className="brand-form-modal-card">
-                <div className="brand-form-header">
-                    <h2 className="brand-form-modal-title">
-                        {mode === 'create' ? 'Onboard Luxury Brand' : mode === 'edit' ? 'Refine Brand Profile' : 'Brand Insights'}
-                    </h2>
-                    <button onClick={onClose} className="brand-form-close-btn">&times;</button>
+        <LuxuryModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={modalTitle}
+            size="lg"
+            isLoading={isLoading}
+            onSubmit={handleSubmit(onFormSubmit)}
+            submitLabel={initialData ? 'Update Profile' : 'Onboard Brand'}
+            isViewOnly={isViewOnly}
+        >
+            <div className="brand-form-container">
+                {/* Section 1: Identity */}
+                <div className="brand-form-section">
+                    <h3 className="brand-form-section-title">Identity & Presence</h3>
+                    <div className="brand-form-row">
+                        <LuxuryInput 
+                            label="Brand Name *" 
+                            {...register('name')}
+                            error={errors.name?.message}
+                            disabled={isViewOnly}
+                            placeholder="e.g. Gucci, Rolex, Versace"
+                        />
+                        <LuxuryInput 
+                            label="Website URL" 
+                            {...register('website')}
+                            error={errors.website?.message}
+                            disabled={isViewOnly}
+                            placeholder="https://brand.com"
+                        />
+                    </div>
+                    <div className="brand-form-group">
+                        <LuxuryInput 
+                            label="Philosophy / Description"
+                            {...register('description')}
+                            error={errors.description?.message}
+                            disabled={isViewOnly}
+                            placeholder="Describe the brand's heritage and luxury appeal..."
+                            multiline
+                            rows={3}
+                        />
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onFormSubmit)} className="brand-form-container">
-                    <div className="brand-form-scroll-area">
-                        {/* Section 1: Identity */}
-                        <div className="brand-form-section">
-                            <h3 className="brand-form-section-title">Identity & Presence</h3>
-                            <div className="brand-form-row">
-                                <LuxuryInput 
-                                    label="Brand Name *" 
-                                    {...register('name')}
-                                    error={errors.name?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="e.g. Gucci, Rolex, Versace"
-                                />
-                                <LuxuryInput 
-                                    label="Website URL" 
-                                    {...register('website')}
-                                    error={errors.website?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="https://brand.com"
-                                />
-                            </div>
-                            <div className="brand-form-group">
-                                <LuxuryInput 
-                                    label="Philosophy / Description"
-                                    {...register('description')}
-                                    error={errors.description?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="Describe the brand's heritage and luxury appeal..."
-                                    multiline
-                                    rows={3}
-                                />
-                            </div>
+                {/* Section 2: Visuals & Ranking */}
+                <div className="brand-form-row">
+                    <div className="brand-form-section" style={{ flex: 1 }}>
+                        <h3 className="brand-form-section-title">Brand Mark (Logo)</h3>
+                        <div className="brand-form-upload-box">
+                            {logoPreview ? (
+                                <img src={logoPreview} className="brand-form-preview" alt="Logo preview" />
+                            ) : <div className="brand-form-placeholder-box">Upload Logo</div>}
+                            {!isViewOnly && <input type="file" onChange={handleLogoChange} className="brand-form-file-input" accept="image/*" />}
                         </div>
-
-                        {/* Section 2: Visuals & Ranking */}
-                        <div className="brand-form-row">
-                            <div className="brand-form-section" style={{ flex: 1 }}>
-                                <h3 className="brand-form-section-title">Brand Mark (Logo)</h3>
-                                <div className="brand-form-upload-box">
-                                    {logoPreview ? (
-                                        <img src={logoPreview} className="brand-form-preview" alt="Logo preview" />
-                                    ) : <div className="brand-form-placeholder-box">Upload Logo</div>}
-                                    {!isViewOnly && <input type="file" onChange={handleLogoChange} className="brand-form-file-input" accept="image/*" />}
-                                </div>
-                            </div>
-                            <div className="brand-form-section" style={{ flex: 1 }}>
-                                <h3 className="brand-form-section-title">Ranking & Visibility</h3>
-                                <LuxuryInput 
-                                    label="Display Order"
-                                    type="number" 
-                                    {...register('order', { valueAsNumber: true })}
-                                    error={errors.order?.message}
-                                    disabled={isViewOnly}
-                                />
-                                <div className="brand-form-group">
-                                    <label className="brand-form-label">Active Status</label>
-                                    <Controller
-                                        name="isActive"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <LuxuryToggle 
-                                                label={field.value ? 'Featured Active' : 'Suspended'}
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                disabled={isViewOnly}
-                                                activeColor="var(--success)"
-                                            />
-                                        )}
+                    </div>
+                    <div className="brand-form-section" style={{ flex: 1 }}>
+                        <h3 className="brand-form-section-title">Ranking & Visibility</h3>
+                        <LuxuryInput 
+                            label="Display Order"
+                            type="number" 
+                            {...register('order', { valueAsNumber: true })}
+                            error={errors.order?.message}
+                            disabled={isViewOnly}
+                        />
+                        <div className="brand-form-group">
+                            <label className="brand-form-label">Active Status</label>
+                            <Controller
+                                name="isActive"
+                                control={control}
+                                render={({ field }) => (
+                                    <LuxuryToggle 
+                                        label={field.value ? 'Featured Active' : 'Suspended'}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        disabled={isViewOnly}
+                                        activeColor="var(--success)"
                                     />
-                                </div>
-                            </div>
+                                )}
+                            />
                         </div>
                     </div>
-
-                    <div className="brand-form-footer">
-                        <LuxuryButton type="button" onClick={onClose} variant="ghost">Cancel</LuxuryButton>
-                        {!isViewOnly && (
-                            <LuxuryButton type="submit" disabled={isLoading}>
-                                {isLoading ? 'Processing...' : (initialData ? 'Update Profile' : 'Onboard Brand')}
-                            </LuxuryButton>
-                        )}
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </LuxuryModal>
     );
 };
 
 export default BrandFormModal;
+
 

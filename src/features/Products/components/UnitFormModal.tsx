@@ -6,6 +6,7 @@ import { useToast } from '../../../context/ToastContext';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import LuxuryModal from '../../../components/Common/LuxuryModal';
 import { unitSchema, UnitFormData } from '../screens/Products.validation';
 import './UnitFormModal.css';
 
@@ -62,7 +63,6 @@ const UnitFormModal: React.FC<UnitFormModalProps> = ({ isOpen, onClose, onSucces
         if (isViewOnly) return;
         setIsLoading(true);
 
-        // Map shortName to shorthand as expected by backend if necessary
         const payload = {
             ...data,
             shorthand: data.shortName
@@ -83,82 +83,72 @@ const UnitFormModal: React.FC<UnitFormModalProps> = ({ isOpen, onClose, onSucces
         }
     };
 
-    if (!isOpen) return null;
+    const modalTitle = initialData ? (isViewOnly ? 'Unit Details' : 'Refine Unit Specs') : 'Define New Unit';
 
     return (
-        <div className="unit-form-overlay">
-            <div className="unit-form-modal-card">
-                <div className="unit-form-header">
-                    <h2 className="unit-form-modal-title">
-                        {initialData ? (isViewOnly ? 'Unit Details' : 'Refine Unit Specs') : 'Define New Unit'}
-                    </h2>
-                    <button onClick={onClose} className="unit-form-close-btn">&times;</button>
+        <LuxuryModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={modalTitle}
+            size="md"
+            isLoading={isLoading}
+            onSubmit={handleSubmit(onFormSubmit)}
+            submitLabel={initialData ? 'Update Unit' : 'Create Unit'}
+            isViewOnly={isViewOnly}
+        >
+            <div className="unit-form-container">
+                <div className="unit-form-section">
+                    <h3 className="unit-form-section-title">Measurement Basics</h3>
+                    <div className="unit-form-row">
+                        <LuxuryInput 
+                            label="Unit Full Name *" 
+                            {...register('name')}
+                            error={errors.name?.message}
+                            disabled={isViewOnly}
+                            placeholder="e.g. Kilogram, Pieces, Meters"
+                        />
+                        <LuxuryInput 
+                            label="Shorthand *" 
+                            {...register('shortName')}
+                            error={errors.shortName?.message}
+                            disabled={isViewOnly}
+                            placeholder="e.g. kg, pcs, m"
+                        />
+                    </div>
+                    <div className="unit-form-group">
+                        <LuxuryInput 
+                            label="Narrative Description"
+                            {...register('description')}
+                            error={errors.description?.message}
+                            disabled={isViewOnly}
+                            placeholder="Details about this unit of measurement..."
+                            multiline
+                            rows={3}
+                        />
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onFormSubmit)} className="unit-form-container">
-                    <div className="unit-form-scroll-area">
-                        <div className="unit-form-section">
-                            <h3 className="unit-form-section-title">Measurement Basics</h3>
-                            <div className="unit-form-row">
-                                <LuxuryInput 
-                                    label="Unit Full Name *" 
-                                    {...register('name')}
-                                    error={errors.name?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="e.g. Kilogram, Pieces, Meters"
-                                />
-                                <LuxuryInput 
-                                    label="Shorthand *" 
-                                    {...register('shortName')}
-                                    error={errors.shortName?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="e.g. kg, pcs, m"
-                                />
-                            </div>
-                            <div className="unit-form-group">
-                                <LuxuryInput 
-                                    label="Narrative Description"
-                                    {...register('description')}
-                                    error={errors.description?.message}
-                                    disabled={isViewOnly}
-                                    placeholder="Details about this unit of measurement..."
-                                    multiline
-                                    rows={3}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="unit-form-group">
-                            <label className="unit-form-label">Status</label>
-                            <Controller
-                                name="isActive"
-                                control={control}
-                                render={({ field }) => (
-                                    <LuxuryToggle 
-                                        label={field.value ? 'Available for Products' : 'Archived'}
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        disabled={isViewOnly}
-                                        activeColor="var(--success)"
-                                    />
-                                )}
+                <div className="unit-form-group">
+                    <label className="unit-form-label">Status</label>
+                    <Controller
+                        name="isActive"
+                        control={control}
+                        render={({ field }) => (
+                            <LuxuryToggle 
+                                label={field.value ? 'Available for Products' : 'Archived'}
+                                value={field.value}
+                                onChange={field.onChange}
+                                disabled={isViewOnly}
+                                activeColor="var(--success)"
                             />
-                        </div>
-                    </div>
-
-                    <div className="unit-form-footer">
-                        <LuxuryButton type="button" onClick={onClose} variant="ghost">Cancel</LuxuryButton>
-                        {!isViewOnly && (
-                            <LuxuryButton type="submit" disabled={isLoading}>
-                                {isLoading ? 'Processing...' : (initialData ? 'Update Unit' : 'Create Unit')}
-                            </LuxuryButton>
                         )}
-                    </div>
-                </form>
+                    />
+                </div>
             </div>
-        </div>
+        </LuxuryModal>
     );
 };
 
 export default UnitFormModal;
+
 

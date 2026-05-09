@@ -1,98 +1,13 @@
-.tax-form-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100;
-}
-
-.tax-form-modal-card {
-    width: 500px;
-    max-width: 95%;
-    max-height: 90vh;
-    background-color: var(--surface);
-    border-radius: 24px;
-    border: 1px solid var(--glass-border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.tax-form-header {
-    padding: 20px 30px;
-    border-bottom: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.tax-form-modal-title {
-    font-family: 'Georgia', serif;
-    color: var(--primary);
-    font-size: 20px;
-    margin: 0;
-    letter-spacing: 1px;
-}
-
-.tax-form-close-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 28px;
-    cursor: pointer;
-}
-
 .tax-form-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-}
-
-.tax-form-scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px;
-}
-
-.tax-form-scroll-area::-webkit-scrollbar {
-    width: 6px;
-}
-
-.tax-form-scroll-area::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.tax-form-scroll-area::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
+    gap: 20px;
 }
 
 .tax-form-row {
     display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.tax-form-group {
-    flex: 1;
-    display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.tax-form-label {
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    display: block;
 }
 
 .tax-form-row.grid-2 {
@@ -105,6 +20,14 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+.tax-form-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
 }
 
 .tax-type-selector {
@@ -132,7 +55,7 @@
     border-radius: 10px;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -160,10 +83,8 @@
     font-style: italic;
 }
 
-.tax-form-footer {
-    padding: 20px 30px;
-    border-top: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
+@media (max-width: 600px) {
+    .tax-form-row.grid-2 {
+        grid-template-columns: 1fr;
+    }
 }

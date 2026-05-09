@@ -6,6 +6,7 @@ import { useToast } from '../../../context/ToastContext';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import LuxuryModal from '../../../components/Common/LuxuryModal';
 import { taxSchema, TaxFormData } from '../screens/Products.validation';
 import './TaxFormModal.css';
 
@@ -87,156 +88,142 @@ const TaxFormModal: React.FC<TaxFormModalProps> = ({ isOpen, onClose, onSuccess,
         }
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="tax-form-overlay">
-            <div className="tax-form-modal-card">
-                <div className="tax-form-header">
-                    <h2 className="tax-form-modal-title">
-                        {initialData ? (isViewOnly ? 'Tax Details' : 'Edit Tax Rule') : 'Create New Tax Rule'}
-                    </h2>
-                    <button onClick={onClose} className="tax-form-close-btn">&times;</button>
+        <LuxuryModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={initialData ? (isViewOnly ? 'Tax Details' : 'Edit Tax Rule') : 'Create New Tax Rule'}
+            size="md"
+            isLoading={isLoading}
+            onSubmit={handleSubmit(onFormSubmit)}
+            submitLabel="Save Tax Rule"
+            isViewOnly={isViewOnly}
+        >
+            <div className="tax-form-container">
+                <div className="tax-form-row">
+                    <LuxuryInput 
+                        label="Tax Name *" 
+                        {...register('name')}
+                        error={errors.name?.message}
+                        disabled={isViewOnly}
+                        placeholder="e.g. GST 18%, VAT 5%"
+                    />
                 </div>
 
-                <form onSubmit={handleSubmit(onFormSubmit)} className="tax-form-container">
-                    <div className="tax-form-scroll-area">
-                        <div className="tax-form-row">
-                            <LuxuryInput 
-                                label="Tax Name *" 
-                                {...register('name')}
-                                error={errors.name?.message}
-                                disabled={isViewOnly}
-                                placeholder="e.g. GST 18%, VAT 5%"
-                            />
-                        </div>
-
-                        <div className="tax-form-row grid-2">
-                            <LuxuryInput 
-                                label={`Tax Rate (${currentType === 'percentage' ? '%' : 'Fixed'}) *`}
-                                type="number" 
-                                {...register('rate', { valueAsNumber: true })}
-                                error={errors.rate?.message}
-                                disabled={isViewOnly}
-                                min="0"
-                                step="0.01"
-                            />
-                            
-                            <div className="tax-form-group">
-                                <label className="tax-form-label">Rate Type</label>
-                                <div className="tax-type-selector">
-                                    <Controller
-                                        name="type"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <div className="selector-buttons">
-                                                <button 
-                                                    type="button"
-                                                    className={`selector-btn ${field.value === 'percentage' ? 'active' : ''}`}
-                                                    onClick={() => !isViewOnly && field.onChange('percentage')}
-                                                    disabled={isViewOnly}
-                                                >
-                                                    Percentage
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    className={`selector-btn ${field.value === 'fixed' ? 'active' : ''}`}
-                                                    onClick={() => !isViewOnly && field.onChange('fixed')}
-                                                    disabled={isViewOnly}
-                                                >
-                                                    Fixed
-                                                </button>
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="tax-form-row">
-                            <div className="tax-form-group">
-                                <label className="tax-form-label">Tax Configuration (Inclusive/Exclusive)</label>
-                                <div className="tax-type-selector">
-                                    <Controller
-                                        name="taxType"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <div className="selector-buttons full-width">
-                                                <button 
-                                                    type="button"
-                                                    className={`selector-btn ${field.value === 'inclusive' ? 'active' : ''}`}
-                                                    onClick={() => !isViewOnly && field.onChange('inclusive')}
-                                                    disabled={isViewOnly}
-                                                >
-                                                    Inclusive
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    className={`selector-btn ${field.value === 'exclusive' ? 'active' : ''}`}
-                                                    onClick={() => !isViewOnly && field.onChange('exclusive')}
-                                                    disabled={isViewOnly}
-                                                >
-                                                    Exclusive
-                                                </button>
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                                <p className="tax-help-text">
-                                    {currentTaxType === 'inclusive' 
-                                        ? 'Price already includes this tax.' 
-                                        : 'Tax will be added on top of the price.'}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="tax-form-row">
-                            <LuxuryInput 
-                                label="Description" 
-                                {...register('description')}
-                                error={errors.description?.message}
-                                disabled={isViewOnly}
-                                multiline={true}
-                                rows={2}
-                                placeholder="Add some notes about this tax rule..."
-                            />
-                        </div>
-
-                        <div className="tax-form-row">
-                            <div className="tax-form-group">
-                                <label className="tax-form-label">Active Status</label>
-                                <Controller
-                                    name="isActive"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxuryToggle 
-                                            label={field.value ? 'Active' : 'Inactive'}
-                                            value={field.value}
-                                            onChange={field.onChange}
+                <div className="tax-form-row grid-2">
+                    <LuxuryInput 
+                        label={`Tax Rate (${currentType === 'percentage' ? '%' : 'Fixed'}) *`}
+                        type="number" 
+                        {...register('rate', { valueAsNumber: true })}
+                        error={errors.rate?.message}
+                        disabled={isViewOnly}
+                        min="0"
+                        step="0.01"
+                    />
+                    
+                    <div className="tax-form-group">
+                        <label className="tax-form-label">Rate Type</label>
+                        <div className="tax-type-selector">
+                            <Controller
+                                name="type"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="selector-buttons">
+                                        <button 
+                                            type="button"
+                                            className={`selector-btn ${field.value === 'percentage' ? 'active' : ''}`}
+                                            onClick={() => !isViewOnly && field.onChange('percentage')}
                                             disabled={isViewOnly}
-                                            activeColor="var(--success)"
-                                        />
-                                    )}
-                                />
-                            </div>
+                                        >
+                                            Percentage
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            className={`selector-btn ${field.value === 'fixed' ? 'active' : ''}`}
+                                            onClick={() => !isViewOnly && field.onChange('fixed')}
+                                            disabled={isViewOnly}
+                                        >
+                                            Fixed
+                                        </button>
+                                    </div>
+                                )}
+                            />
                         </div>
                     </div>
+                </div>
 
-                    <div className="tax-form-footer">
-                        <LuxuryButton type="button" onClick={onClose} variant="ghost">
-                            {isViewOnly ? 'Close' : 'Cancel'}
-                        </LuxuryButton>
-                        {!isViewOnly && (
-                            <LuxuryButton type="submit" disabled={isLoading}>
-                                {isLoading ? 'Saving...' : 'Save Tax Rule'}
-                            </LuxuryButton>
-                        )}
+                <div className="tax-form-row">
+                    <div className="tax-form-group">
+                        <label className="tax-form-label">Tax Configuration (Inclusive/Exclusive)</label>
+                        <div className="tax-type-selector">
+                            <Controller
+                                name="taxType"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="selector-buttons full-width">
+                                        <button 
+                                            type="button"
+                                            className={`selector-btn ${field.value === 'inclusive' ? 'active' : ''}`}
+                                            onClick={() => !isViewOnly && field.onChange('inclusive')}
+                                            disabled={isViewOnly}
+                                        >
+                                            Inclusive
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            className={`selector-btn ${field.value === 'exclusive' ? 'active' : ''}`}
+                                            onClick={() => !isViewOnly && field.onChange('exclusive')}
+                                            disabled={isViewOnly}
+                                        >
+                                            Exclusive
+                                        </button>
+                                    </div>
+                                )}
+                            />
+                        </div>
+                        <p className="tax-help-text">
+                            {currentTaxType === 'inclusive' 
+                                ? 'Price already includes this tax.' 
+                                : 'Tax will be added on top of the price.'}
+                        </p>
                     </div>
-                </form>
+                </div>
+
+                <div className="tax-form-row">
+                    <LuxuryInput 
+                        label="Description" 
+                        {...register('description')}
+                        error={errors.description?.message}
+                        disabled={isViewOnly}
+                        multiline={true}
+                        rows={2}
+                        placeholder="Add some notes about this tax rule..."
+                    />
+                </div>
+
+                <div className="tax-form-row">
+                    <div className="tax-form-group">
+                        <label className="tax-form-label">Active Status</label>
+                        <Controller
+                            name="isActive"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxuryToggle 
+                                    label={field.value ? 'Active' : 'Inactive'}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    disabled={isViewOnly}
+                                    activeColor="var(--success)"
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
             </div>
-        </div>
+        </LuxuryModal>
     );
 };
 
 export default TaxFormModal;
+
 

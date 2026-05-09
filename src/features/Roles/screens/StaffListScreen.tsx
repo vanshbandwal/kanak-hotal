@@ -92,15 +92,15 @@ const StaffListScreen = () => {
                 ))}
             </div>
 
-            {showAddModal && (
-                <StaffFormModal
-                    onClose={() => setShowAddModal(false)}
-                    onSuccess={() => {
-                        setShowAddModal(false);
-                        fetchStaff();
-                    }}
-                />
-            )}
+            <StaffFormModal
+                isOpen={showAddModal}
+                onClose={() => setShowAddModal(false)}
+                onSuccess={() => {
+                    setShowAddModal(false);
+                    fetchStaff();
+                }}
+            />
+
         </div>
     );
 };

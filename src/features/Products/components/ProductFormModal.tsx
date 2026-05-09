@@ -11,6 +11,7 @@ import { useToast } from '../../../context/ToastContext';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxurySelect from '../../../components/Common/LuxurySelect';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
+import LuxuryModal from '../../../components/Common/LuxuryModal';
 import { productSchema, ProductFormData } from '../screens/Products.validation';
 import './ProductFormModal.css';
 
@@ -36,7 +37,6 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
         watch,
         formState: { errors }
     } = useForm<ProductFormData>({
-        // Casting resolver to any handles library-level type mismatches between Zod and RHF versions
         resolver: zodResolver(productSchema) as any,
         defaultValues: {
             name: '',
@@ -242,199 +242,194 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
         }
     };
 
-    if (!isOpen) return null;
+    const modalTitle = initialData ? 'Refine Dish' : 'Create New Dish';
 
     return (
-        <div className="product-form-overlay">
-            <div className="product-form-modal-card">
-                <div className="product-form-header">
-                    <h2 className="product-form-modal-title">{initialData ? 'Refine Dish' : 'Create New Dish'}</h2>
-                    <button onClick={onClose} className="product-form-close-btn">&times;</button>
+        <LuxuryModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={modalTitle}
+            size="lg"
+            isLoading={isLoading}
+            onSubmit={handleSubmit(onFormSubmit)}
+            submitLabel="Save Dish"
+            isViewOnly={isViewOnly}
+        >
+            <div className="product-form-container">
+                <div className="product-form-section">
+                    <h3 className="product-form-section-title">Culinary Identity</h3>
+                    <div className="product-form-row">
+                        <LuxuryInput label="Dish Name *" {...register('name')} error={errors.name?.message} disabled={isViewOnly} />
+                        <Controller
+                            name="productType"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxurySelect
+                                    label="Service Style *"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    options={[
+                                        { value: 'single', label: 'Single Dish' },
+                                        { value: 'variant', label: 'Portions (Half/Full)' },
+                                        { value: 'combo', label: 'Meal Combo' }
+                                    ]}
+                                    disabled={isViewOnly}
+                                    error={errors.productType?.message}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div className="product-form-row" style={{ alignItems: 'center', gap: '20px' }}>
+                        <div style={{ display: 'flex', gap: '15px' }}>
+                            <Controller
+                                name="isVeg"
+                                control={control}
+                                render={({ field }) => (
+                                    <div onClick={() => !isViewOnly && field.onChange(!field.value)} className={`food-type-badge ${field.value ? 'veg' : 'non-veg'}`}>
+                                        {field.value ? '🟢 VEG' : '🔴 NON-VEG'}
+                                    </div>
+                                )}
+                            />
+                        </div>
+                        <LuxuryInput label="Prep Time (Min)" type="number" {...register('prepTime')} error={errors.prepTime?.message} disabled={isViewOnly} />
+                        <Controller
+                            name="spicyLevel"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxurySelect
+                                    label="Spiciness"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    options={[
+                                        { value: 0, label: 'Not Spicy' },
+                                        { value: 1, label: 'Mild' },
+                                        { value: 2, label: 'Spicy' },
+                                        { value: 3, label: 'Extra Spicy' }
+                                    ]}
+                                    disabled={isViewOnly}
+                                    error={errors.spicyLevel?.message}
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onFormSubmit)} className="product-form-container">
-                    <div className="product-form-scroll-area">
-                        <div className="product-form-section">
-                            <h3 className="product-form-section-title">Culinary Identity</h3>
-                            <div className="product-form-row">
-                                <LuxuryInput label="Dish Name *" {...register('name')} error={errors.name?.message} disabled={isViewOnly} />
-                                <Controller
-                                    name="productType"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxurySelect
-                                            label="Service Style *"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            options={[
-                                                { value: 'single', label: 'Single Dish' },
-                                                { value: 'variant', label: 'Portions (Half/Full)' },
-                                                { value: 'combo', label: 'Meal Combo' }
-                                            ]}
-                                            disabled={isViewOnly}
-                                            error={errors.productType?.message}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div className="product-form-row" style={{ alignItems: 'center', gap: '20px' }}>
-                                <div style={{ display: 'flex', gap: '15px' }}>
+                <div className="product-form-section">
+                    <h3 className="product-form-section-title">Pricing & Portions</h3>
+                    {productType === 'single' && (
+                        <div className="product-form-row">
+                            <LuxuryInput label="Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
+                            <LuxuryInput label="Sale Price" type="number" {...register('salePrice')} error={errors.salePrice?.message} disabled={isViewOnly} />
+                        </div>
+                    )}
+
+                    {productType === 'variant' && (
+                        <div className="portion-management">
+                            {variantFields.map((field, index) => (
+                                <div key={field.id} className="portion-row">
+                                    <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
+                                    <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
+                                    <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
+                                    {!isViewOnly && <button type="button" onClick={() => removeVariant(index)} className="remove-row-btn">🗑️</button>}
+                                </div>
+                            ))}
+                            {!isViewOnly && (
+                                <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, sku: `P-${Date.now()}` })} variant="ghost" size="small">
+                                    + Add Portion
+                                </LuxuryButton>
+                            )}
+                        </div>
+                    )}
+
+                    {productType === 'combo' && (
+                        <div className="combo-management">
+                            {comboFields.map((field, index) => (
+                                <div key={field.id} className="portion-row">
                                     <Controller
-                                        name="isVeg"
+                                        name={`comboItems.${index}.product` as any}
                                         control={control}
-                                        render={({ field }) => (
-                                            <div onClick={() => !isViewOnly && field.onChange(!field.value)} className={`food-type-badge ${field.value ? 'veg' : 'non-veg'}`}>
-                                                {field.value ? '🟢 VEG' : '🔴 NON-VEG'}
-                                            </div>
+                                        render={({ field: selectField }) => (
+                                            <LuxurySelect
+                                                label="Select Dish"
+                                                value={selectField.value}
+                                                onChange={selectField.onChange}
+                                                options={allProducts.map(p => ({ value: p._id, label: p.name }))}
+                                                disabled={isViewOnly}
+                                            />
                                         )}
                                     />
+                                    <LuxuryInput label="Qty" type="number" {...register(`comboItems.${index}.quantity` as any)} disabled={isViewOnly} />
+                                    {!isViewOnly && <button type="button" onClick={() => removeCombo(index)} className="remove-row-btn">🗑️</button>}
                                 </div>
-                                <LuxuryInput label="Prep Time (Min)" type="number" {...register('prepTime')} error={errors.prepTime?.message} disabled={isViewOnly} />
-                                <Controller
-                                    name="spicyLevel"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxurySelect
-                                            label="Spiciness"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            options={[
-                                                { value: 0, label: 'Not Spicy' },
-                                                { value: 1, label: 'Mild' },
-                                                { value: 2, label: 'Spicy' },
-                                                { value: 3, label: 'Extra Spicy' }
-                                            ]}
-                                            disabled={isViewOnly}
-                                            error={errors.spicyLevel?.message}
-                                        />
-                                    )}
-                                />
+                            ))}
+                            {!isViewOnly && (
+                                <LuxuryButton type="button" onClick={() => appendCombo({ product: '', quantity: 1 })} variant="ghost" size="small">
+                                    + Add Item to Meal
+                                </LuxuryButton>
+                            )}
+                            <div className="product-form-row" style={{ marginTop: '15px' }}>
+                                <LuxuryInput label="Combo Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
                             </div>
                         </div>
+                    )}
+                </div>
 
-                        <div className="product-form-section">
-                            <h3 className="product-form-section-title">Pricing & Portions</h3>
-                            {productType === 'single' && (
-                                <div className="product-form-row">
-                                    <LuxuryInput label="Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
-                                    <LuxuryInput label="Sale Price" type="number" {...register('salePrice')} error={errors.salePrice?.message} disabled={isViewOnly} />
-                                </div>
-                            )}
-
-                            {productType === 'variant' && (
-                                <div className="portion-management">
-                                    {variantFields.map((field, index) => (
-                                        <div key={field.id} className="portion-row">
-                                            {/* Using any for dynamic paths to prevent deep recursive type errors in RHF */}
-                                            <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
-                                            <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
-                                            <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
-                                            {!isViewOnly && <button type="button" onClick={() => removeVariant(index)} className="remove-row-btn">🗑️</button>}
-                                        </div>
-                                    ))}
-                                    {!isViewOnly && (
-                                        <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, sku: `P-${Date.now()}` })} variant="ghost" size="small">
-                                            + Add Portion
-                                        </LuxuryButton>
-                                    )}
-                                </div>
-                            )}
-
-                            {productType === 'combo' && (
-                                <div className="combo-management">
-                                    {comboFields.map((field, index) => (
-                                        <div key={field.id} className="portion-row">
-                                            <Controller
-                                                name={`comboItems.${index}.product` as any}
-                                                control={control}
-                                                render={({ field: selectField }) => (
-                                                    <LuxurySelect
-                                                        label="Select Dish"
-                                                        value={selectField.value}
-                                                        onChange={selectField.onChange}
-                                                        options={allProducts.map(p => ({ value: p._id, label: p.name }))}
-                                                        disabled={isViewOnly}
-                                                    />
-                                                )}
-                                            />
-                                            <LuxuryInput label="Qty" type="number" {...register(`comboItems.${index}.quantity` as any)} disabled={isViewOnly} />
-                                            {!isViewOnly && <button type="button" onClick={() => removeCombo(index)} className="remove-row-btn">🗑️</button>}
-                                        </div>
-                                    ))}
-                                    {!isViewOnly && (
-                                        <LuxuryButton type="button" onClick={() => appendCombo({ product: '', quantity: 1 })} variant="ghost" size="small">
-                                            + Add Item to Meal
-                                        </LuxuryButton>
-                                    )}
-                                    <div className="product-form-row" style={{ marginTop: '15px' }}>
-                                        <LuxuryInput label="Combo Price *" type="number" {...register('price')} error={errors.price?.message} disabled={isViewOnly} />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="product-form-section">
-                            <h3 className="product-form-section-title">Menu Category</h3>
-                            <div className="product-form-row">
-                                <Controller
-                                    name="category"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxurySelect
-                                            label="Category *"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            options={categories.map(c => ({ value: c._id, label: c.name }))}
-                                            placeholder="Select Category"
-                                            disabled={isViewOnly}
-                                            error={errors.category?.message}
-                                        />
-                                    )}
+                <div className="product-form-section">
+                    <h3 className="product-form-section-title">Menu Category</h3>
+                    <div className="product-form-row">
+                        <Controller
+                            name="category"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxurySelect
+                                    label="Category *"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    options={categories.map(c => ({ value: c._id, label: c.name }))}
+                                    placeholder="Select Category"
+                                    disabled={isViewOnly}
+                                    error={errors.category?.message}
                                 />
-                                <Controller
-                                    name="brand"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <LuxurySelect
-                                            label="Branded Ingredient"
-                                            value={field.value || ''}
-                                            onChange={field.onChange}
-                                            options={brands.map(b => ({ value: b._id, label: b.name }))}
-                                            placeholder="Select Brand"
-                                            disabled={isViewOnly}
-                                        />
-                                    )}
+                            )}
+                        />
+                        <Controller
+                            name="brand"
+                            control={control}
+                            render={({ field }) => (
+                                <LuxurySelect
+                                    label="Branded Ingredient"
+                                    value={field.value || ''}
+                                    onChange={field.onChange}
+                                    options={brands.map(b => ({ value: b._id, label: b.name }))}
+                                    placeholder="Select Brand"
+                                    disabled={isViewOnly}
                                 />
-                            </div>
-                        </div>
-
-                        <div className="product-form-section">
-                            <h3 className="product-form-section-title">Dish Photos</h3>
-                            <div className="product-form-media-grid">
-                                <label className="product-form-upload-label">
-                                    {mainImagePreview ? <img src={mainImagePreview} className="product-form-preview-img" alt="Dish preview" /> : <span className="upload-icon">📸 Upload Cover</span>}
-                                    <input type="file" onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            setMainImage(file);
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => setMainImagePreview(reader.result as string);
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }} style={{ display: 'none' }} accept="image/*" disabled={isViewOnly} />
-                                </label>
-                            </div>
-                        </div>
+                            )}
+                        />
                     </div>
+                </div>
 
-                    <div className="product-form-footer">
-                        <LuxuryButton type="button" onClick={onClose} variant="ghost">Cancel</LuxuryButton>
-                        {!isViewOnly && <LuxuryButton type="submit" disabled={isLoading}>{isLoading ? 'Saving...' : 'Save Dish'}</LuxuryButton>}
+                <div className="product-form-section">
+                    <h3 className="product-form-section-title">Dish Photos</h3>
+                    <div className="product-form-media-grid">
+                        <label className="product-form-upload-label">
+                            {mainImagePreview ? <img src={mainImagePreview} className="product-form-preview-img" alt="Dish preview" /> : <span className="upload-icon">📸 Upload Cover</span>}
+                            <input type="file" onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    setMainImage(file);
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => setMainImagePreview(reader.result as string);
+                                    reader.readAsDataURL(file);
+                                }
+                            }} style={{ display: 'none' }} accept="image/*" disabled={isViewOnly} />
+                        </label>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </LuxuryModal>
     );
 };
 
 export default ProductFormModal;
+
