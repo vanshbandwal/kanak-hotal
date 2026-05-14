@@ -116,4 +116,14 @@ export const QUERY_ENDPOINTS = {
     CUSTOMER_REPLY: (id: string) => `/v2/query/${id}/reply`,
 };
 
+export const SERVICE_PARTNER_ENDPOINTS = {
+    ALL: '/v1/service-partner',
+    SEND_OTP: '/v1/service-partner/send-otp',
+    VERIFY_OTP: '/v1/service-partner/verify-otp',
+    COMPLETE_REGISTRATION: '/v1/service-partner/complete-registration',
+    BY_ID: (id: string) => `/v1/service-partner/${id}`,
+    UPDATE_KYC: (id: string) => `/v1/service-partner/${id}/kyc`,
+    TOGGLE_STATUS: (id: string) => `/v1/service-partner/${id}/status`,
+};
+
 

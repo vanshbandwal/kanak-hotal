@@ -20,6 +20,7 @@ const CouponsScreen = lazy(() => import('../features/Coupons/screens/CouponsScre
 const BannersScreen = lazy(() => import('../features/Banners/screens/BannersScreen'));
 const ReviewsScreen = lazy(() => import('../features/Reviews/screens/ReviewsScreen'));
 const QueriesScreen = lazy(() => import('../features/Queries/screens/QueriesScreen'));
+const ServicePartnersScreen = lazy(() => import('../features/ServicePartners/screens/ServicePartnersScreen'));
 const ReportsScreen = lazy(() => import('../features/Reports/screens/ReportsScreen'));
 const AddRoleScreen = lazy(() => import('../features/Roles/screens/AddRoleScreen'));
 const EditRoleScreen = lazy(() => import('../features/Roles/screens/EditRoleScreen'));
@@ -64,7 +65,7 @@ const Markup = () => {
         { url: "products", component: <ProductsScreen /> },
         { url: "orders", component: <OrdersScreen /> },
         { url: "customers", component: <CustomersScreen /> },
-        { url: "service-partners", component: <div style={{ padding: '20px', color: 'white' }}>Service Partner Management Screen (Coming Soon)</div> },
+        { url: "service-partners", component: <ServicePartnersScreen /> },
         { url: "cms", component: <CMSScreen /> },
         { url: "coupons", component: <CouponsScreen /> },
         { url: "banners", component: <BannersScreen /> },
