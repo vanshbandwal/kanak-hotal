@@ -39,7 +39,9 @@ const requestHandler = async (request) => {
             const status = error.response.status;
             if (status === 401) {
                 errorMessage = 'Session expired. Please login again.';
-                // Optional: trigger logout or redirect to login
+                localStorage.removeItem('token');
+                localStorage.removeItem('admin_user');
+                window.location.href = '/login';
             } else if (status === 403) {
                 errorMessage = 'You do not have permission to perform this action.';
             } else if (status === 404) {

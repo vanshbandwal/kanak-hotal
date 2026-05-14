@@ -90,3 +90,30 @@ export const BANNER_ENDPOINTS = {
     UPDATE: (id: string) => `/v1/banner/update/${id}`,
     DELETE: (id: string) => `/v1/banner/delete/${id}`,
 };
+
+export const CUSTOMER_ENDPOINTS = {
+    ALL: '/v1/customer/admin/all',
+    BY_ID: (id: string) => `/v1/customer/admin/${id}`,
+    UPDATE: (id: string) => `/v1/customer/admin/${id}`,
+    DELETE: (id: string) => `/v1/customer/admin/${id}`,
+    TOGGLE_STATUS: (id: string) => `/v1/customer/admin/${id}/status`,
+    // OTP Flow
+    SEND_OTP: '/v1/customer/admin/send-otp',
+    VERIFY_OTP: '/v1/customer/admin/verify-otp',
+    COMPLETE_PROFILE: (id: string) => `/v1/customer/admin/complete-profile/${id}`,
+};
+
+export const QUERY_ENDPOINTS = {
+    ALL: '/v1/query',
+    BY_ID: (id: string) => `/v1/query/${id}`,
+    STATUS: (id: string) => `/v1/query/${id}/status`,
+    ASSIGN: (id: string) => `/v1/query/${id}/assign`,
+    ADMIN_REPLY: (id: string) => `/v1/query/${id}/admin-reply`,
+    DELETE: (id: string) => `/v1/query/${id}`,
+    // Customer Facing (Public)
+    CREATE: '/v2/query',
+    MY_QUERIES: '/v2/query/my-queries',
+    CUSTOMER_REPLY: (id: string) => `/v2/query/${id}/reply`,
+};
+
+

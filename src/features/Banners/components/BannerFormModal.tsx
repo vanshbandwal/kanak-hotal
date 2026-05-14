@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { bannerApi } from '../../../api/bannerApi';
@@ -18,7 +19,7 @@ const bannerSchema = z.object({
     link: z.string().url('Must be a valid URL').optional().or(z.literal('')),
     type: z.enum(['hero', 'promotion', 'footer']),
     order: z.number().min(0),
-    isActive: z.boolean().default(true)
+    isActive: z.boolean()
 });
 
 type BannerFormData = z.infer<typeof bannerSchema>;
@@ -31,10 +32,11 @@ interface BannerFormModalProps {
 }
 
 const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, initialData, onSuccess }) => {
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const { showToast } = useToast();
+    const { addToast } = useToast();
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm<BannerFormData>({
         resolver: zodResolver(bannerSchema),
@@ -77,15 +79,19 @@ const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, init
 
     const handleFormSubmit = async (data: BannerFormData) => {
         if (!imageFile && !initialData?.image) {
-            showToast('Please upload a banner image', 'error');
+            addToast('error', 'Please upload a banner image');
             return;
         }
 
         setIsSubmitting(true);
         try {
             const formData = new FormData();
+            
+            // ✅ Fix: Safely handle optional/undefined values
             Object.entries(data).forEach(([key, value]) => {
-                formData.append(key, value.toString());
+                if (value !== undefined && value !== null) {
+                    formData.append(key, String(value));
+                }
             });
             
             if (imageFile) {
@@ -94,14 +100,17 @@ const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, init
 
             if (initialData) {
                 await bannerApi.updateBanner(initialData._id, formData);
-                showToast('Banner updated successfully', 'success');
+                addToast('success', 'Banner updated successfully');
             } else {
                 await bannerApi.createBanner(formData);
-                showToast('Banner created successfully', 'success');
+                addToast('success', 'Banner created successfully');
             }
+            
+            onClose(); 
             onSuccess();
+            navigate('/banners');
         } catch (error) {
-            showToast('Failed to save banner', 'error');
+            addToast('error', 'Failed to save banner');
         } finally {
             setIsSubmitting(false);
         }
@@ -121,8 +130,10 @@ const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, init
                             label="Banner Image (High Resolution Recommended)"
                             value={imagePreview}
                             onChange={(file) => {
-                                setImageFile(file);
-                                setImagePreview(URL.createObjectURL(file));
+                                if (file) {
+                                    setImageFile(file);
+                                    setImagePreview(URL.createObjectURL(file));
+                                }
                             }}
                             onRemove={() => {
                                 setImageFile(null);
@@ -209,8 +220,8 @@ const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, init
                                 control={control}
                                 render={({ field }) => (
                                     <LuxuryToggle 
-                                        isActive={field.value}
-                                        onToggle={() => field.onChange(!field.value)}
+                                        value={field.value}
+                                        onChange={field.onChange}
                                     />
                                 )}
                             />

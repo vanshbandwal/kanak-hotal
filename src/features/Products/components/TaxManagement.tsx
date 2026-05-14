@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import TaxFormModal from './TaxFormModal';
 import { taxApi } from '../../../api/taxApi';
 import { useToast } from '../../../context/ToastContext';
@@ -32,7 +33,7 @@ const TaxManagement = () => {
         title: '',
         message: '',
         onConfirm: () => {},
-        type: 'danger' as 'danger'|'warning'|'info'
+        variant: 'danger' as 'danger'|'warning'|'info'
     });
 
     const fetchData = useCallback(async () => {
@@ -55,7 +56,7 @@ const TaxManagement = () => {
             isOpen: true,
             title: 'Change Status',
             message: `Are you sure you want to ${item.isActive ? 'deactivate' : 'activate'} tax rule "${item.name}"?`,
-            type: 'warning',
+            variant: 'warning',
             onConfirm: async () => {
                 const { error } = await taxApi.updateTax(item._id, { isActive: !item.isActive });
                 if (error) {
@@ -86,7 +87,7 @@ const TaxManagement = () => {
             isOpen: true,
             title: 'Delete Tax Rule',
             message: 'Are you sure you want to delete this tax rule? This might affect products using it.',
-            type: 'danger',
+            variant: 'danger',
             onConfirm: async () => {
                 const { error } = await taxApi.deleteTax(id);
                 if (error) {
@@ -128,12 +129,10 @@ const TaxManagement = () => {
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
-                    <LuxuryStatusBadge 
-                        label={item.isActive ? 'Active' : 'Inactive'}
-                        variant={item.isActive ? 'success' : 'danger'}
-                    />
-                </div>
+                <LuxuryToggle 
+                    value={item.isActive}
+                    onChange={() => handleToggleStatus(item)}
+                />
             )
         },
         { 
@@ -176,7 +175,7 @@ const TaxManagement = () => {
                 isOpen={confirmModal.isOpen}
                 title={confirmModal.title}
                 message={confirmModal.message}
-                type={confirmModal.type}
+                variant={confirmModal.variant}
                 onConfirm={confirmModal.onConfirm}
                 onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                 isLoading={isLoading}

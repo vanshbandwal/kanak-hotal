@@ -12,7 +12,7 @@ interface LuxuryConfirmModalProps {
     message: string;
     confirmLabel?: string;
     cancelLabel?: string;
-    type?: 'danger' | 'warning' | 'info';
+    variant?: 'danger' | 'warning' | 'info';
     isLoading?: boolean;
 }
 
@@ -24,20 +24,20 @@ const LuxuryConfirmModal: React.FC<LuxuryConfirmModalProps> = ({
     message,
     confirmLabel = 'CONFIRM',
     cancelLabel = 'CANCEL',
-    type = 'danger',
+    variant = 'danger',
     isLoading = false
 }) => {
     const { colors } = useTheme();
 
     const getIcon = () => {
-        if (type === 'danger') return '⚠️';
-        if (type === 'warning') return '🔔';
+        if (variant === 'danger') return '⚠️';
+        if (variant === 'warning') return '🔔';
         return 'ℹ️';
     };
 
     const getAccentColor = () => {
-        if (type === 'danger') return colors.error;
-        if (type === 'warning') return colors.primary;
+        if (variant === 'danger') return colors.error;
+        if (variant === 'warning') return colors.primary;
         return '#00a2ff';
     };
 

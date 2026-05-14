@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import ProductFormModal from './ProductFormModal';
 import { productApi } from '../../../api/productApi';
 import { BASE_URL } from '../../../api/endpoint';
@@ -36,7 +37,7 @@ const ProductManagement = () => {
         title: '',
         message: '',
         onConfirm: () => {},
-        type: 'danger' as 'danger' | 'warning' | 'info'
+        variant: 'danger' as 'danger' | 'warning' | 'info'
     });
 
     // Pagination & Sorting State
@@ -76,7 +77,7 @@ const ProductManagement = () => {
             isOpen: true,
             title: 'Change Status',
             message: `Are you sure you want to ${item.isActive ? 'deactivate' : 'activate'} "${item.name}"?`,
-            type: 'warning',
+            variant: 'warning',
             onConfirm: async () => {
                 const { error } = await productApi.toggleProductStatus(item._id);
                 if (error) {
@@ -107,7 +108,7 @@ const ProductManagement = () => {
             isOpen: true,
             title: 'Delete Product',
             message: 'Are you sure you want to delete this luxury item? This action will remove it from the catalog permanently.',
-            type: 'danger',
+            variant: 'danger',
             onConfirm: async () => {
                 const { error } = await productApi.deleteProduct(id);
                 if (error) {
@@ -213,12 +214,10 @@ const ProductManagement = () => {
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
-                    <LuxuryStatusBadge 
-                        label={item.isActive ? 'Active' : 'Inactive'}
-                        variant={item.isActive ? 'success' : 'danger'}
-                    />
-                </div>
+                <LuxuryToggle 
+                    value={item.isActive}
+                    onChange={() => handleToggleStatus(item)}
+                />
             )
         },
         { 
@@ -286,7 +285,7 @@ const ProductManagement = () => {
                 isOpen={confirmModal.isOpen}
                 title={confirmModal.title}
                 message={confirmModal.message}
-                type={confirmModal.type}
+                variant={confirmModal.variant}
                 onConfirm={confirmModal.onConfirm}
                 onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                 isLoading={isLoading}

@@ -1,54 +1,80 @@
-.queries-container {
+.queries-screen-container {
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.queries-title {
-    font-family: 'Georgia', serif;
+.ticket-id-link {
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ticket-id-link:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.customer-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.customer-name {
+    font-weight: 500;
     color: var(--text-primary);
-    font-size: 28px;
-    letter-spacing: 2px;
-    margin: 0;
 }
 
-.queries-subtitle {
+.customer-phone {
+    font-size: 11px;
     color: var(--text-secondary);
-    font-size: 14px;
-    margin-top: 5px;
-    letter-spacing: 0.5px;
 }
 
-.queries-content-card {
-    margin-top: 40px;
-    background-color: var(--glass-background);
-    backdrop-filter: blur(30px) saturate(180%);
-    padding: 60px;
-    border-radius: 24px;
+.subject-text {
+    max-width: 250px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-secondary);
+}
+
+.table-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
-    box-shadow: var(--card-shadow);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
-}
-
-.queries-placeholder {
-    text-align: center;
-}
-
-.queries-placeholder-icon {
-    font-size: 64px;
-    display: block;
-    margin-bottom: 20px;
-}
-
-.queries-placeholder-title {
-    color: var(--text-white);
-    font-family: 'Georgia', serif;
-    font-size: 24px;
-    margin: 10px 0;
-}
-
-.queries-placeholder-text {
-    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
     font-size: 14px;
-    margin-bottom: 30px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.action-btn.delete:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.action-btn.view:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

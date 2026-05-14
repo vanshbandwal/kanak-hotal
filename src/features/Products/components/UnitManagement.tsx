@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import UnitFormModal from './UnitFormModal';
 import { unitApi } from '../../../api/unitApi';
 import { useToast } from '../../../context/ToastContext';
@@ -30,7 +31,7 @@ const UnitManagement = () => {
         title: '',
         message: '',
         onConfirm: () => {},
-        type: 'danger' as 'danger'|'warning'|'info'
+        variant: 'danger' as 'danger'|'warning'|'info'
     });
 
     // Pagination & Sorting State
@@ -70,7 +71,7 @@ const UnitManagement = () => {
             isOpen: true,
             title: 'Change Status',
             message: `Are you sure you want to ${item.isActive ? 'deactivate' : 'activate'} unit "${item.name}"?`,
-            type: 'warning',
+            variant: 'warning',
             onConfirm: async () => {
                 const { error } = await unitApi.toggleUnitStatus(item._id);
                 if (error) {
@@ -101,7 +102,7 @@ const UnitManagement = () => {
             isOpen: true,
             title: 'Delete Unit',
             message: 'Are you sure you want to delete this unit? This might affect products using it.',
-            type: 'danger',
+            variant: 'danger',
             onConfirm: async () => {
                 const { error } = await unitApi.deleteUnit(id);
                 if (error) {
@@ -132,12 +133,10 @@ const UnitManagement = () => {
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div onClick={() => handleToggleStatus(item)} style={{ cursor: 'pointer' }}>
-                    <LuxuryStatusBadge 
-                        label={item.isActive ? 'Active' : 'Inactive'}
-                        variant={item.isActive ? 'success' : 'danger'}
-                    />
-                </div>
+                <LuxuryToggle 
+                    value={item.isActive}
+                    onChange={() => handleToggleStatus(item)}
+                />
             )
         },
         { 
@@ -187,7 +186,7 @@ const UnitManagement = () => {
                 isOpen={confirmModal.isOpen}
                 title={confirmModal.title}
                 message={confirmModal.message}
-                type={confirmModal.type}
+                variant={confirmModal.variant}
                 onConfirm={confirmModal.onConfirm}
                 onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                 isLoading={isLoading}

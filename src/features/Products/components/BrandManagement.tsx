@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
-import BrandFormModal from './BrandFormModal.tsx';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import BrandFormModal from './BrandFormModal';
 import { brandApi } from '../../../api/brandApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
@@ -32,7 +33,7 @@ const BrandManagement = () => {
         title: '',
         message: '',
         onConfirm: () => {},
-        type: 'danger' as 'danger' | 'warning' | 'info'
+        variant: 'danger' as 'danger' | 'warning' | 'info'
     });
 
     // Pagination & Sorting State
@@ -72,7 +73,7 @@ const BrandManagement = () => {
             isOpen: true,
             title: 'Change Status',
             message: `Are you sure you want to ${item.isActive ? 'deactivate' : 'activate'} "${item.name}"?`,
-            type: 'warning',
+            variant: 'warning',
             onConfirm: async () => {
                 const { error } = await brandApi.toggleBrandStatus(item._id);
                 if (error) {
@@ -103,7 +104,7 @@ const BrandManagement = () => {
             isOpen: true,
             title: 'Delete Brand',
             message: 'Are you sure you want to delete this brand? This action is permanent.',
-            type: 'danger',
+            variant: 'danger',
             onConfirm: async () => {
                 const { error } = await brandApi.deleteBrand(id);
                 if (error) {
@@ -164,15 +165,10 @@ const BrandManagement = () => {
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <div className="brand-mgmt-toggle-wrapper" onClick={() => handleToggleStatus(item)}>
-                    <div className="brand-mgmt-toggle-bg" style={{
-                        backgroundColor: item.isActive ? 'var(--success)' : 'rgba(255,255,255,0.1)'
-                    }}>
-                        <div className="brand-mgmt-toggle-circle" style={{
-                            left: item.isActive ? '18px' : '2px'
-                        }} />
-                    </div>
-                </div>
+                <LuxuryToggle 
+                    value={item.isActive}
+                    onChange={() => handleToggleStatus(item)}
+                />
             )
         },
         { 
@@ -237,7 +233,7 @@ const BrandManagement = () => {
                 isOpen={confirmModal.isOpen}
                 title={confirmModal.title}
                 message={confirmModal.message}
-                type={confirmModal.type}
+                variant={confirmModal.variant}
                 onConfirm={confirmModal.onConfirm}
                 onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                 isLoading={isLoading}

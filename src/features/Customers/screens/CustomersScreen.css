@@ -1,54 +1,174 @@
-.customers-container {
-    /* Container styles if needed */
+.customers-screen-container {
+    padding: 24px;
+    min-height: calc(100vh - 80px);
 }
 
-.customers-title {
-    font-family: 'Georgia', serif;
-    color: var(--text-primary);
-    font-size: 28px;
-    letter-spacing: 2px;
-    margin: 0;
+/* ── Row cells ── */
+.customer-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.customers-subtitle {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-top: 5px;
-    letter-spacing: 0.5px;
-}
-
-.customers-content-card {
-    margin-top: 40px;
-    background-color: var(--glass-background);
-    backdrop-filter: blur(30px) saturate(180%);
-    padding: 60px;
-    border-radius: 24px;
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--card-shadow);
+.customer-avatar-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(197, 160, 89, 0.1);
+    border: 1px solid rgba(197, 160, 89, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    flex-shrink: 0;
 }
 
-.customers-placeholder {
-    text-align: center;
+.customer-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+.avatar-placeholder {
+    color: var(--primary-gold, #c5a059);
+    font-weight: 700;
+    font-size: 0.9rem;
 }
 
-.customers-placeholder-icon {
-    font-size: 64px;
-    display: block;
-    margin-bottom: 20px;
+.customer-text { display: flex; flex-direction: column; gap: 2px; }
+.customer-name  { color: var(--text-primary, #fff); font-weight: 500; font-size: 0.92rem; }
+.customer-email { color: var(--text-secondary, #a0a0a0); font-size: 0.78rem; }
+
+.phone-badge {
+    background: rgba(197, 160, 89, 0.08);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88rem;
+    color: var(--primary-gold, #c5a059);
+    border: 1px solid rgba(197, 160, 89, 0.18);
 }
 
-.customers-placeholder-title {
-    color: var(--text-white);
-    font-family: 'Georgia', serif;
-    font-size: 24px;
-    margin: 10px 0;
+/* ── Action buttons ── */
+.customer-actions { display: flex; gap: 6px; align-items: center; }
+
+.action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: var(--text-secondary, #a0a0a0);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s ease;
+}
+.action-btn:hover                { transform: translateY(-2px); }
+.action-btn.view:hover           { background: rgba(99,179,237,0.18); color: #63b3ed; border-color: rgba(99,179,237,0.3); }
+.action-btn.edit:hover           { background: rgba(197,160,89,0.18); color: var(--primary-gold,#c5a059); border-color: rgba(197,160,89,0.3); }
+.action-btn.delete:hover         { background: rgba(255,71,87,0.18);  color: #ff4757; border-color: rgba(255,71,87,0.3); }
+
+/* ── View Drawer ── */
+.customer-view-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    z-index: 9000;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeOverlay 0.25s ease;
 }
 
-.customers-placeholder-text {
-    color: var(--text-secondary);
-    font-size: 14px;
+.customer-view-drawer {
+    width: 360px;
+    height: 100%;
+    background: #111;
+    border-left: 1px solid rgba(197,160,89,0.25);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 32px;
+    overflow-y: auto;
+    animation: slideInDrawer 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.drawer-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.drawer-header h3 { color: var(--primary-gold,#c5a059); font-size: 1.1rem; margin: 0; }
+
+.drawer-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary,#a0a0a0);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    transition: color 0.2s;
+}
+.drawer-close:hover { color: #fff; }
+
+.drawer-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(197,160,89,0.1);
+    border: 2px solid rgba(197,160,89,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 700;
+    color: var(--primary-gold,#c5a059);
+    margin: 28px 0 12px;
+}
+.drawer-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.drawer-name {
+    color: #fff; font-size: 1.15rem; font-weight: 600;
+    margin: 0 0 24px; text-align: center;
+}
+
+.drawer-fields {
+    width: 100%;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.drawer-field {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.drawer-field label { color: var(--text-secondary,#a0a0a0); font-size: 0.82rem; }
+.drawer-field span  { color: #fff; font-size: 0.88rem; font-weight: 500; }
+
+.drawer-actions {
+    width: 100%;
+    padding: 24px 24px 0;
+}
+.drawer-edit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(197,160,89,0.2), rgba(197,160,89,0.1));
+    border: 1px solid rgba(197,160,89,0.4);
+    color: var(--primary-gold,#c5a059);
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.2s ease;
+}
+.drawer-edit-btn:hover {
+    background: rgba(197,160,89,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(197,160,89,0.2);
+}
+
+@keyframes fadeOverlay   { from { opacity:0 } to { opacity:1 } }
+@keyframes slideInDrawer { from { transform: translateX(100%) } to { transform: translateX(0) } }

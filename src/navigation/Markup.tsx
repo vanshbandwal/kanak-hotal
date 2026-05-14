@@ -64,6 +64,7 @@ const Markup = () => {
         { url: "products", component: <ProductsScreen /> },
         { url: "orders", component: <OrdersScreen /> },
         { url: "customers", component: <CustomersScreen /> },
+        { url: "service-partners", component: <div style={{ padding: '20px', color: 'white' }}>Service Partner Management Screen (Coming Soon)</div> },
         { url: "cms", component: <CMSScreen /> },
         { url: "coupons", component: <CouponsScreen /> },
         { url: "banners", component: <BannersScreen /> },

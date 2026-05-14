@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import CategoryFormModal from './CategoryFormModal';
 import { categoryApi } from '../../../api/categoryApi';
 import { BASE_URL } from '../../../api/endpoint';
@@ -35,7 +36,7 @@ const CategoryManagement = () => {
         title: '',
         message: '',
         onConfirm: () => {},
-        type: 'danger' as 'danger' | 'warning' | 'info'
+        variant: 'danger' as 'danger' | 'warning' | 'info'
     });
 
     // Pagination & Sorting State
@@ -60,9 +61,9 @@ const CategoryManagement = () => {
         let response;
         if (subTab === 'category') response = await categoryApi.getAllCategories(params);
         else if (subTab === 'subcategory') response = await categoryApi.getAllSubcategories(params);
-        else if (subTab === 'subsubcategory') response = await categoryApi.getAllSubSubcategories(params);
+        else response = await categoryApi.getAllSubSubcategories(params);
 
-        const { data: responseData, error } = response;
+        const { data: responseData, error } = response || { data: null, error: 'Request failed' };
 
         if (error) {
             addToast('error', error);
@@ -91,7 +92,7 @@ const CategoryManagement = () => {
             isOpen: true,
             title: 'Change Status',
             message: `Are you sure you want to ${item.isActive ? 'deactivate' : 'activate'} "${item.name}"?`,
-            type: 'warning',
+            variant: 'warning',
             onConfirm: async () => {
                 let response;
                 const updateData = { isActive: !item.isActive };
@@ -127,7 +128,7 @@ const CategoryManagement = () => {
             isOpen: true,
             title: 'Delete Item',
             message: 'Are you sure you want to delete this collection? This action cannot be undone.',
-            type: 'danger',
+            variant: 'danger',
             onConfirm: async () => {
                 let response;
                 if (subTab === 'category') response = await categoryApi.deleteCategory(id);
@@ -216,15 +217,10 @@ const CategoryManagement = () => {
                 key: 'isActive',
                 sortable: true,
                 render: (item) => (
-                    <div className="category-mgmt-toggle-wrapper" onClick={() => handleToggleStatus(item)}>
-                        <div className="category-mgmt-toggle-bg" style={{
-                            backgroundColor: item.isActive ? 'var(--success)' : 'rgba(255,255,255,0.1)'
-                        }}>
-                            <div className="category-mgmt-toggle-circle" style={{
-                                left: item.isActive ? '18px' : '2px'
-                            }} />
-                        </div>
-                    </div>
+                    <LuxuryToggle 
+                        value={item.isActive}
+                        onChange={() => handleToggleStatus(item)}
+                    />
                 )
             },
             { 
@@ -334,7 +330,7 @@ const CategoryManagement = () => {
                 isOpen={confirmModal.isOpen}
                 title={confirmModal.title}
                 message={confirmModal.message}
-                type={confirmModal.type}
+                variant={confirmModal.variant}
                 onConfirm={confirmModal.onConfirm}
                 onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                 isLoading={isLoading}

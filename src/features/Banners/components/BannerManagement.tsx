@@ -6,6 +6,7 @@ import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryTable from '../../../components/Common/LuxuryTable';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
+import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import BannerFormModal from './BannerFormModal';
 import './BannerManagement.css';
 
@@ -15,6 +16,9 @@ const BannerManagement: React.FC = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState<any>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [totalItems, setTotalItems] = useState(0);
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({
         key: 'order',
         direction: 'asc'
@@ -32,11 +36,11 @@ const BannerManagement: React.FC = () => {
         onConfirm: () => {},
         variant: 'info'
     });
-    const { showToast } = useToast();
+    const { addToast } = useToast();
 
     useEffect(() => {
         loadBanners();
-    }, [searchTerm, sortConfig]);
+    }, [searchTerm, sortConfig, currentPage, rowsPerPage]);
 
     const loadBanners = async () => {
         setIsLoading(true);
@@ -44,11 +48,14 @@ const BannerManagement: React.FC = () => {
             const { data } = await bannerApi.getAllBanners({ 
                 search: searchTerm,
                 sort: sortConfig.key,
-                order: sortConfig.direction
+                order: sortConfig.direction,
+                page: currentPage,
+                limit: rowsPerPage
             });
             setBanners(data?.data || []);
+            setTotalItems(data?.pagination?.totalItems || 0);
         } catch (error) {
-            showToast('Failed to load banners', 'error');
+            addToast('error', 'Failed to load banners');
         } finally {
             setIsLoading(false);
         }
@@ -76,11 +83,11 @@ const BannerManagement: React.FC = () => {
                 setIsActionLoading(true);
                 try {
                     await bannerApi.updateBanner(banner._id, { isActive: !banner.isActive });
-                    showToast('Status updated successfully', 'success');
+                    addToast('success', 'Status updated successfully');
                     setConfirmAction(prev => ({ ...prev, isOpen: false }));
                     loadBanners();
                 } catch (error) {
-                    showToast('Failed to update status', 'error');
+                    addToast('error', 'Failed to update status');
                 } finally {
                     setIsActionLoading(false);
                 }
@@ -98,11 +105,11 @@ const BannerManagement: React.FC = () => {
                 setIsActionLoading(true);
                 try {
                     await bannerApi.deleteBanner(banner._id);
-                    showToast('Banner deleted successfully', 'success');
+                    addToast('success', 'Banner deleted successfully');
                     setConfirmAction(prev => ({ ...prev, isOpen: false }));
                     loadBanners();
                 } catch (error) {
-                    showToast('Failed to delete banner', 'error');
+                    addToast('error', 'Failed to delete banner');
                 } finally {
                     setIsActionLoading(false);
                 }
@@ -115,7 +122,7 @@ const BannerManagement: React.FC = () => {
             key: 'sno',
             header: 'Sr.No',
             width: '60px',
-            render: (_: any, index: number) => index + 1
+            render: (_: any, index: number) => (currentPage - 1) * rowsPerPage + index + 1
         },
         {
             key: 'image',
@@ -160,12 +167,10 @@ const BannerManagement: React.FC = () => {
             key: 'isActive',
             header: 'Status',
             render: (banner: any) => (
-                <div onClick={() => handleToggleStatus(banner)} style={{ cursor: 'pointer' }}>
-                    <LuxuryStatusBadge
-                        label={banner?.isActive ? 'ACTIVE' : 'INACTIVE'}
-                        variant={banner?.isActive ? 'success' : 'neutral'}
-                    />
-                </div>
+                <LuxuryToggle 
+                    value={banner?.isActive}
+                    onChange={() => handleToggleStatus(banner)}
+                />
             )
         },
         {
@@ -212,6 +217,12 @@ const BannerManagement: React.FC = () => {
                     onSearchChange={setSearchTerm}
                     sortConfig={sortConfig}
                     onSortChange={setSortConfig}
+                    // Pagination Props
+                    currentPage={currentPage}
+                    totalCount={totalItems}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setCurrentPage}
+                    onRowsPerPageChange={setRowsPerPage}
                     emptyTitle="No Banners Found"
                     emptyDescription="Start by uploading your first promotional banner."
                     emptyIcon="🖼️"
