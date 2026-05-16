@@ -6,6 +6,7 @@ import BrandFormModal from './BrandFormModal';
 import { brandApi } from '../../../api/brandApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './BrandManagement.css';
 
 interface BrandItem {
@@ -176,9 +177,21 @@ const BrandManagement = () => {
             key: 'actions',
             render: (item) => (
                 <div className="brand-mgmt-actions-cell">
-                    <button className="brand-mgmt-view-btn" onClick={() => handleView(item)} title="View">👁️</button>
-                    <button className="brand-mgmt-edit-btn" onClick={() => handleEdit(item)} title="Edit">✏️</button>
-                    <button className="brand-mgmt-delete-btn" onClick={() => handleDelete(item._id)} title="Delete">🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleView(item)} 
+                        title="View Brand"
+                    />
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(item)} 
+                        title="Edit Brand"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDelete(item._id)} 
+                        title="Delete Brand"
+                    />
                 </div>
             )
         }

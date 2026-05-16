@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../../../layouts/AuthLayout';
+import LuxuryButton from '../../../components/Common/LuxuryButton';
+import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import './ForgotPasswordScreen.css';
 
 const ForgotPasswordScreen = () => {
     const [isSent, setIsSent] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <AuthLayout>
@@ -13,40 +17,20 @@ const ForgotPasswordScreen = () => {
             </div>
 
             {!isSent ? (
-                <form className="forgot-form">
-                    <div className="forgot-input-group">
-                        <label className="forgot-label">EMAIL ADDRESS</label>
-                        <input
-                            type="email"
-                            placeholder="admin@velour.com"
-                            className="forgot-input"
-                        />
-                    </div>
-
-                    <button
-                        className="forgot-button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setIsSent(true);
-                        }}
-                    >
-                        SEND RECOVERY EMAIL
-                    </button>
-
-                    <div className="forgot-back-row">
-                        <span className="forgot-back-text">Back to Sign In</span>
-                    </div>
-                </form>
+                <ForgotPasswordForm 
+                    onSubmitSuccess={() => setIsSent(true)}
+                    onBackToLogin={() => navigate('/login')}
+                />
             ) : (
                 <div className="forgot-success-state">
                     <div className="forgot-success-icon">📧</div>
                     <p className="forgot-success-text">Recovery link has been sent to your email.</p>
-                    <button
-                        className="forgot-button"
-                        onClick={() => setIsSent(false)}
+                    <LuxuryButton
+                        onClick={() => navigate('/login')}
+                        variant="secondary"
                     >
                         RETURN TO LOGIN
-                    </button>
+                    </LuxuryButton>
                 </div>
             )}
         </AuthLayout>

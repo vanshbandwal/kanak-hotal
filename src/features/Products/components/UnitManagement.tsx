@@ -6,6 +6,7 @@ import UnitFormModal from './UnitFormModal';
 import { unitApi } from '../../../api/unitApi';
 import { useToast } from '../../../context/ToastContext';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './UnitManagement.css';
 
 interface UnitItem {
@@ -144,9 +145,21 @@ const UnitManagement = () => {
             key: 'actions',
             render: (item) => (
                 <div className="unit-mgmt-actions-cell">
-                    <button className="unit-mgmt-view-btn" onClick={() => handleView(item)}>👁️</button>
-                    <button className="unit-mgmt-edit-btn" onClick={() => handleEdit(item)}>✏️</button>
-                    <button className="unit-mgmt-delete-btn" onClick={() => handleDelete(item._id)}>🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleView(item)} 
+                        title="View Unit"
+                    />
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(item)} 
+                        title="Edit Unit"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDelete(item._id)} 
+                        title="Delete Unit"
+                    />
                 </div>
             )
         }

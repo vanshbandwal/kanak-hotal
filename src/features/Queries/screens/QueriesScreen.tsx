@@ -5,6 +5,7 @@ import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import { queryApi } from '../../../api/queryApi';
 import { useToast } from '../../../context/ToastContext';
 import QueryDetailsModal from '../components/QueryDetailsModal';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './QueriesScreen.css';
 
 const QueriesScreen = () => {
@@ -142,8 +143,16 @@ const QueriesScreen = () => {
             header: 'Actions',
             render: (item: any) => (
                 <div className="table-actions">
-                    <button className="action-btn view" onClick={() => handleViewDetails(item)} title="View & Reply">👁️</button>
-                    <button className="action-btn delete" onClick={() => handleDeleteClick(item)} title="Delete">🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleViewDetails(item)} 
+                        title="View & Reply"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDeleteClick(item)} 
+                        title="Delete"
+                    />
                 </div>
             )
         }

@@ -9,7 +9,7 @@ import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import LuxuryModal from '../../../components/Common/LuxuryModal';
 import LuxuryImageUpload from '../../../components/Common/LuxuryImageUpload';
-import { brandSchema, BrandFormData } from '../screens/Brands.validation';
+import { brandSchema, BrandFormData } from '../screens/Products.validation';
 import './BrandFormModal.css';
 
 interface BrandFormModalProps {
@@ -35,7 +35,7 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
         reset,
         control,
         formState: { errors }
-    } = useForm<BrandFormData>({
+    } = useForm<any>({
         resolver: zodResolver(brandSchema),
         defaultValues: {
             name: '',
@@ -126,14 +126,14 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
                         <LuxuryInput 
                             label="Brand Name *" 
                             {...register('name')}
-                            error={errors.name?.message}
+                            error={errors.name?.message as string}
                             disabled={isViewOnly}
                             placeholder="e.g. Gucci, Rolex, Versace"
                         />
                         <LuxuryInput 
                             label="Website URL" 
                             {...register('website')}
-                            error={errors.website?.message}
+                            error={errors.website?.message as string}
                             disabled={isViewOnly}
                             placeholder="https://brand.com"
                         />
@@ -142,7 +142,7 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
                         <LuxuryInput 
                             label="Philosophy / Description"
                             {...register('description')}
-                            error={errors.description?.message}
+                            error={errors.description?.message as string}
                             disabled={isViewOnly}
                             placeholder="Describe the brand's heritage and luxury appeal..."
                             multiline
@@ -171,7 +171,7 @@ const BrandFormModal: React.FC<BrandFormModalProps> = ({ isOpen, onClose, onSucc
                             label="Display Order"
                             type="number" 
                             {...register('order', { valueAsNumber: true })}
-                            error={errors.order?.message}
+                            error={errors.order?.message as string}
                             disabled={isViewOnly}
                         />
                         <div className="brand-form-group">

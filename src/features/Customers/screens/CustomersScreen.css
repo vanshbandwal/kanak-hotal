@@ -48,24 +48,6 @@
 /* ── Action buttons ── */
 .customer-actions { display: flex; gap: 6px; align-items: center; }
 
-.action-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 7px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
-    color: var(--text-secondary, #a0a0a0);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.18s ease;
-}
-.action-btn:hover                { transform: translateY(-2px); }
-.action-btn.view:hover           { background: rgba(99,179,237,0.18); color: #63b3ed; border-color: rgba(99,179,237,0.3); }
-.action-btn.edit:hover           { background: rgba(197,160,89,0.18); color: var(--primary-gold,#c5a059); border-color: rgba(197,160,89,0.3); }
-.action-btn.delete:hover         { background: rgba(255,71,87,0.18);  color: #ff4757; border-color: rgba(255,71,87,0.3); }
-
 /* ── View Drawer ── */
 .customer-view-overlay {
     position: fixed; inset: 0;

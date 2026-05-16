@@ -8,6 +8,8 @@ import AuthLayout from '../../../layouts/AuthLayout';
 import FashionLoader from '../../../components/Common/FashionLoader';
 import { useNavigate } from 'react-router-dom';
 import { loginSchema, LoginFormData } from './Auth.validation';
+import LuxuryInput from '../../../components/Common/LuxuryInput';
+import LuxuryButton from '../../../components/Common/LuxuryButton';
 import './LoginScreen.css';
 
 const LoginScreen = () => {
@@ -66,27 +68,21 @@ const LoginScreen = () => {
             </div>
 
             <form className="login-form" onSubmit={handleSubmit(onFormSubmit)}>
-                <div className="login-input-group">
-                    <label className="login-label">ADMIN IDENTIFIER</label>
-                    <input
-                        type="email"
-                        {...register('email')}
-                        placeholder="admin@velour.com"
-                        className={`login-input ${errors.email ? 'error-border' : ''}`}
-                    />
-                    {errors.email && <span className="login-field-error">{errors.email.message}</span>}
-                </div>
+                <LuxuryInput 
+                    label="ADMIN IDENTIFIER"
+                    type="email"
+                    {...register('email')}
+                    placeholder="admin@velour.com"
+                    error={errors.email?.message}
+                />
 
-                <div className="login-input-group">
-                    <label className="login-label">ENCRYPTED PASSCODE</label>
-                    <input
-                        type="password"
-                        {...register('password')}
-                        placeholder="••••••••"
-                        className={`login-input ${errors.password ? 'error-border' : ''}`}
-                    />
-                    {errors.password && <span className="login-field-error">{errors.password.message}</span>}
-                </div>
+                <LuxuryInput 
+                    label="ENCRYPTED PASSCODE"
+                    type="password"
+                    {...register('password')}
+                    placeholder="••••••••"
+                    error={errors.password?.message}
+                />
 
                 {authError && (
                     <div className="login-error-text">
@@ -103,13 +99,14 @@ const LoginScreen = () => {
                     </span>
                 </div>
 
-                <button
+                <LuxuryButton
                     type="submit"
-                    disabled={isLocalLoading}
-                    className="login-button"
+                    isLoading={isLocalLoading}
+                    glow
+                    className="login-button-submit"
                 >
                     ESTABLISH SESSION
-                </button>
+                </LuxuryButton>
             </form>
 
             <div className="login-footer">

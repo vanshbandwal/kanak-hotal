@@ -8,6 +8,7 @@ import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import BannerFormModal from './BannerFormModal';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './BannerManagement.css';
 
 const BannerManagement: React.FC = () => {
@@ -186,16 +187,22 @@ const BannerManagement: React.FC = () => {
             width: '120px',
             render: (banner: any) => (
                 <div className="banner-actions">
-                    <button className="action-btn edit" onClick={() => handleEdit(banner)} title="Edit">
-                        ✎
-                    </button>
-                    <button className="action-btn delete" onClick={() => handleDeleteClick(banner)} title="Delete">
-                        🗑
-                    </button>
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(banner)} 
+                        title="Edit Banner"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDeleteClick(banner)} 
+                        title="Delete Banner"
+                    />
                     {banner.link && (
-                        <a href={banner.link} target="_blank" rel="noopener noreferrer" className="action-btn link" title="View Link">
-                            ↗
-                        </a>
+                        <LuxuryActionButton 
+                            type="external" 
+                            href={banner.link} 
+                            title="View Link"
+                        />
                     )}
                 </div>
             )

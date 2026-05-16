@@ -7,6 +7,7 @@ import { servicePartnerApi } from '../../../api/servicePartnerApi';
 import { useToast } from '../../../context/ToastContext';
 import PartnerFormModal from '../components/PartnerFormModal';
 import PartnerViewModal from '../components/PartnerViewModal';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './ServicePartnersScreen.css';
 
 const ServicePartnersScreen = () => {
@@ -193,9 +194,21 @@ const ServicePartnersScreen = () => {
             header: 'Actions',
             render: (item: any) => (
                 <div className="table-actions">
-                    <button className="action-btn" onClick={() => handleView(item)} title="View Profile">👁️</button>
-                    <button className="action-btn" onClick={() => handleEdit(item)} title="Edit Details">✏️</button>
-                    <button className="action-btn delete" onClick={() => handleDelete(item)} title="Remove Partner">🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleView(item)} 
+                        title="View Profile"
+                    />
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(item)} 
+                        title="Edit Details"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDelete(item)} 
+                        title="Remove Partner"
+                    />
                 </div>
             )
         }

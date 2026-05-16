@@ -1,0 +1,78 @@
+.luxury-action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.luxury-action-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.luxury-action-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.luxury-action-btn:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.luxury-action-btn:active {
+    transform: translateY(0);
+}
+
+/* Specific Types */
+.luxury-action-btn.type-edit:hover {
+    color: #4facfe;
+    border-color: rgba(79, 172, 254, 0.3);
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.15);
+}
+
+.luxury-action-btn.type-delete:hover {
+    color: #ff4d4d;
+    border-color: rgba(255, 77, 77, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 77, 77, 0.15);
+}
+
+.luxury-action-btn.type-view:hover,
+.luxury-action-btn.type-external:hover {
+    color: var(--primary);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+.luxury-action-btn.type-approve:hover {
+    color: #00ff66;
+    border-color: rgba(0, 255, 102, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 255, 102, 0.15);
+}
+
+.luxury-action-btn.type-reject:hover {
+    color: #ffcc00;
+    border-color: rgba(255, 204, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 204, 0, 0.15);
+}
+
+.luxury-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none !important;
+}

@@ -3,6 +3,7 @@ import { roleApi } from '../../../api/roleApi';
 import { useNavigate } from 'react-router-dom';
 import FashionLoader from '../../../components/Common/FashionLoader';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './RoleListScreen.css';
 
 interface Role {
@@ -80,13 +81,12 @@ const RoleListScreen = () => {
                                 <h3 className="role-list-role-label">{role.label}</h3>
                                 <p className="role-list-system-name">{role.name}</p>
                             </div>
-                            <button 
-                                className="role-list-view-icon-button"
-                                onClick={() => navigate(`/roles/edit/${role._id}`)}
+                            <LuxuryActionButton 
+                                type="edit" 
+                                onClick={() => navigate(`/roles/edit/${role._id}`)} 
                                 title="Edit Configuration"
-                            >
-                                ⚙️
-                            </button>
+                                className="role-list-view-icon-button"
+                            />
                         </div>
 
                         <div className="role-list-badge-container">
@@ -105,18 +105,16 @@ const RoleListScreen = () => {
                         </p>
 
                         <div className="role-list-card-footer">
-                            <button 
-                                className="role-list-edit-button"
-                                onClick={() => navigate(`/roles/edit/${role._id}`)}
-                            >
-                                <span className="role-list-btn-icon">✏️</span> Edit
-                            </button>
-                            <button 
-                                className="role-list-delete-button"
-                                onClick={() => handleDelete(role._id)}
-                            >
-                                <span className="role-list-btn-icon">🗑️</span> Delete
-                            </button>
+                            <LuxuryActionButton 
+                                type="edit" 
+                                onClick={() => navigate(`/roles/edit/${role._id}`)} 
+                                title="Edit Role"
+                            />
+                            <LuxuryActionButton 
+                                type="delete" 
+                                onClick={() => handleDelete(role._id)} 
+                                title="Delete Role"
+                            />
                         </div>
                     </div>
                 ))}

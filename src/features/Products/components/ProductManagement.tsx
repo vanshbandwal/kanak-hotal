@@ -7,6 +7,7 @@ import { productApi } from '../../../api/productApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './ProductManagement.css';
 
 interface ProductItem {
@@ -225,9 +226,21 @@ const ProductManagement = () => {
             key: 'actions',
             render: (item) => (
                 <div className="product-mgmt-actions-cell">
-                    <button className="product-mgmt-view-btn" onClick={() => handleView(item)} title="View">👁️</button>
-                    <button className="product-mgmt-edit-btn" onClick={() => handleEdit(item)} title="Edit">✏️</button>
-                    <button className="product-mgmt-delete-btn" onClick={() => handleDelete(item._id)} title="Delete">🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleView(item)} 
+                        title="View Product"
+                    />
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(item)} 
+                        title="Edit Product"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDelete(item._id)} 
+                        title="Delete Product"
+                    />
                 </div>
             )
         }

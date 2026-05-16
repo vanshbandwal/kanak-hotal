@@ -6,6 +6,7 @@ import TaxFormModal from './TaxFormModal';
 import { taxApi } from '../../../api/taxApi';
 import { useToast } from '../../../context/ToastContext';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './TaxManagement.css';
 
 interface TaxItem {
@@ -140,9 +141,21 @@ const TaxManagement = () => {
             key: 'actions',
             render: (item) => (
                 <div className="tax-mgmt-actions-cell">
-                    <button className="tax-mgmt-view-btn" onClick={() => handleView(item)}>👁️</button>
-                    <button className="tax-mgmt-edit-btn" onClick={() => handleEdit(item)}>✏️</button>
-                    <button className="tax-mgmt-delete-btn" onClick={() => handleDelete(item._id)}>🗑️</button>
+                    <LuxuryActionButton 
+                        type="view" 
+                        onClick={() => handleView(item)} 
+                        title="View Tax Rule"
+                    />
+                    <LuxuryActionButton 
+                        type="edit" 
+                        onClick={() => handleEdit(item)} 
+                        title="Edit Tax Rule"
+                    />
+                    <LuxuryActionButton 
+                        type="delete" 
+                        onClick={() => handleDelete(item._id)} 
+                        title="Delete Tax Rule"
+                    />
                 </div>
             )
         }

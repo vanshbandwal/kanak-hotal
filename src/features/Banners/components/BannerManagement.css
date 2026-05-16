@@ -54,38 +54,3 @@
     gap: 8px;
     align-items: center;
 }
-
-.action-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    transform: translateY(-2px);
-}
-
-.action-btn.edit:hover {
-    color: #ffd700;
-    border-color: rgba(255, 215, 0, 0.3);
-}
-
-.action-btn.delete:hover {
-    color: #ff4d4d;
-    border-color: rgba(255, 77, 77, 0.3);
-}
-
-.action-btn.link:hover {
-    color: #4da6ff;
-    border-color: rgba(77, 166, 255, 0.3);
-}

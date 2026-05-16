@@ -6,6 +6,7 @@ import CategoryFormModal from './CategoryFormModal';
 import { categoryApi } from '../../../api/categoryApi';
 import { BASE_URL } from '../../../api/endpoint';
 import { useToast } from '../../../context/ToastContext';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import './CategoryManagement.css';
 
 interface CategoryItem {
@@ -236,9 +237,21 @@ const CategoryManagement = () => {
                 key: 'actions',
                 render: (item) => (
                     <div className="category-mgmt-actions-cell">
-                        <button className="category-mgmt-view-btn" onClick={() => handleView(item)} title="View">👁️</button>
-                        <button className="category-mgmt-edit-btn" onClick={() => handleEdit(item)} title="Edit">✏️</button>
-                        <button className="category-mgmt-delete-btn" onClick={() => handleDelete(item._id)} title="Delete">🗑️</button>
+                        <LuxuryActionButton 
+                            type="view" 
+                            onClick={() => handleView(item)} 
+                            title={`View ${subTab}`}
+                        />
+                        <LuxuryActionButton 
+                            type="edit" 
+                            onClick={() => handleEdit(item)} 
+                            title={`Edit ${subTab}`}
+                        />
+                        <LuxuryActionButton 
+                            type="delete" 
+                            onClick={() => handleDelete(item._id)} 
+                            title={`Delete ${subTab}`}
+                        />
                     </div>
                 )
             }
