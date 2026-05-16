@@ -85,7 +85,7 @@ const RoleListScreen = () => {
                                 type="edit" 
                                 onClick={() => navigate(`/roles/edit/${role._id}`)} 
                                 title="Edit Configuration"
-                                className="role-list-view-icon-button"
+                                className="role-config-action"
                             />
                         </div>
 

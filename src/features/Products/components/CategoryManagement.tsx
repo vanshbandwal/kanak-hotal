@@ -240,17 +240,17 @@ const CategoryManagement = () => {
                         <LuxuryActionButton 
                             type="view" 
                             onClick={() => handleView(item)} 
-                            title={`View ${subTab}`}
+                            title="View Category"
                         />
                         <LuxuryActionButton 
                             type="edit" 
                             onClick={() => handleEdit(item)} 
-                            title={`Edit ${subTab}`}
+                            title="Edit Category"
                         />
                         <LuxuryActionButton 
                             type="delete" 
                             onClick={() => handleDelete(item._id)} 
-                            title={`Delete ${subTab}`}
+                            title="Delete Category"
                         />
                     </div>
                 )

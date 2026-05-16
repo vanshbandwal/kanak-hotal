@@ -15,6 +15,7 @@ import LuxuryModal from '../../../components/Common/LuxuryModal';
 import LuxuryTabs from '../../../components/Common/LuxuryTabs';
 import LuxuryImageUpload from '../../../components/Common/LuxuryImageUpload';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import { productSchema, ProductFormData } from '../screens/Products.validation';
 import './ProductFormModal.css';
 
@@ -388,7 +389,14 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, on
                                         <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
                                         <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
                                         <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
-                                        {!isViewOnly && <button type="button" onClick={() => removeVariant(index)} className="remove-row-btn">🗑️</button>}
+                                        {!isViewOnly && (
+                                            <LuxuryActionButton 
+                                                type="delete" 
+                                                onClick={() => removeVariant(index)} 
+                                                title="Remove Variant"
+                                                className="row-action-fix"
+                                            />
+                                        )}
                                     </div>
                                 ))}
                                 {!isViewOnly && (
@@ -417,7 +425,14 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, on
                                             )}
                                         />
                                         <LuxuryInput label="Qty" type="number" {...register(`comboItems.${index}.quantity` as any)} disabled={isViewOnly} />
-                                        {!isViewOnly && <button type="button" onClick={() => removeCombo(index)} className="remove-row-btn">🗑️</button>}
+                                        {!isViewOnly && (
+                                            <LuxuryActionButton 
+                                                type="delete" 
+                                                onClick={() => removeCombo(index)} 
+                                                title="Remove Item"
+                                                className="row-action-fix"
+                                            />
+                                        )}
                                     </div>
                                 ))}
                                 {!isViewOnly && (
