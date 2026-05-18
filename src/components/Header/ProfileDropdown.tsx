@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import './ProfileDropdown.css';
 
@@ -10,6 +11,7 @@ interface ProfileDropdownProps {
 
 const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ isOpen, onClose, onLogout }) => {
     const { theme } = useTheme();
+    const navigate = useNavigate();
 
     if (!isOpen) return null;
 
@@ -27,7 +29,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ isOpen, onClose, onLo
                 <div className="profile-dropdown-menu-list">
                     <button 
                         className={`profile-dropdown-menu-item ${isMinimal ? 'minimal' : ''}`} 
-                        onClick={onClose}
+                        onClick={() => {
+                            navigate('/profile-settings');
+                            onClose();
+                        }}
                     >
                         <span className="profile-dropdown-menu-icon">👤</span>
                         <span className="profile-dropdown-menu-text">Profile Settings</span>

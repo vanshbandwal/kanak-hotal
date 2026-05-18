@@ -70,6 +70,14 @@ export const servicePartnerApi = {
      */
     deletePartner: async (id) => {
         return await client.delete(SERVICE_PARTNER_ENDPOINTS.BY_ID(id));
+    },
+
+    /**
+     * Toggle a partner's active status
+     * @param {string} id 
+     */
+    toggleStatus: async (id) => {
+        return await client.patch(SERVICE_PARTNER_ENDPOINTS.TOGGLE_STATUS(id));
     }
 };
 

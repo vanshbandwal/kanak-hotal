@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../../context/ToastContext';
 import { FASHION_TOASTS } from '../../../components/Toast/ToastConstants';
 import FashionLoader from '../../../components/Common/FashionLoader';
+import LuxuryInput from '../../../components/Common/LuxuryInput';
+import LuxurySelect from '../../../components/Common/LuxurySelect';
+import LuxuryButton from '../../../components/Common/LuxuryButton';
 import './AddStaffScreen.css';
 
 const AddStaffScreen = () => {
@@ -63,63 +66,53 @@ const AddStaffScreen = () => {
 
             <div className="add-staff-content-card">
                 <form onSubmit={handleSubmit} className="add-staff-form" autoComplete="off">
-                    <div className="add-staff-input-group">
-                        <label className="add-staff-label">Full Name</label>
-                        <input
-                            className="add-staff-input"
-                            placeholder="e.g. John Doe"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
+                    <LuxuryInput 
+                        label="Full Name"
+                        placeholder="e.g. John Doe"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
 
-                    <div className="add-staff-input-group">
-                        <label className="add-staff-label">Email Address</label>
-                        <input
-                            className="add-staff-input"
-                            type="email"
-                            placeholder="e.g. john@velour.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            autoComplete="off"
-                        />
-                    </div>
+                    <LuxuryInput 
+                        label="Email Address"
+                        type="email"
+                        placeholder="e.g. john@velour.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="off"
+                    />
 
-                    <div className="add-staff-input-group">
-                        <label className="add-staff-label">Password</label>
-                        <input
-                            className="add-staff-input"
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            autoComplete="new-password"
-                        />
-                    </div>
+                    <LuxuryInput 
+                        label="Password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="new-password"
+                    />
 
-                    <div className="add-staff-input-group">
-                        <label className="add-staff-label">Assign Role</label>
-                        <select
-                            className="add-staff-select"
-                            value={roleId}
-                            onChange={(e) => setRoleId(e.target.value)}
+                    <LuxurySelect 
+                        label="Assign Role"
+                        placeholder="Select a role..."
+                        options={roles.map(role => ({
+                            value: role._id,
+                            label: role.label || role.name
+                        }))}
+                        value={roleId}
+                        onChange={setRoleId}
+                    />
+
+                    <div style={{ marginTop: '20px' }}>
+                        <LuxuryButton
+                            type="submit"
+                            variant="primary"
+                            isLoading={loading}
+                            disabled={loading || fetchingRoles}
+                            style={{ width: '100%' }}
                         >
-                            <option value="">Select a role...</option>
-                            {roles.map(role => (
-                                <option key={role._id} value={role._id}>
-                                    {role.label || role.name}
-                                </option>
-                            ))}
-                        </select>
+                            CREATE STAFF ACCOUNT
+                        </LuxuryButton>
                     </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading || fetchingRoles}
-                        className="add-staff-add-button"
-                    >
-                        {loading ? 'PROCESSING...' : 'CREATE STAFF ACCOUNT'}
-                    </button>
                 </form>
             </div>
         </div>

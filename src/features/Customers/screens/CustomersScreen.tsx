@@ -114,19 +114,22 @@ const CustomersScreen: React.FC = () => {
             render: (_: any, index: number) => (currentPage - 1) * rowsPerPage + index + 1
         },
         {
-            key: 'name', header: 'Customer Details', sortable: true,
+            key: 'image', header: 'Profile', width: '70px',
             render: (c: any) => (
-                <div className="customer-info-cell">
-                    <div className="customer-avatar-small">
-                        {c.avatar
-                            ? <img src={`http://localhost:3006/${c.avatar.replace(/\\/g, '/')}`} alt="avatar" />
-                            : <span className="avatar-placeholder">{c.name ? c.name[0].toUpperCase() : '?'}</span>
-                        }
-                    </div>
-                    <div className="customer-text">
-                        <span className="customer-name">{c.name || 'Unnamed Client'}</span>
-                        <span className="customer-email">{c.email || '—'}</span>
-                    </div>
+                <div className="customer-avatar-small">
+                    {c.avatar
+                        ? <img src={`http://localhost:3006/${c.avatar.replace(/\\/g, '/')}`} alt="avatar" />
+                        : <span className="avatar-placeholder">{c.name ? c.name[0].toUpperCase() : '?'}</span>
+                    }
+                </div>
+            )
+        },
+        {
+            key: 'name', header: 'Customer', sortable: true,
+            render: (c: any) => (
+                <div className="customer-text">
+                    <span className="customer-name">{c.name || 'Unnamed Client'}</span>
+                    <span className="customer-email">{c.email || '—'}</span>
                 </div>
             )
         },

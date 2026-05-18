@@ -8,6 +8,7 @@ import { useToast } from '../../../context/ToastContext';
 import PartnerFormModal from '../components/PartnerFormModal';
 import PartnerViewModal from '../components/PartnerViewModal';
 import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
+import { BASE_URL } from '../../../api/endpoint';
 import './ServicePartnersScreen.css';
 
 const ServicePartnersScreen = () => {
@@ -124,17 +125,27 @@ const ServicePartnersScreen = () => {
         {
             key: 'avatar',
             header: 'Profile',
-            render: (item: any) => (
-                <div className="partner-avatar-cell">
-                    <div className="partner-avatar-mini">
-                        {item.avatar ? (
-                            <img src={item.avatar} alt={item.name} />
-                        ) : (
-                            <span>{item.name?.charAt(0) || 'P'}</span>
-                        )}
+            render: (item: any) => {
+                const getSanitizedPath = (path: string) => {
+                    if (!path) return '';
+                    if (path.startsWith('http')) return path;
+                    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+                    const cleanBase = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+                    return `${cleanBase}${cleanPath.replace(/\\/g, '/')}`;
+                };
+                
+                return (
+                    <div className="partner-avatar-cell">
+                        <div className="partner-avatar-mini">
+                            {item.avatar ? (
+                                <img src={getSanitizedPath(item.avatar)} alt={item.name} />
+                            ) : (
+                                <span>{item.name?.charAt(0) || 'P'}</span>
+                            )}
+                        </div>
                     </div>
-                </div>
-            )
+                );
+            }
         },
         {
             key: 'name',

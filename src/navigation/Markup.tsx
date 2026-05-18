@@ -27,6 +27,7 @@ const EditRoleScreen = lazy(() => import('../features/Roles/screens/EditRoleScre
 const RoleListScreen = lazy(() => import('../features/Roles/screens/RoleListScreen'));
 const AddStaffScreen = lazy(() => import('../features/Roles/screens/AddStaffScreen'));
 const StaffListScreen = lazy(() => import('../features/Roles/screens/StaffListScreen'));
+const ProfileSettingsScreen = lazy(() => import('../features/Profile/screens/ProfileSettingsScreen'));
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { sidebarApi } from '../api/sidebarApi';
@@ -77,6 +78,7 @@ const Markup = () => {
         { url: "roles/list", component: <RoleListScreen /> },
         { url: "roles/add-staff", component: <AddStaffScreen /> },
         { url: "roles/staff", component: <StaffListScreen /> },
+        { url: "profile-settings", component: <ProfileSettingsScreen /> },
     ];
 
     return (

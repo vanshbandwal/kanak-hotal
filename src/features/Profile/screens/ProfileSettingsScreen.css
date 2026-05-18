@@ -1,0 +1,356 @@
+.profile-settings-page {
+    padding: 30px;
+    background: radial-gradient(circle at 10% 20%, #151410 0%, #0d0c0a 50%, #070707 100%);
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🧱 Main Dashboard Containers */
+.profile-settings-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 950px;
+    align-items: stretch;
+}
+
+/* 👑 Left Section: Admin Profile Summary Card */
+.owner-summary-card {
+    background: rgba(22, 20, 16, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 20px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 50px rgba(212, 175, 55, 0.04);
+}
+
+.owner-summary-card .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.owner-meta-info {
+    margin-bottom: 30px;
+}
+
+.owner-meta-info h2 {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.3px;
+    background: linear-gradient(to right, #ffffff, #f7e7b4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.owner-role-desc {
+    color: #8c8c8c;
+    font-size: 0.8rem;
+    margin: 5px 0 0 0;
+    letter-spacing: 0.5px;
+}
+
+.premium-badge {
+    background: linear-gradient(135deg, #d4af37, #aa7c11);
+    color: #0c0b08;
+    font-weight: 800;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    display: inline-block;
+}
+
+/* 🛡️ Change Password Trigger Button */
+.security-modal-trigger-btn {
+    width: 100%;
+    margin-top: auto;
+    background: rgba(212, 175, 55, 0.06);
+    color: #e5c158;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 12px;
+    border: 1px dashed rgba(212, 175, 55, 0.35);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.security-modal-trigger-btn:hover {
+    background: linear-gradient(135deg, #d4af37, #aa7c11);
+    color: #0c0b08;
+    border-style: solid;
+    border-color: #f7e7b4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+}
+
+.security-modal-trigger-btn:active {
+    transform: translateY(0);
+}
+
+/* 📝 Right Section: Administrative Details Card */
+.profile-details-card {
+    background: rgba(22, 20, 16, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 20px;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 50px rgba(212, 175, 55, 0.04);
+}
+
+.details-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.details-header h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.details-header p {
+    color: #8c8c8c;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+    line-height: 1.4;
+}
+
+.high-density-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-single-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ✨ Compact Gold Button */
+.submit-btn-premium.compact {
+    align-self: flex-end;
+    margin-top: auto;
+    background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 12px 30px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+}
+
+.submit-btn-premium.compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4), 0 0 15px rgba(212, 175, 55, 0.15);
+    background: linear-gradient(135deg, #f7e7b4 0%, #d4af37 100%);
+    color: #0c0b08;
+    border-color: #f7e7b4;
+}
+
+.submit-btn-premium.compact:active {
+    transform: translateY(0);
+}
+
+.submit-btn-premium.compact:disabled {
+    background: #252422;
+    color: #5a5752;
+    border-color: rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 🛡️ Secure Modal Password Wizard Styling */
+.password-wizard-content {
+    padding: 10px 10px;
+}
+
+.wizard-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.wizard-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+}
+
+.wizard-step h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+}
+
+.wizard-description {
+    color: #8c8c8c;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 8px 0 20px 0;
+    max-width: 400px;
+}
+
+.wizard-input-wrap {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.wizard-input-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+/* OTP Dispatch Badge Alert */
+.otp-alert-badge {
+    background: rgba(46, 204, 113, 0.08);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    color: #2ecc71;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+}
+
+/* Wizard Footers */
+.wizard-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+}
+
+.wizard-cancel-btn, .wizard-back-btn {
+    background: transparent;
+    color: #8c8c8c;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wizard-cancel-btn:hover, .wizard-back-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.wizard-submit-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+    color: #ffffff;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 10px 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+    transition: all 0.2s ease;
+}
+
+.wizard-submit-btn:hover {
+    background: linear-gradient(135deg, #f7e7b4 0%, #d4af37 100%);
+    color: #0c0b08;
+    border-color: #f7e7b4;
+    transform: translateY(-1px);
+}
+
+.wizard-submit-btn.confirm {
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.15);
+}
+
+/* 🔄 Circular Avatar Preview styling overrides */
+.avatar-preview-circle {
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    width: 140px !important;
+    height: 140px !important;
+    border: 2px solid rgba(212, 175, 55, 0.25) !important;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15) !important;
+    transition: all 0.3s ease;
+}
+
+.avatar-preview-circle:hover {
+    border-color: rgba(212, 175, 55, 0.5) !important;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.3) !important;
+}
+
+.avatar-preview-circle img {
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.avatar-preview-circle .preview-overlay {
+    border-radius: 50% !important;
+}
+
+/* 📱 Responsive Adjustments */
+@media (max-width: 800px) {
+    .profile-settings-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .owner-summary-card {
+        padding: 20px;
+    }
+}

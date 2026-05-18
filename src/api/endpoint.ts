@@ -3,10 +3,12 @@ export const BASE_URL = 'http://localhost:3006';
 export const AUTH_ENDPOINTS = {
     LOGIN: '/v2/admin/login',
     PROFILE: '/v2/admin/me',
+    UPDATE_PROFILE: '/v2/admin/update-profile',
     LOGOUT: '/v1/user/logout',
     FORGOT_PASSWORD: '/v2/admin/forgot-password',
     RESET_PASSWORD: '/v2/admin/reset-password',
     CHANGE_PASSWORD: '/v2/admin/change-password',
+    REQUEST_PASSWORD_OTP: '/v2/admin/request-password-otp',
 };
 
 export const CATEGORY_ENDPOINTS = {

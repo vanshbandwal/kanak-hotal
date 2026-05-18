@@ -7,6 +7,7 @@ import LuxuryModal from '../../../components/Common/LuxuryModal';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryInput from '../../../components/Common/LuxuryInput';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxurySelect from '../../../components/Common/LuxurySelect';
 import { queryReplySchema, QueryReplyFormData } from '../Queries.validation';
 import './QueryDetailsModal.css';
 
@@ -51,6 +52,7 @@ const QueryDetailsModal: React.FC<QueryDetailsModalProps> = ({ isOpen, onClose, 
     };
 
     const loadQueryDetails = async () => {
+        if (!queryId) return;
         setIsLoading(true);
         try {
             const { data } = await queryApi.getQueryById(queryId);
@@ -63,6 +65,7 @@ const QueryDetailsModal: React.FC<QueryDetailsModalProps> = ({ isOpen, onClose, 
     };
 
     const onReplySubmit = async (data: QueryReplyFormData) => {
+        if (!queryId) return;
         setIsSubmitting(true);
         try {
             const response = await queryApi.adminReply(queryId, data);
@@ -80,6 +83,7 @@ const QueryDetailsModal: React.FC<QueryDetailsModalProps> = ({ isOpen, onClose, 
     };
 
     const handleStatusUpdate = async (newStatus: string) => {
+        if (!queryId) return;
         try {
             await queryApi.updateStatus(queryId, newStatus);
             addToast('success', `Status updated to ${newStatus}`);
@@ -118,17 +122,17 @@ const QueryDetailsModal: React.FC<QueryDetailsModalProps> = ({ isOpen, onClose, 
                             <LuxuryStatusBadge label={query.category} variant="info" />
                         </div>
                         <div className="meta-item">
-                            <label>Status</label>
-                            <select 
-                                className="query-status-select"
+                            <LuxurySelect 
+                                label="Status"
+                                options={[
+                                    { value: 'Open', label: 'Open' },
+                                    { value: 'Pending', label: 'Pending' },
+                                    { value: 'Resolved', label: 'Resolved' },
+                                    { value: 'Closed', label: 'Closed' }
+                                ]}
                                 value={query.status}
-                                onChange={(e) => handleStatusUpdate(e.target.value)}
-                            >
-                                <option value="Open">Open</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Resolved">Resolved</option>
-                                <option value="Closed">Closed</option>
-                            </select>
+                                onChange={handleStatusUpdate}
+                            />
                         </div>
                     </div>
 

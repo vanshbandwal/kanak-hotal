@@ -16,6 +16,7 @@ interface LuxuryModalProps {
     cancelLabel?: string;
     isViewOnly?: boolean;
     footer?: React.ReactNode;
+    hideFooter?: boolean;
 }
 
 const sizeMap: Record<ModalSize, string> = {
@@ -37,7 +38,8 @@ const LuxuryModal: React.FC<LuxuryModalProps> = ({
     submitLabel = 'Save Changes',
     cancelLabel = 'Cancel',
     isViewOnly = false,
-    footer
+    footer,
+    hideFooter = false
 }) => {
     // Handle Escape key to close
     useEffect(() => {
@@ -65,28 +67,30 @@ const LuxuryModal: React.FC<LuxuryModalProps> = ({
                     {children}
                 </div>
 
-                <div className="luxury-modal-footer">
-                    {footer ? footer : (
-                        <>
-                            <LuxuryButton 
-                                type="button" 
-                                onClick={onClose} 
-                                variant="ghost"
-                            >
-                                {isViewOnly ? 'Close' : cancelLabel}
-                            </LuxuryButton>
-                            {!isViewOnly && onSubmit && (
+                {!hideFooter && (
+                    <div className="luxury-modal-footer">
+                        {footer ? footer : (
+                            <>
                                 <LuxuryButton 
-                                    type="submit" 
-                                    onClick={onSubmit}
-                                    disabled={isLoading}
+                                    type="button" 
+                                    onClick={onClose} 
+                                    variant="ghost"
                                 >
-                                    {isLoading ? 'Saving...' : submitLabel}
+                                    {isViewOnly ? 'Close' : cancelLabel}
                                 </LuxuryButton>
-                            )}
-                        </>
-                    )}
-                </div>
+                                {!isViewOnly && onSubmit && (
+                                    <LuxuryButton 
+                                        type="submit" 
+                                        onClick={onSubmit}
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? 'Saving...' : submitLabel}
+                                    </LuxuryButton>
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
