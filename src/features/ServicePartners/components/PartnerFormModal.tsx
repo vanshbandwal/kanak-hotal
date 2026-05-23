@@ -129,32 +129,63 @@ const PartnerFormModal: React.FC<PartnerFormModalProps> = ({
         defaultValues: getInitialDetailsValues(initialData)
     });
 
+    // Register image fields so they are tracked by React Hook Form's watch/reset
+    React.useEffect(() => {
+        detailsForm.register('avatar');
+        detailsForm.register('documents.aadhaar.frontImage');
+        detailsForm.register('documents.aadhaar.backImage');
+        detailsForm.register('documents.pan.image');
+        detailsForm.register('documents.drivingLicense.image');
+    }, [detailsForm]);
+
     // Sync form with initialData when it changes
     React.useEffect(() => {
-        if (isOpen) {
-            if (mode === 'edit' && initialData) {
-                setStep('DETAILS');
-                setPhone(initialData.phone);
-                setPartnerId(initialData._id);
-                detailsForm.reset(getInitialDetailsValues(initialData));
-                setActiveTab('basic');
-            } else {
-                setStep('PHONE');
-                setPhone('');
-                setPartnerId('');
-                phoneForm.reset();
-                otpForm.reset();
-                detailsForm.reset(getInitialDetailsValues(null));
-                setActiveTab('basic');
+        const fetchDetails = async () => {
+            if (isOpen) {
+                if (mode === 'edit' && initialData?._id) {
+                    setStep('DETAILS');
+                    setIsLoading(true);
+                    try {
+                        const { data } = await servicePartnerApi.getPartnerById(initialData._id);
+                        if (data.success) {
+                            const partnerData = data.partner;
+                            setPhone(partnerData.phone);
+                            setPartnerId(partnerData._id);
+                            detailsForm.reset(getInitialDetailsValues(partnerData));
+                        } else {
+                            setPhone(initialData.phone);
+                            setPartnerId(initialData._id);
+                            detailsForm.reset(getInitialDetailsValues(initialData));
+                        }
+                    } catch (error) {
+                        addToast('error', 'Failed to fetch detailed partner information');
+                        setPhone(initialData.phone);
+                        setPartnerId(initialData._id);
+                        detailsForm.reset(getInitialDetailsValues(initialData));
+                    } finally {
+                        setIsLoading(false);
+                        setActiveTab('basic');
+                    }
+                } else {
+                    setStep('PHONE');
+                    setPhone('');
+                    setPartnerId('');
+                    phoneForm.reset();
+                    otpForm.reset();
+                    detailsForm.reset(getInitialDetailsValues(null));
+                    setActiveTab('basic');
+                }
+                // Clear files
+                setAvatarFile(null);
+                setAadhaarFrontFile(null);
+                setAadhaarBackFile(null);
+                setPanFile(null);
+                setDlFile(null);
             }
-            // Clear files
-            setAvatarFile(null);
-            setAadhaarFrontFile(null);
-            setAadhaarBackFile(null);
-            setPanFile(null);
-            setDlFile(null);
-        }
-    }, [isOpen, initialData, mode, detailsForm, phoneForm, otpForm]);
+        };
+
+        fetchDetails();
+    }, [isOpen, initialData, mode, detailsForm, phoneForm, otpForm, addToast]);
 
     const sanitizePath = (path: string) => {
         if (!path) return '';
@@ -210,7 +241,24 @@ const PartnerFormModal: React.FC<PartnerFormModalProps> = ({
             
             // Append objects as JSON strings (controller handles parsing)
             formData.append('vehicle', JSON.stringify(data.vehicle));
-            formData.append('documents', JSON.stringify(data.documents));
+            
+            // Clean documents object to exclude image fields (defense-in-depth / payload optimization)
+            const cleanedDocuments = {
+                aadhaar: {
+                    number: data.documents?.aadhaar?.number || '',
+                    status: data.documents?.aadhaar?.status || 'Pending',
+                },
+                pan: {
+                    number: data.documents?.pan?.number || '',
+                    status: data.documents?.pan?.status || 'Pending',
+                },
+                drivingLicense: {
+                    number: data.documents?.drivingLicense?.number || '',
+                    expiryDate: data.documents?.drivingLicense?.expiryDate || '',
+                    status: data.documents?.drivingLicense?.status || 'Pending',
+                },
+            };
+            formData.append('documents', JSON.stringify(cleanedDocuments));
             formData.append('kycStatus', data.kycStatus || 'Pending');
             formData.append('walletBalance', String(data.walletBalance || 0));
             formData.append('totalEarnings', String(data.totalEarnings || 0));
@@ -432,7 +480,8 @@ const PartnerFormModal: React.FC<PartnerFormModalProps> = ({
                                             control={detailsForm.control}
                                             render={({ field }) => (
                                                 <DatePicker 
-                                                    style={{ width: '100%', height: '44px', background: 'var(--bg-dark-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)' }}
+                                                    className="luxury-datepicker"
+                                                    popupClassName="luxury-datepicker-dropdown"
                                                     value={field.value ? dayjs(field.value) : null}
                                                     onChange={(date, dateString) => field.onChange(dateString)}
                                                     format="YYYY-MM-DD"

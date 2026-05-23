@@ -106,3 +106,110 @@
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Luxury DatePicker Custom Styles */
+.luxury-datepicker {
+    width: 100%;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1)) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    color: var(--text-white, #ffffff) !important;
+    box-sizing: border-box !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+}
+
+.luxury-datepicker:hover,
+.luxury-datepicker-focused,
+.luxury-datepicker.ant-picker-focused {
+    border-color: var(--primary, #c5a059) !important;
+    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2) !important;
+}
+
+.luxury-datepicker .ant-picker-input > input {
+    color: var(--text-white, #ffffff) !important;
+    font-size: 14px !important;
+    font-family: inherit !important;
+}
+
+.luxury-datepicker .ant-picker-input > input::placeholder {
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.luxury-datepicker .ant-picker-suffix {
+    color: var(--primary-gold, #c5a059) !important;
+}
+
+/* Style the Ant Design Calendar Dropdown to fit the Dark Theme beautifully */
+.luxury-datepicker-dropdown.ant-picker-dropdown,
+.ant-picker-dropdown {
+    z-index: 10000 !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-panel-container,
+.ant-picker-dropdown .ant-picker-panel-container {
+    background: #181818 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-panel,
+.ant-picker-dropdown .ant-picker-panel {
+    border: none !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-header,
+.ant-picker-dropdown .ant-picker-header {
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-header button,
+.ant-picker-dropdown .ant-picker-header button {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-header button:hover,
+.ant-picker-dropdown .ant-picker-header button:hover {
+    color: var(--primary-gold, #c5a059) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-content th,
+.ant-picker-dropdown .ant-picker-content th {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 500 !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-cell,
+.ant-picker-dropdown .ant-picker-cell {
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-cell-in-view,
+.ant-picker-dropdown .ant-picker-cell-in-view {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner,
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+    background: var(--primary-gold, #c5a059) !important;
+    color: #000000 !important;
+    border-radius: 6px !important;
+    font-weight: bold !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-cell:hover .ant-picker-cell-inner,
+.ant-picker-dropdown .ant-picker-cell:hover .ant-picker-cell-inner {
+    background: rgba(197, 160, 89, 0.15) !important;
+    color: var(--primary-gold, #c5a059) !important;
+    border-radius: 6px !important;
+}
+
+.luxury-datepicker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before,
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border: 1px solid var(--primary-gold, #c5a059) !important;
+    border-radius: 6px !important;
+}

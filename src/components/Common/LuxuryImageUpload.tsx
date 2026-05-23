@@ -23,6 +23,10 @@ const LuxuryImageUpload: React.FC<LuxuryImageUploadProps> = ({
     const [previews, setPreviews] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    React.useEffect(() => {
+        setPreviews([]);
+    }, [value]);
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (files.length === 0) return;
