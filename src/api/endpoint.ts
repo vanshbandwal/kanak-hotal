@@ -128,4 +128,11 @@ export const SERVICE_PARTNER_ENDPOINTS = {
     TOGGLE_STATUS: (id: string) => `/v1/service-partner/${id}/status`,
 };
 
+export const COUPON_ENDPOINTS = {
+    ALL: '/v1/coupon/all-coupons', 
+    CREATE: '/v1/coupon/create-coupon',
+    UPDATE: (id: string) => `/v1/coupon/update-coupon/${id}`,
+    PATCH: (id: string) => `/v1/coupon/patch-coupon/${id}`,
+    DELETE: (id: string) => `/v1/coupon/delete-coupon/${id}`,
+};
 
