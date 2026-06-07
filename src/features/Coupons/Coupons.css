@@ -1,0 +1,52 @@
+/* Coupon Module Styles */
+
+.coupon-list-container {
+    padding: 2rem;
+}
+
+.coupon-code-text {
+    font-weight: bold;
+    color: #B8860B;
+}
+
+.coupon-validity-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.coupon-usage-text {
+    font-size: 0.9rem;
+}
+
+.coupon-usage-subtext {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.coupon-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+/* Form Styles */
+.coupon-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.coupon-form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.coupon-form-col {
+    flex: 1;
+}
+
+.coupon-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}

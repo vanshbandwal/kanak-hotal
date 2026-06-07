@@ -53,7 +53,7 @@ const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                         >
                             {getThemeIcon()}
                         </button>
-                        <div style={{ position: 'relative' }}>
+                        <div className="main-layout-profile-wrapper">
                             <div
                                 className="main-layout-user-profile"
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}

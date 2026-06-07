@@ -188,7 +188,7 @@ const ProfileSettingsScreen: React.FC = () => {
     if (isLoading) {
         return (
             <div className="profile-settings-page">
-                <div style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', textAlign: 'center', marginTop: '100px', letterSpacing: '1px' }}>
+                <div className="profile-loading-text">
                     Loading Your Premium Admin Space...
                 </div>
             </div>

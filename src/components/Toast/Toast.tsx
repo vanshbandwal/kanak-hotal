@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastType, useToast } from '../../context/ToastContext';
-import { COLORS } from '../../theme/colors';
-import { TYPOGRAPHY } from '../../theme/typography';
+import './Toast.css';
 
 interface ToastProps {
     id: string;
@@ -42,90 +41,30 @@ const Toast: React.FC<ToastProps> = ({ id, type, message, duration }) => {
 
     return (
         <div
-            style={styles.toast(type)}
+            className="toast-item"
             role="alert"
             aria-live="polite"
         >
-            <div style={styles.content}>
-                <span style={styles.icon}>{getIcon(type)}</span>
-                <div style={styles.textContainer}>
-                    <span style={styles.message}>{message}</span>
+            <div className="toast-content">
+                <span className="toast-icon">{getIcon(type)}</span>
+                <div className="toast-text-container">
+                    <span className="toast-message">{message}</span>
                 </div>
                 <button
                     onClick={() => removeToast(id)}
-                    style={styles.closeButton}
+                    className="toast-close-btn"
                     aria-label="Close notification"
                 >
                     ✕
                 </button>
             </div>
             {duration > 0 && (
-                <div style={styles.progressContainer}>
-                    <div style={styles.progressBar(type, progress)} />
+                <div className="toast-progress-container">
+                    <div className="toast-progress-bar" style={{ width: `${progress}%` }} />
                 </div>
             )}
         </div>
     );
-};
-
-const styles = {
-    toast: (type: ToastType): React.CSSProperties => ({
-        backgroundColor: COLORS.glassBackground,
-        backdropFilter: 'blur(40px) saturate(180%)',
-        minWidth: '320px',
-        borderRadius: '20px',
-        padding: '16px 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        marginBottom: '15px',
-        border: `1px solid ${COLORS.glassBorder}`,
-        boxShadow: COLORS.cardShadow,
-        animation: 'toast-slide-in 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards',
-        overflow: 'hidden',
-        position: 'relative' as const,
-    }),
-    content: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-    },
-    icon: {
-        fontSize: '20px',
-    },
-    textContainer: {
-        flex: 1,
-    },
-    message: {
-        fontFamily: TYPOGRAPHY.brand,
-        color: COLORS.textPrimary,
-        fontSize: '13px',
-        letterSpacing: '0.8px',
-        fontWeight: '500',
-    },
-    closeButton: {
-        background: 'none',
-        border: 'none',
-        color: COLORS.textSecondary,
-        cursor: 'pointer',
-        fontSize: '14px',
-        padding: '5px',
-        opacity: 0.6,
-        transition: 'opacity 0.2s',
-    },
-    progressContainer: {
-        position: 'absolute' as const,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '3px',
-        backgroundColor: 'rgba(0,0,0,0.05)',
-    },
-    progressBar: (type: ToastType, progress: number): React.CSSProperties => ({
-        height: '100%',
-        width: `${progress}%`,
-        backgroundColor: COLORS.primary,
-        transition: 'width 0.03s linear',
-    }),
 };
 
 export default Toast;

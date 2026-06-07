@@ -110,7 +110,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
             title={initialData ? 'Edit Coupon' : 'Create Coupon'}
             size="md"
         >
-            <form onSubmit={handleSubmit(handleFormSubmit)} className="coupon-form" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleSubmit(handleFormSubmit)} className="coupon-form coupon-form-grid">
                 <Controller
                     name="code"
                     control={control}
@@ -136,8 +136,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                     )}
                 />
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
+                <div className="coupon-form-row">
+                    <div className="coupon-form-col">
                         <Controller
                             name="discountType"
                             control={control}
@@ -154,7 +154,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                             )}
                         />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="coupon-form-col">
                         <Controller
                             name="discountValue"
                             control={control}
@@ -171,8 +171,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
+                <div className="coupon-form-row">
+                    <div className="coupon-form-col">
                         <Controller
                             name="minPurchaseAmount"
                             control={control}
@@ -186,7 +186,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                             )}
                         />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="coupon-form-col">
                         <Controller
                             name="maxDiscountAmount"
                             control={control}
@@ -202,8 +202,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
+                <div className="coupon-form-row">
+                    <div className="coupon-form-col">
                         <Controller
                             name="startDate"
                             control={control}
@@ -217,7 +217,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                             )}
                         />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="coupon-form-col">
                         <Controller
                             name="endDate"
                             control={control}
@@ -233,8 +233,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
+                <div className="coupon-form-row">
+                    <div className="coupon-form-col">
                         <Controller
                             name="usageLimit"
                             control={control}
@@ -248,7 +248,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                             )}
                         />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="coupon-form-col">
                         <Controller
                             name="userCountLimit"
                             control={control}
@@ -264,7 +264,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({ isOpen, onClose, onSu
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+                <div className="coupon-form-footer">
                     <LuxuryButton variant="neutral" onClick={onClose} type="button">
                         Cancel
                     </LuxuryButton>

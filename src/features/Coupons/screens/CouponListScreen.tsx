@@ -6,6 +6,7 @@ import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import CouponFormModal from '../components/CouponFormModal';
+import '../Coupons.css';
 
 const CouponListScreen: React.FC = () => {
     const [coupons, setCoupons] = useState<any[]>([]);
@@ -115,7 +116,7 @@ const CouponListScreen: React.FC = () => {
             header: 'Coupon Code',
             sortable: true,
             render: (coupon: any) => (
-                <div style={{ fontWeight: 'bold', color: '#B8860B' }}>
+                <div className="coupon-code-text">
                     {coupon.code}
                 </div>
             )
@@ -137,7 +138,7 @@ const CouponListScreen: React.FC = () => {
                 const start = new Date(coupon.startDate).toLocaleDateString();
                 const end = new Date(coupon.endDate).toLocaleDateString();
                 return (
-                    <div style={{ fontSize: '0.85rem', color: '#666' }}>
+                    <div className="coupon-validity-text">
                         <div>{start} to</div>
                         <div>{end}</div>
                     </div>
@@ -148,10 +149,10 @@ const CouponListScreen: React.FC = () => {
             key: 'usage',
             header: 'Usage Limit',
             render: (coupon: any) => (
-                <div style={{ fontSize: '0.9rem' }}>
+                <div className="coupon-usage-text">
                     {coupon.usageLimit ? `${coupon.usageLimit} total` : 'Unlimited'}
                     <br />
-                    <span style={{ color: '#888', fontSize: '0.8rem' }}>{coupon.userCountLimit} per user</span>
+                    <span className="coupon-usage-subtext">{coupon.userCountLimit} per user</span>
                 </div>
             )
         },
@@ -160,7 +161,7 @@ const CouponListScreen: React.FC = () => {
             header: 'Actions',
             width: '120px',
             render: (coupon: any) => (
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="coupon-actions-row">
                     <LuxuryActionButton
                         type="edit"
                         onClick={() => handleEdit(coupon)}
@@ -177,7 +178,7 @@ const CouponListScreen: React.FC = () => {
     ];
 
     return (
-        <div style={{ padding: '2rem' }}>
+        <div className="coupon-list-container">
             <LuxuryTable
                 title="Coupons Management"
                 subtitle="Create and manage discount codes for your customers."

@@ -91,6 +91,10 @@
     transform: scale(1.1);
 }
 
+.main-layout-profile-wrapper {
+    position: relative;
+}
+
 .main-layout-user-profile {
     display: flex;
     align-items: center;

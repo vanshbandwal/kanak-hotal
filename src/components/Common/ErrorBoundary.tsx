@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import './ErrorBoundary.css';
 
 interface Props {
     children: ReactNode;
@@ -27,12 +28,12 @@ class ErrorBoundary extends Component<Props, State> {
     public render() {
         if (this.state.hasError) {
             return (
-                <div style={styles.container}>
-                    <div style={styles.card}>
-                        <h1 style={styles.title}>Something went wrong</h1>
-                        <p style={styles.message}>{this.state.error?.message}</p>
+                <div className="error-boundary-container">
+                    <div className="error-boundary-card">
+                        <h1 className="error-boundary-title">Something went wrong</h1>
+                        <p className="error-boundary-message">{this.state.error?.message}</p>
                         <button 
-                            style={styles.button}
+                            className="error-boundary-button"
                             onClick={() => window.location.reload()}
                         >
                             Reload Application
@@ -45,45 +46,5 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.children;
     }
 }
-
-const styles: { [key: string]: React.CSSProperties } = {
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#0a0a0a',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
-    },
-    card: {
-        backgroundColor: '#1a1a1a',
-        padding: '40px',
-        borderRadius: '24px',
-        border: '1px solid #333',
-        textAlign: 'center',
-        maxWidth: '400px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
-    },
-    title: {
-        color: '#e8c97b',
-        fontSize: '24px',
-        margin: '0 0 16px 0'
-    },
-    message: {
-        color: '#888',
-        fontSize: '14px',
-        margin: '0 0 32px 0',
-        lineHeight: '1.6'
-    },
-    button: {
-        backgroundColor: '#e8c97b',
-        color: '#000',
-        border: 'none',
-        padding: '12px 32px',
-        borderRadius: '12px',
-        fontWeight: 'bold',
-        cursor: 'pointer'
-    }
-};
 
 export default ErrorBoundary;

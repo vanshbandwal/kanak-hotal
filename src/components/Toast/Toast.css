@@ -1,0 +1,79 @@
+.toast-container-wrapper {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.toast-item {
+    background-color: var(--glass-background);
+    backdrop-filter: blur(40px) saturate(180%);
+    min-width: 320px;
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    animation: toast-slide-in 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    overflow: hidden;
+    position: relative;
+    pointer-events: auto;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.toast-icon {
+    font-size: 20px;
+}
+
+.toast-text-container {
+    flex: 1;
+}
+
+.toast-message {
+    font-family: 'Playfair Display', serif; /* Or var(--font-brand) */
+    color: var(--text-primary);
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+}
+
+.toast-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.toast-close-btn:hover {
+    opacity: 1;
+}
+
+.toast-progress-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.toast-progress-bar {
+    height: 100%;
+    background-color: var(--primary);
+    transition: width 0.03s linear;
+}
