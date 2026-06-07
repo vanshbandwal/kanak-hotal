@@ -136,3 +136,22 @@ export const COUPON_ENDPOINTS = {
     DELETE: (id: string) => `/v1/coupon/delete-coupon/${id}`,
 };
 
+export const ORDER_ENDPOINTS = {
+    ALL: '/v1/order',
+    BY_ID: (id: string) => `/v1/order/${id}`,
+    UPDATE_STATUS: (id: string) => `/v1/order/${id}/status`,
+};
+
+export const CMS_ENDPOINTS = {
+    PAGE: {
+        GET: (pageKey: string) => `/v1/cms/page/${pageKey}`,
+        UPDATE: (pageKey: string) => `/v1/cms/page/${pageKey}`,
+    },
+    FAQ: {
+        ALL: '/v1/cms/faq',
+        CREATE: '/v1/cms/faq',
+        UPDATE: (id: string) => `/v1/cms/faq/${id}`,
+        DELETE: (id: string) => `/v1/cms/faq/${id}`,
+    }
+};
+

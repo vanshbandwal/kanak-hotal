@@ -41,8 +41,8 @@ const Markup = () => {
         const fetchInitialData = async () => {
             if (isAuthenticated) {
                 const { data, error } = await sidebarApi.getSidebarMenu();
-                if (!error && data) {
-                    dispatch(setSidebarItems(data));
+                if (!error && data && data.success) {
+                    dispatch(setSidebarItems(data.data || []));
                 } else {
                     // 🛑 Fix: Even if sidebar fails, don't hang the app
                     dispatch(setSidebarItems([])); 

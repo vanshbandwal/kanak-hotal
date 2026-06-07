@@ -34,7 +34,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSubmitSuccess
     };
 
     return (
-        <form className="forgot-form" onSubmit={handleSubmit(onFormSubmit)}>
+        <form className="forgot-form" onSubmit={handleSubmit(onFormSubmit)} noValidate>
             <LuxuryInput 
                 label="EMAIL ADDRESS"
                 type="email"

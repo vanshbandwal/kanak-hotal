@@ -38,10 +38,15 @@ const requestHandler = async (request) => {
             // Server responded with a status code out of 2xx range
             const status = error.response.status;
             if (status === 401) {
-                errorMessage = 'Session expired. Please login again.';
-                localStorage.removeItem('token');
-                localStorage.removeItem('admin_user');
-                window.location.href = '/login';
+                const isLoginRequest = error.config?.url?.includes('/login');
+                if (!isLoginRequest) {
+                    errorMessage = 'Session expired. Please login again.';
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('admin_user');
+                    window.location.href = '/login';
+                } else {
+                    errorMessage = error.response.data?.message || 'Invalid credentials. Please try again.';
+                }
             } else if (status === 403) {
                 errorMessage = 'You do not have permission to perform this action.';
             } else if (status === 404) {

@@ -67,7 +67,7 @@ const LoginScreen = () => {
                 <div className="login-divider" />
             </div>
 
-            <form className="login-form" onSubmit={handleSubmit(onFormSubmit)}>
+            <form className="login-form" onSubmit={handleSubmit(onFormSubmit)} noValidate>
                 <LuxuryInput 
                     label="ADMIN IDENTIFIER"
                     type="email"
