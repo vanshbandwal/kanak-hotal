@@ -2,8 +2,12 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../store';
 import { useTheme } from '../context/ThemeContext';
-import { SubItem } from '../services/sidebarService';
 import './Sidebar.css';
+
+interface SubItem {
+    name: string;
+    path: string;
+}
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     const navigate = useNavigate();

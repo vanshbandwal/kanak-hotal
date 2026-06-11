@@ -155,3 +155,38 @@ export const CMS_ENDPOINTS = {
     }
 };
 
+export const REPORT_ENDPOINTS = {
+    OVERVIEW: '/v1/report/overview'
+};
+
+export const REVIEW_ENDPOINTS = {
+    ALL: '/v1/review',
+    REPLY: (id: string) => `/v1/review/reply/${id}`,
+    DELETE: (id: string) => `/v1/review/delete/${id}`,
+};
+
+const endpoints = {
+    auth: AUTH_ENDPOINTS,
+    category: CATEGORY_ENDPOINTS.CATEGORY,
+    subcategory: CATEGORY_ENDPOINTS.SUBCATEGORY,
+    subSubcategory: CATEGORY_ENDPOINTS.SUBSUBCATEGORY,
+    product: PRODUCT_ENDPOINTS,
+    brand: BRAND_ENDPOINTS,
+    unit: UNIT_ENDPOINTS,
+    tax: TAX_ENDPOINTS,
+    sidebar: SIDEBAR_ENDPOINTS,
+    role: ROLE_ENDPOINTS,
+    staff: STAFF_ENDPOINTS,
+    permission: PERMISSION_ENDPOINTS,
+    banner: BANNER_ENDPOINTS,
+    customer: CUSTOMER_ENDPOINTS,
+    query: QUERY_ENDPOINTS,
+    servicePartner: SERVICE_PARTNER_ENDPOINTS,
+    coupon: COUPON_ENDPOINTS,
+    order: ORDER_ENDPOINTS,
+    cms: CMS_ENDPOINTS,
+    report: REPORT_ENDPOINTS,
+    review: REVIEW_ENDPOINTS,
+};
+
+export default endpoints;

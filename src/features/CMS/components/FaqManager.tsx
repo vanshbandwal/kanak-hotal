@@ -196,7 +196,7 @@ const FaqManager = () => {
                         <label className="cms-editor-label">Status</label>
                         <div className="faq-toggle-wrapper">
                             <LuxuryToggle
-                                checked={formData.isActive}
+                                value={formData.isActive}
                                 onChange={(val) => setFormData({ ...formData, isActive: val })}
                                 label={formData.isActive ? 'Active' : 'Inactive'}
                             />

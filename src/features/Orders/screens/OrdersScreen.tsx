@@ -142,7 +142,6 @@ const OrdersScreen = () => {
                         options={STATUS_OPTIONS}
                         onChange={(val) => handleStatusChange(item._id, val)}
                         searchable={false}
-                        wrapperClassName="order-status-select"
                     />
                 );
             }
@@ -158,7 +157,6 @@ const OrdersScreen = () => {
                     options={[{ value: '', label: 'All Statuses' }, ...STATUS_OPTIONS]}
                     searchable={false}
                     placeholder="Filter by Status"
-                    wrapperClassName="order-filter-select"
                 />
             </div>
             

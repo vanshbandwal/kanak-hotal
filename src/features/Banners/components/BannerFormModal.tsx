@@ -128,18 +128,15 @@ const BannerFormModal: React.FC<BannerFormModalProps> = ({ isOpen, onClose, init
                     <div className="banner-form-image-section">
                         <LuxuryImageUpload 
                             label="Banner Image (High Resolution Recommended)"
-                            value={imagePreview}
-                            onChange={(file) => {
-                                if (file) {
-                                    setImageFile(file);
-                                    setImagePreview(URL.createObjectURL(file));
+                            value={imagePreview || undefined}
+                            onChange={(file: any) => {
+                                const singleFile = Array.isArray(file) ? file[0] : file;
+                                if (singleFile) {
+                                    setImageFile(singleFile);
+                                    setImagePreview(URL.createObjectURL(singleFile));
                                 }
                             }}
-                            onRemove={() => {
-                                setImageFile(null);
-                                setImagePreview(null);
-                            }}
-                            aspectRatio={16/9}
+
                         />
                     </div>
 

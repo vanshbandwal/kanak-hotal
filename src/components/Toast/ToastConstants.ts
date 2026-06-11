@@ -1,4 +1,4 @@
-import { ToastType } from './ToastContext';
+type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 export const FASHION_TOASTS = {
     success: {
