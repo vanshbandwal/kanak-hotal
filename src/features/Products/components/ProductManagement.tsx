@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
@@ -21,9 +22,11 @@ interface ProductItem {
     isActive: boolean;
     mainImage: string;
     sku?: string;
+    variants?: any[];
 }
 
 const ProductManagement = () => {
+    const navigate = useNavigate();
     const { addToast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState<ProductItem[]>([]);
@@ -37,7 +40,7 @@ const ProductManagement = () => {
         isOpen: false,
         title: '',
         message: '',
-        onConfirm: () => {},
+        onConfirm: () => { },
         variant: 'danger' as 'danger' | 'warning' | 'info'
     });
 
@@ -93,9 +96,7 @@ const ProductManagement = () => {
     };
 
     const handleView = (item: ProductItem) => {
-        setSelectedItem(item);
-        setModalMode('view');
-        setIsModalOpen(true);
+        navigate(`/products/dashboard/${item._id}`);
     };
 
     const handleEdit = (item: ProductItem) => {
@@ -124,29 +125,29 @@ const ProductManagement = () => {
     };
 
     const getColumns = (): ColumnDef<ProductItem>[] => [
-        { 
-            header: 'Sr.No', 
-            key: '_id', 
+        {
+            header: 'Sr.No',
+            key: '_id',
             width: '60px',
             render: (_, index) => index + 1
         },
-        { 
-            header: 'Image', 
-            key: 'mainImage', 
+        {
+            header: 'Image',
+            key: 'mainImage',
             width: '80px',
             render: (item) => (
                 <div className="product-mgmt-image-container">
                     {item?.mainImage ? (
-                        <img 
+                        <img
                             src={(() => {
                                 const path = item.mainImage || '';
                                 if (path.startsWith('http')) return path;
                                 const uploadIndex = path.indexOf('uploads');
                                 const cleanPath = uploadIndex !== -1 ? path.substring(uploadIndex) : path;
                                 return `${BASE_URL}/${cleanPath.replace(/\\/g, '/')}`;
-                            })()} 
-                            alt={item?.name} 
-                            className="product-mgmt-table-image" 
+                            })()}
+                            alt={item?.name}
+                            className="product-mgmt-table-image"
                             loading="lazy"
                         />
                     ) : (
@@ -155,25 +156,35 @@ const ProductManagement = () => {
                 </div>
             )
         },
-        { 
-            header: 'Product Info', 
+        {
+            header: 'Product Info',
             key: 'name',
             sortable: true,
             render: (item) => (
                 <div className="product-mgmt-info-cell">
                     <span className="product-mgmt-name-text">{item.name}</span>
-                    <LuxuryStatusBadge label={item.productType.toUpperCase()} variant="info" />
+                    {item.productType === 'variant' ? (
+                        <div className="variant-icon-wrapper" title="Multiple Variants Available (Click row to view)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="variant-icon-svg">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                    ) : item.productType !== 'single' ? (
+                        <LuxuryStatusBadge label={item.productType.toUpperCase()} variant="info" />
+                    ) : null}
                 </div>
             )
         },
-        { 
-            header: 'Hierarchy', 
+        {
+            header: 'Hierarchy',
             key: 'category',
             render: (item) => (
                 <div className="product-mgmt-hierarchy-cell">
-                    <LuxuryStatusBadge 
-                        label={item.category?.name || 'Uncategorized'} 
-                        variant="warning" 
+                    <LuxuryStatusBadge
+                        label={item.category?.name || 'Uncategorized'}
+                        variant="warning"
                     />
                     {item.subcategory && (
                         <div className="product-mgmt-subcategory-wrapper">
@@ -184,8 +195,8 @@ const ProductManagement = () => {
                 </div>
             )
         },
-        { 
-            header: 'Price', 
+        {
+            header: 'Price',
             key: 'price',
             sortable: true,
             render: (item) => (
@@ -210,35 +221,35 @@ const ProductManagement = () => {
                 </div>
             )
         },
-        { 
-            header: 'Status', 
+        {
+            header: 'Status',
             key: 'isActive',
             sortable: true,
             render: (item) => (
-                <LuxuryToggle 
+                <LuxuryToggle
                     value={item.isActive}
                     onChange={() => handleToggleStatus(item)}
                 />
             )
         },
-        { 
-            header: 'Actions', 
+        {
+            header: 'Actions',
             key: 'actions',
             render: (item) => (
                 <div className="product-mgmt-actions-cell">
-                    <LuxuryActionButton 
-                        type="view" 
-                        onClick={() => handleView(item)} 
+                    <LuxuryActionButton
+                        type="view"
+                        onClick={() => handleView(item)}
                         title="View Product"
                     />
-                    <LuxuryActionButton 
-                        type="edit" 
-                        onClick={() => handleEdit(item)} 
+                    <LuxuryActionButton
+                        type="edit"
+                        onClick={() => handleEdit(item)}
                         title="Edit Product"
                     />
-                    <LuxuryActionButton 
-                        type="delete" 
-                        onClick={() => handleDelete(item._id)} 
+                    <LuxuryActionButton
+                        type="delete"
+                        onClick={() => handleDelete(item._id)}
                         title="Delete Product"
                     />
                 </div>
@@ -260,7 +271,7 @@ const ProductManagement = () => {
                     setSearchTerm(val);
                     setCurrentPage(1);
                 }}
-                
+
                 // Pagination props
                 totalCount={totalCount}
                 currentPage={currentPage}
@@ -275,15 +286,48 @@ const ProductManagement = () => {
                 sortConfig={sortConfig}
                 onSortChange={setSortConfig}
 
+                // Expanded Row props
+                isRowExpandable={(item) => item.productType === 'variant' && !!item.variants && item.variants.length > 0}
+                renderExpandedRow={(item) => (
+                    <div className="product-mgmt-expanded-variants">
+                        <table className="luxury-table-variants">
+                            <thead>
+                                <tr>
+                                    <th>Variant Attributes</th>
+                                    <th>Price</th>
+                                    <th>Sale Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {item.variants?.map((v: any, idx: number) => (
+                                    <tr key={v._id || idx}>
+                                        <td>
+                                            <div className="variant-attributes-list">
+                                                {v.attributes ? Object.entries(v.attributes).map(([k, val]) => (
+                                                    <span key={k} className="variant-attr-badge">
+                                                        {String(val)}
+                                                    </span>
+                                                )) : '-'}
+                                            </div>
+                                        </td>
+                                        <td>₹{v.price?.toLocaleString() || 0}</td>
+                                        <td>{v.salePrice ? `₹${v.salePrice.toLocaleString()}` : '-'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
                 onAdd={() => {
                     setSelectedItem(null);
                     setModalMode('create');
                     setIsModalOpen(true);
                 }}
-                addButtonLabel="+ ADD LUXURY PRODUCT"
+                addButtonLabel="ADD LUXURY PRODUCT"
             />
 
-            <ProductFormModal 
+            <ProductFormModal
                 isOpen={isModalOpen}
                 mode={modalMode}
                 onClose={() => {

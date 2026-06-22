@@ -43,6 +43,26 @@
     padding-left: 35px;
 }
 
+.luxury-input-field.with-right-icon {
+    padding-right: 40px;
+}
+
+.luxury-input-right-icon {
+    position: absolute;
+    right: 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.luxury-input-right-icon:hover {
+    color: var(--primary);
+}
+
 .luxury-input-field.error {
     border-color: var(--error) !important;
 }

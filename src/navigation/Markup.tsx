@@ -13,6 +13,7 @@ const ResetPasswordScreen = lazy(() => import('../features/Auth/screens/ResetPas
 const DashboardScreen = lazy(() => import('../features/Dashboard/screens/DashboardScreen'));
 const LandingScreen = lazy(() => import('../features/Landing/screens/LandingScreen'));
 const ProductsScreen = lazy(() => import('../features/Products/screens/ProductsScreen'));
+const ProductDashboardScreen = lazy(() => import('../features/Products/screens/ProductDashboardScreen'));
 const OrdersScreen = lazy(() => import('../features/Orders/screens/OrdersScreen'));
 const CustomersScreen = lazy(() => import('../features/Customers/screens/CustomersScreen'));
 const CMSScreen = lazy(() => import('../features/CMS/screens/CMSScreen'));
@@ -62,23 +63,24 @@ const Markup = () => {
 
     const mainRoutes = [
         { url: "/", component: <LandingScreen /> },
-        { url: "dashboard", component: <DashboardScreen /> },
-        { url: "products", component: <ProductsScreen /> },
-        { url: "orders", component: <OrdersScreen /> },
-        { url: "customers", component: <CustomersScreen /> },
-        { url: "service-partners", component: <ServicePartnersScreen /> },
-        { url: "cms", component: <CMSScreen /> },
-        { url: "coupons", component: <CouponsScreen /> },
-        { url: "banners", component: <BannersScreen /> },
-        { url: "reviews", component: <ReviewsScreen /> },
-        { url: "queries", component: <QueriesScreen /> },
-        { url: "reports", component: <ReportsScreen /> },
-        { url: "roles/add", component: <AddRoleScreen /> },
-        { url: "roles/edit/:id", component: <EditRoleScreen /> },
-        { url: "roles/list", component: <RoleListScreen /> },
-        { url: "roles/add-staff", component: <AddStaffScreen /> },
-        { url: "roles/staff", component: <StaffListScreen /> },
-        { url: "profile-settings", component: <ProfileSettingsScreen /> },
+        { url: "/dashboard", component: <DashboardScreen /> },
+        { url: "/products", component: <ProductsScreen /> },
+        { url: "/products/dashboard/:id", component: <ProductDashboardScreen /> },
+        { url: "/orders", component: <OrdersScreen /> },
+        { url: "/customers", component: <CustomersScreen /> },
+        { url: "/service-partners", component: <ServicePartnersScreen /> },
+        { url: "/cms", component: <CMSScreen /> },
+        { url: "/coupons", component: <CouponsScreen /> },
+        { url: "/banners", component: <BannersScreen /> },
+        { url: "/reviews", component: <ReviewsScreen /> },
+        { url: "/queries", component: <QueriesScreen /> },
+        { url: "/reports", component: <ReportsScreen /> },
+        { url: "/roles/add", component: <AddRoleScreen /> },
+        { url: "/roles/edit/:id", component: <EditRoleScreen /> },
+        { url: "/roles/list", component: <RoleListScreen /> },
+        { url: "/roles/add-staff", component: <AddStaffScreen /> },
+        { url: "/roles/staff", component: <StaffListScreen /> },
+        { url: "/profile-settings", component: <ProfileSettingsScreen /> },
     ];
 
     return (

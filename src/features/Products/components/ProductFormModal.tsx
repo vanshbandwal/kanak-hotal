@@ -243,7 +243,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, on
         Object.keys(data).forEach(key => {
             const val = (data as any)[key];
             if (['variants', 'comboItems', 'images', 'mainImage'].includes(key)) return;
-            if (val !== undefined && val !== null) formData.append(key, String(val));
+            if (val !== undefined && val !== null && val !== '') {
+                formData.append(key, String(val));
+            }
         });
 
         if (data.productType === 'variant' && data.variants) {
@@ -386,9 +388,22 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, on
                             <div className="portion-management">
                                 {variantFields.map((field, index) => (
                                     <div key={field.id} className="portion-row">
-                                        <LuxuryInput label="Portion" {...register(`variants.${index}.attributes.portion` as any)} disabled={isViewOnly} />
+                                        <Controller
+                                            name={`variants.${index}.attributes.portion` as any}
+                                            control={control}
+                                            render={({ field: selectField }) => (
+                                                <LuxurySelect
+                                                    label="Portion"
+                                                    value={selectField.value || ''}
+                                                    onChange={selectField.onChange}
+                                                    options={units.map(u => ({ value: u.name, label: u.name }))}
+                                                    placeholder="Select Portion"
+                                                    disabled={isViewOnly}
+                                                />
+                                            )}
+                                        />
                                         <LuxuryInput label="Price" type="number" {...register(`variants.${index}.price` as any)} disabled={isViewOnly} />
-                                        <LuxuryInput label="SKU/ID" {...register(`variants.${index}.sku` as any)} disabled={isViewOnly} />
+                                        <LuxuryInput label="Sale Price" type="number" {...register(`variants.${index}.salePrice` as any)} disabled={isViewOnly} />
                                         {!isViewOnly && (
                                             <LuxuryActionButton 
                                                 type="delete" 
@@ -400,7 +415,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onClose, on
                                     </div>
                                 ))}
                                 {!isViewOnly && (
-                                    <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, sku: `P-${Date.now()}` })} variant="ghost" size="small">
+                                    <LuxuryButton type="button" onClick={() => appendVariant({ attributes: { portion: '' }, price: 0, salePrice: 0 })} variant="ghost" size="small">
                                         + Add Portion
                                     </LuxuryButton>
                                 )}

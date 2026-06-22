@@ -34,10 +34,12 @@ export const CATEGORY_ENDPOINTS = {
 
 export const PRODUCT_ENDPOINTS = {
     ALL: '/v1/product',
+    STATS: '/v1/product/stats',
     CREATE: '/v1/product/create',
     UPDATE: (id: string) => `/v1/product/update/${id}`,
     DELETE: (id: string) => `/v1/product/delete/${id}`,
     TOGGLE_STATUS: (id: string) => `/v1/product/toggle-status/${id}`,
+    DASHBOARD_STATS: (id: string) => `/v1/product/${id}/dashboard`,
 };
 
 export const BRAND_ENDPOINTS = {
@@ -165,6 +167,10 @@ export const REVIEW_ENDPOINTS = {
     DELETE: (id: string) => `/v1/review/delete/${id}`,
 };
 
+export const DASHBOARD_ENDPOINTS = {
+    STATS: '/v1/dashboard',
+};
+
 const endpoints = {
     auth: AUTH_ENDPOINTS,
     category: CATEGORY_ENDPOINTS.CATEGORY,
@@ -187,6 +193,7 @@ const endpoints = {
     cms: CMS_ENDPOINTS,
     report: REPORT_ENDPOINTS,
     review: REVIEW_ENDPOINTS,
+    dashboard: DASHBOARD_ENDPOINTS,
 };
 
 export default endpoints;

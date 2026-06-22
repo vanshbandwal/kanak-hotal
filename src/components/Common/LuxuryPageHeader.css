@@ -2,7 +2,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 0;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border-light);
     animation: fadeInSlideDown 0.5s ease-out;

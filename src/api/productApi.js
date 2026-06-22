@@ -14,6 +14,13 @@ export const productApi = {
     },
 
     /**
+     * Fetch product stats (counts)
+     */
+    getProductStats: async () => {
+        return await client.get(PRODUCT_ENDPOINTS.STATS);
+    },
+
+    /**
      * Create a new product
      * @param {FormData|Object} productData 
      */
@@ -44,6 +51,14 @@ export const productApi = {
      */
     toggleProductStatus: async (id) => {
         return await client.patch(PRODUCT_ENDPOINTS.TOGGLE_STATUS(id));
+    },
+
+    /**
+     * Fetch product dashboard statistics
+     * @param {string} id
+     */
+    getProductDashboardStats: async (id) => {
+        return await client.get(PRODUCT_ENDPOINTS.DASHBOARD_STATS(id));
     }
 };
 

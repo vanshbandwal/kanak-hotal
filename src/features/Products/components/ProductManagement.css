@@ -162,3 +162,71 @@
 .product-mgmt-delete-btn:hover {
     transform: scale(1.1);
 }
+
+/* Variant Icon & Expanded Rows */
+.variant-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    color: #d4af37;
+    margin-top: 4px;
+    width: fit-content;
+}
+
+.variant-icon-svg {
+    opacity: 0.9;
+}
+
+.product-mgmt-expanded-variants {
+    padding: 16px 32px 16px 80px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.luxury-table-variants {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.luxury-table-variants th {
+    text-align: left;
+    padding: 10px 16px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--glass-border);
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.luxury-table-variants td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.luxury-table-variants tr:last-child td {
+    border-bottom: none;
+}
+
+.variant-attributes-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.variant-attr-badge {
+    background: rgba(212, 175, 55, 0.15);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #d4af37;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    font-weight: 500;
+}

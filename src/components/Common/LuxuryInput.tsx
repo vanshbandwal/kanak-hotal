@@ -5,12 +5,13 @@ interface LuxuryInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTe
     label?: string;
     error?: string;
     icon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
     multiline?: boolean;
     rows?: number;
 }
 
-const LuxuryInput: React.FC<LuxuryInputProps> = ({ label, error, icon, multiline, rows = 3, style, className, ...props }) => {
-    const fieldClasses = `luxury-input-field ${icon ? 'with-icon' : ''} ${error ? 'error' : ''} ${multiline ? 'multiline' : ''} ${className || ''}`;
+const LuxuryInput: React.FC<LuxuryInputProps> = ({ label, error, icon, rightIcon, multiline, rows = 3, style, className, ...props }) => {
+    const fieldClasses = `luxury-input-field ${icon ? 'with-icon' : ''} ${rightIcon ? 'with-right-icon' : ''} ${error ? 'error' : ''} ${multiline ? 'multiline' : ''} ${className || ''}`;
 
     return (
         <div className="luxury-input-wrapper">
@@ -31,6 +32,7 @@ const LuxuryInput: React.FC<LuxuryInputProps> = ({ label, error, icon, multiline
                         style={style}
                     />
                 )}
+                {rightIcon && <span className="luxury-input-right-icon">{rightIcon}</span>}
             </div>
             {error && <span className="luxury-input-error-text">{error}</span>}
         </div>

@@ -16,7 +16,7 @@ export interface ColumnDef<T> {
     sortable?: boolean;
 }
 
-interface LuxuryTableProps<T> {
+export interface LuxuryTableProps<T> {
     columns: ColumnDef<T>[];
     data: T[];
     title?: string;
@@ -38,7 +38,10 @@ interface LuxuryTableProps<T> {
     emptyIcon?: string;
     emptyTitle?: string;
     emptyDescription?: string;
+    renderExpandedRow?: (item: T) => React.ReactNode;
+    isRowExpandable?: (item: T) => boolean;
 }
+
 
 const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
     columns,
@@ -61,8 +64,20 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
     isLoading = false,
     emptyIcon = '💎',
     emptyTitle = 'No Records Found',
-    emptyDescription = 'Our archives seem to be missing this selection. Try refining your search or add a new entry.'
+    emptyDescription = 'Our archives seem to be missing this selection. Try refining your search or add a new entry.',
+    renderExpandedRow,
+    isRowExpandable
 }: LuxuryTableProps<T>) => {
+    const [expandedRows, setExpandedRows] = React.useState<Set<string | number>>(new Set());
+
+    const toggleRow = (id: string | number) => {
+        setExpandedRows(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
     
     const totalPages = Math.ceil(totalCount / rowsPerPage);
     
@@ -145,23 +160,6 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
 
     return (
         <div className="luxury-table-wrapper">
-            {(title || onAdd) && (
-                <LuxuryPageHeader
-                    title={title || ''}
-                    subtitle={subtitle}
-                    primaryAction={onAdd ? {
-                        label: addButtonLabel,
-                        onClick: onAdd,
-                        icon: "＋"
-                    } : undefined}
-                    secondaryAction={onExport ? {
-                        label: "Export Excel",
-                        onClick: onExport,
-                        icon: "📥"
-                    } : undefined}
-                />
-            )}
-
             <div className="luxury-table-filter-bar">
                 <div className="luxury-table-search-container">
                     <LuxuryInput
@@ -185,6 +183,14 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                         style={{ padding: '8px 12px', minWidth: '120px' }}
                     />
                 </div>
+                {onAdd && (
+                    <div className="luxury-table-add-action">
+                        <LuxuryButton onClick={onAdd} style={{ padding: '8px 16px', height: '100%', minHeight: '40px' }}>
+                            <span className="btn-icon-spacing">＋</span>
+                            {addButtonLabel}
+                        </LuxuryButton>
+                    </div>
+                )}
             </div>
 
             <div className="luxury-table-scroll-container">
@@ -229,24 +235,39 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                                     </tr>
                                 ))
                             ) : data && data.length > 0 ? (
-                                data.map((item, rowIdx) => (
-                                    <tr key={item._id || item.id || rowIdx} className="luxury-table-row">
-                                        {columns.map((col, colIdx) => (
-                                            <td key={colIdx} className="luxury-table-cell">
-                                                {col.render ? (
-                                                    col.render(item, (currentPage - 1) * rowsPerPage + rowIdx)
-                                                ) : typeof item[col.key as keyof T] === 'boolean' ? (
-                                                    <LuxuryStatusBadge 
-                                                        label={item[col.key as keyof T] ? 'Active' : 'Inactive'}
-                                                        variant={item[col.key as keyof T] ? 'success' : 'danger'}
-                                                    />
-                                                ) : (
-                                                    (item[col.key as keyof T] as React.ReactNode)
-                                                )}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
+                                data.map((item, rowIdx) => {
+                                    const rowId = item._id || item.id || rowIdx;
+                                    const isExpanded = expandedRows.has(rowId);
+                                    const expandable = isRowExpandable ? isRowExpandable(item) : !!renderExpandedRow;
+
+                                    return (
+                                        <React.Fragment key={rowId}>
+                                            <tr className={`luxury-table-row ${isExpanded ? 'expanded' : ''} ${expandable ? 'expandable' : ''}`} onClick={() => expandable && toggleRow(rowId)}>
+                                                {columns.map((col, colIdx) => (
+                                                    <td key={colIdx} className="luxury-table-cell">
+                                                        {col.render ? (
+                                                            col.render(item, (currentPage - 1) * rowsPerPage + rowIdx)
+                                                        ) : typeof item[col.key as keyof T] === 'boolean' ? (
+                                                            <LuxuryStatusBadge 
+                                                                label={item[col.key as keyof T] ? 'Active' : 'Inactive'}
+                                                                variant={item[col.key as keyof T] ? 'success' : 'danger'}
+                                                            />
+                                                        ) : (
+                                                            (item[col.key as keyof T] as React.ReactNode)
+                                                        )}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                            {isExpanded && renderExpandedRow && (
+                                                <tr className="luxury-table-expanded-row">
+                                                    <td colSpan={columns.length} style={{ padding: 0 }}>
+                                                        {renderExpandedRow(item)}
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </React.Fragment>
+                                    );
+                                })
                             ) : (
                                 <tr>
                                     <td colSpan={columns.length}>

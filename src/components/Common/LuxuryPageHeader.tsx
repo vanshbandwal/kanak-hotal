@@ -24,12 +24,13 @@ const LuxuryPageHeader: React.FC<LuxuryPageHeaderProps> = ({
     secondaryAction,
     className = ''
 }) => {
+    // If there are no action buttons, don't render the header wrapper at all.
+    if (!primaryAction && !secondaryAction) {
+        return null;
+    }
+
     return (
-        <div className={`luxury-page-header ${className}`}>
-            <div className="luxury-header-info">
-                <h1 className="luxury-header-title">{title}</h1>
-                {subtitle && <p className="luxury-header-subtitle">{subtitle}</p>}
-            </div>
+        <div className={`luxury-page-header ${className}`} style={{ borderBottom: 'none', justifyContent: 'flex-end', marginBottom: 0 }}>
             
             <div className="luxury-header-actions">
                 {secondaryAction && (

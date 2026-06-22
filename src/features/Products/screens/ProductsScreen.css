@@ -1,5 +1,12 @@
 .products-container {
-    padding: 0px;
+    padding-bottom: 40px;
+}
+
+.products-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .products-header {

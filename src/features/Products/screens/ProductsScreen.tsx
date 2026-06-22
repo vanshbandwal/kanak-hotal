@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { useToast } from '../../../context/ToastContext';
 import FashionLoader from '../../../components/Common/FashionLoader';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
+import productApi from '../../../api/productApi';
 import './ProductsScreen.css';
 
 const CategoryManagement = lazy(() => import('../components/CategoryManagement'));
@@ -12,6 +14,21 @@ const TaxManagement = lazy(() => import('../components/TaxManagement'));
 const ProductsScreen = () => {
     const { addToast } = useToast();
     const [activeTab, setActiveTab] = React.useState('Products');
+    const [stats, setStats] = React.useState<any>(null);
+
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await productApi.getProductStats();
+                if (response.data?.success) {
+                    setStats(response.data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch product stats:", error);
+            }
+        };
+        fetchStats();
+    }, []);
 
     const tabs = ['Products', 'Bulk Import', 'Categories', 'Brands', 'Units', 'Tax'];
 
@@ -69,15 +86,29 @@ const ProductsScreen = () => {
 
     const isTableView = ['Categories', 'Products', 'Brands', 'Units', 'Tax'].includes(activeTab);
 
+    const statsData = stats ? [
+        { title: 'TOTAL PRODUCTS', value: stats.totalProducts, icon: '✨', desc: 'All time' },
+        { title: 'TOTAL CATEGORIES', value: stats.totalCategories, icon: '📁', desc: 'All time' },
+        { title: 'TOTAL BRANDS', value: stats.totalBrands, icon: '🏷️', desc: 'All time' },
+        { title: 'TOTAL UNITS', value: stats.totalUnits, icon: '📏', desc: 'All time' },
+        { title: 'TAX RULES', value: stats.totalTaxes, icon: '📉', desc: 'All time' }
+    ] : [];
+
     return (
         <div className="products-container">
-            <div className="products-header">
-                <div>
-                    <h2 className="products-title">Product Management</h2>
-                    <p className="products-subtitle">Curate and manage your luxury collection.</p>
+            {stats && (
+                <div className="products-stats-grid">
+                    {statsData.map((stat, idx) => (
+                        <LuxuryStatsCard 
+                            key={`${stat.title}-${idx}`}
+                            title={stat.title}
+                            value={stat.value}
+                            icon={stat.icon}
+                            description={stat.desc}
+                        />
+                    ))}
                 </div>
-            </div>
-
+            )}
             <div className="products-tab-container">
                 {tabs.map((tab) => (
                     <div
