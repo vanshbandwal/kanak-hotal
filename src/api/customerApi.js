@@ -14,6 +14,14 @@ export const customerApi = {
     },
 
     /**
+     * Fetch customer statistics
+     */
+    getCustomerStats: async () => {
+        const response = await client.get(CUSTOMER_ENDPOINTS.STATS);
+        return response;
+    },
+
+    /**
      * Get customer by ID
      */
     getCustomerById: async (id) => {

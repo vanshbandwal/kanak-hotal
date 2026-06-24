@@ -97,6 +97,7 @@ export const BANNER_ENDPOINTS = {
 
 export const CUSTOMER_ENDPOINTS = {
     ALL: '/v1/customer/admin/all',
+    STATS: '/v1/customer/admin/stats',
     BY_ID: (id: string) => `/v1/customer/admin/${id}`,
     UPDATE: (id: string) => `/v1/customer/admin/${id}`,
     DELETE: (id: string) => `/v1/customer/admin/${id}`,
@@ -122,6 +123,7 @@ export const QUERY_ENDPOINTS = {
 
 export const SERVICE_PARTNER_ENDPOINTS = {
     ALL: '/v1/service-partner',
+    STATS: '/v1/service-partner/stats',
     SEND_OTP: '/v1/service-partner/send-otp',
     VERIFY_OTP: '/v1/service-partner/verify-otp',
     COMPLETE_REGISTRATION: '/v1/service-partner/complete-registration',
@@ -140,6 +142,7 @@ export const COUPON_ENDPOINTS = {
 
 export const ORDER_ENDPOINTS = {
     ALL: '/v1/order',
+    STATS: '/v1/order/stats',
     BY_ID: (id: string) => `/v1/order/${id}`,
     UPDATE_STATUS: (id: string) => `/v1/order/${id}/status`,
 };

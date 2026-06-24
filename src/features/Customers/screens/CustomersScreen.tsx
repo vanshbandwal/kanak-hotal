@@ -7,10 +7,19 @@ import LuxuryToggle from '../../../components/Common/LuxuryToggle';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import CustomerFormModal from '../components/CustomerFormModal';
 import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import './CustomersScreen.css';
+
+interface CustomerStats {
+    totalCustomers: number;
+    activeCustomers: number;
+    verifiedCustomers: number;
+    incompleteProfiles: number;
+}
 
 const CustomersScreen: React.FC = () => {
     const [customers, setCustomers] = useState<any[]>([]);
+    const [stats, setStats] = useState<CustomerStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [viewCustomer, setViewCustomer] = useState<any>(null);
@@ -57,7 +66,17 @@ const CustomersScreen: React.FC = () => {
         }
     }, [searchTerm, sortKey, sortDir, currentPage, rowsPerPage]); // ← primitives only
 
-    useEffect(() => { loadCustomers(); }, [loadCustomers]);
+    const loadStats = useCallback(async () => {
+        const { data, error } = await customerApi.getCustomerStats();
+        if (!error && data?.success) {
+            setStats(data.data);
+        }
+    }, []);
+
+    useEffect(() => { 
+        loadCustomers(); 
+        loadStats();
+    }, [loadCustomers, loadStats]);
 
     // Wrap sortConfig as an object so LuxuryTable is still happy
     const sortConfig = { key: sortKey, direction: sortDir };
@@ -187,27 +206,38 @@ const CustomersScreen: React.FC = () => {
 
     return (
         <div className="customers-screen-container">
-            <LuxuryTable
-                title="Clientele Management"
-                subtitle="Manage your exclusive community of shoppers."
-                columns={columns}
-                data={customers}
-                isLoading={isLoading}
-                onAdd={handleCreate}
-                addButtonLabel="ONBOARD CLIENT"
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                sortConfig={sortConfig}
-                onSortChange={handleSortChange}
-                currentPage={currentPage}
-                totalCount={totalItems}
-                rowsPerPage={rowsPerPage}
-                onPageChange={setCurrentPage}
-                onRowsPerPageChange={setRowsPerPage}
-                emptyTitle="No Clients Found"
-                emptyDescription="Your luxury circle is waiting for its first member."
-                emptyIcon="👤"
-            />
+            {stats && (
+                <div className="customer-stats-grid">
+                    <LuxuryStatsCard title="Total Clients" value={stats.totalCustomers} icon="👥" />
+                    <LuxuryStatsCard title="Active Clients" value={stats.activeCustomers} icon="⚡" />
+                    <LuxuryStatsCard title="Verified Profiles" value={stats.verifiedCustomers} icon="🛡️" />
+                    <LuxuryStatsCard title="Incomplete Profiles" value={stats.incompleteProfiles} icon="📝" />
+                </div>
+            )}
+
+            <div className="customers-content-card">
+                <LuxuryTable
+                    title="Clientele Management"
+                    subtitle="Manage your exclusive community of shoppers."
+                    columns={columns}
+                    data={customers}
+                    isLoading={isLoading}
+                    onAdd={handleCreate}
+                    addButtonLabel="ONBOARD CLIENT"
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    sortConfig={sortConfig}
+                    onSortChange={handleSortChange}
+                    currentPage={currentPage}
+                    totalCount={totalItems}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setCurrentPage}
+                    onRowsPerPageChange={setRowsPerPage}
+                    emptyTitle="No Clients Found"
+                    emptyDescription="Your luxury circle is waiting for its first member."
+                    emptyIcon="👤"
+                />
+            </div>
 
             {/* View Drawer */}
             {viewCustomer && (

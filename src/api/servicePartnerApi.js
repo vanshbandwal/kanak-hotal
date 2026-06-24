@@ -14,6 +14,13 @@ export const servicePartnerApi = {
     },
 
     /**
+     * Fetch service partner statistics
+     */
+    getPartnerStats: async () => {
+        return await client.get(SERVICE_PARTNER_ENDPOINTS.STATS);
+    },
+
+    /**
      * Step 1: Send OTP to Partner
      * @param {string} phone 
      */

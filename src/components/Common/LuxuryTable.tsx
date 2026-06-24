@@ -40,6 +40,7 @@ export interface LuxuryTableProps<T> {
     emptyDescription?: string;
     renderExpandedRow?: (item: T) => React.ReactNode;
     isRowExpandable?: (item: T) => boolean;
+    extraFilters?: React.ReactNode;
 }
 
 
@@ -66,7 +67,8 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
     emptyTitle = 'No Records Found',
     emptyDescription = 'Our archives seem to be missing this selection. Try refining your search or add a new entry.',
     renderExpandedRow,
-    isRowExpandable
+    isRowExpandable,
+    extraFilters
 }: LuxuryTableProps<T>) => {
     const [expandedRows, setExpandedRows] = React.useState<Set<string | number>>(new Set());
 
@@ -160,8 +162,8 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
 
     return (
         <div className="luxury-table-wrapper">
-            <div className="luxury-table-filter-bar">
-                <div className="luxury-table-search-container">
+            <div className="luxury-table-filter-bar" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <div className="luxury-table-search-container" style={{ flex: '8' }}>
                     <LuxuryInput
                         type="text"
                         placeholder="Search archives..."
@@ -170,7 +172,7 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                         icon="🔍"
                     />
                 </div>
-                <div className="luxury-table-entries-selector">
+                <div className="luxury-table-entries-selector" style={{ flex: '1', minWidth: '120px' }}>
                     <LuxurySelect 
                         value={String(rowsPerPage)} 
                         onChange={(val) => onRowsPerPageChange?.(Number(val))}
@@ -180,9 +182,13 @@ const LuxuryTable = <T extends { _id?: string; id?: string | number }>({
                             { value: '50', label: '50 Entries' }
                         ]}
                         searchable={false}
-                        style={{ padding: '8px 12px', minWidth: '120px' }}
                     />
                 </div>
+                {extraFilters && (
+                    <div className="luxury-table-extra-filters" style={{ flex: '1', minWidth: '150px' }}>
+                        {extraFilters}
+                    </div>
+                )}
                 {onAdd && (
                     <div className="luxury-table-add-action">
                         <LuxuryButton onClick={onAdd} style={{ padding: '8px 16px', height: '100%', minHeight: '40px' }}>

@@ -14,6 +14,13 @@ export const orderApi = {
     },
 
     /**
+     * Get order statistics
+     */
+    getOrderStats: async () => {
+        return await client.get(ORDER_ENDPOINTS.STATS);
+    },
+
+    /**
      * Get an order by ID
      * @param {string} id - Order ID
      */

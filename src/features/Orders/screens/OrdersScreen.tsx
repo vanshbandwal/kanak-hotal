@@ -3,6 +3,7 @@ import orderApi from '../../../api/orderApi';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryStatusBadge, { BadgeVariant } from '../../../components/Common/LuxuryStatusBadge';
 import LuxurySelect from '../../../components/Common/LuxurySelect';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import './OrdersScreen.css';
 
 interface Customer {
@@ -21,6 +22,13 @@ interface OrderData {
     orderStatus: string;
 }
 
+interface OrderStats {
+    totalOrders: number;
+    pendingOrders: number;
+    completedOrders: number;
+    totalRevenue: number;
+}
+
 const STATUS_OPTIONS = [
     { value: 'pending', label: 'Pending' },
     { value: 'accepted', label: 'Accepted' },
@@ -34,6 +42,7 @@ const STATUS_OPTIONS = [
 
 const OrdersScreen = () => {
     const [orders, setOrders] = useState<OrderData[]>([]);
+    const [stats, setStats] = useState<OrderStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     
     // Pagination & Filtering State
@@ -42,16 +51,25 @@ const OrdersScreen = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'createdAt', direction: 'desc' });
+
+    const fetchStats = async () => {
+        const { data, error } = await orderApi.getOrderStats();
+        if (!error && data && data.success) {
+            setStats(data.data);
+        }
+    };
 
     const fetchOrders = useCallback(async () => {
         setIsLoading(true);
         const params: any = {
             page: currentPage,
             limit: rowsPerPage,
+            search: searchTerm,
+            sortBy: sortConfig.key,
+            sortOrder: sortConfig.direction
         };
         if (statusFilter) params.status = statusFilter;
-        
-        // Search term could be used if backend supported text search, but we'll leave it in state
         
         const { data, error } = await orderApi.getAllOrders(params);
         if (!error && data && data.success) {
@@ -61,17 +79,25 @@ const OrdersScreen = () => {
             console.error("Failed to fetch orders:", error);
         }
         setIsLoading(false);
-    }, [currentPage, rowsPerPage, statusFilter]);
+    }, [currentPage, rowsPerPage, statusFilter, searchTerm, sortConfig]);
 
     useEffect(() => {
-        fetchOrders();
+        fetchStats();
+    }, []);
+
+    useEffect(() => {
+        // debounce search slightly
+        const delayDebounceFn = setTimeout(() => {
+            fetchOrders();
+        }, 300);
+        return () => clearTimeout(delayDebounceFn);
     }, [fetchOrders]);
 
     const handleStatusChange = async (orderId: string, newStatus: string) => {
         const { error } = await orderApi.updateOrderStatus(orderId, newStatus);
         if (!error) {
-            // Refresh the list after successful update
             fetchOrders();
+            fetchStats(); // update stats if status changes
         } else {
             alert(`Failed to update status: ${error}`);
         }
@@ -89,12 +115,13 @@ const OrdersScreen = () => {
 
     const columns: ColumnDef<OrderData>[] = [
         {
-            header: "Order ID",
+            header: "ORDER ID",
             key: "_id",
+            sortable: true,
             render: (item) => <span className="order-id-text">#{item._id.substring(item._id.length - 6).toUpperCase()}</span>
         },
         {
-            header: "Customer",
+            header: "CUSTOMER",
             key: "customer",
             render: (item) => (
                 <div>
@@ -104,20 +131,23 @@ const OrdersScreen = () => {
             )
         },
         {
-            header: "Date",
+            header: "DATE",
             key: "createdAt",
+            sortable: true,
             render: (item) => new Date(item.createdAt).toLocaleDateString(undefined, {
                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
             })
         },
         {
-            header: "Total",
+            header: "TOTAL",
             key: "grandTotal",
+            sortable: true,
             render: (item) => <span className="order-grand-total">${item.grandTotal.toFixed(2)}</span>
         },
         {
-            header: "Payment",
+            header: "PAYMENT",
             key: "paymentStatus",
+            sortable: true,
             render: (item) => (
                 <LuxuryStatusBadge 
                     label={item.paymentStatus.toUpperCase()} 
@@ -126,23 +156,24 @@ const OrdersScreen = () => {
             )
         },
         {
-            header: "Order Status",
+            header: "ORDER STATUS",
             key: "orderStatus",
+            sortable: true,
             render: (item) => {
-                // If it's a final state, just show a badge to prevent editing
                 if (['delivered', 'completed', 'cancelled', 'rejected'].includes(item.orderStatus)) {
                     const variant = item.orderStatus === 'delivered' || item.orderStatus === 'completed' ? 'success' : 'danger';
                     return <LuxuryStatusBadge label={item.orderStatus.replace(/_/g, ' ').toUpperCase()} variant={variant} />;
                 }
                 
-                // Otherwise, show the dropdown to allow editing
                 return (
-                    <LuxurySelect
-                        value={item.orderStatus}
-                        options={STATUS_OPTIONS}
-                        onChange={(val) => handleStatusChange(item._id, val)}
-                        searchable={false}
-                    />
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <LuxurySelect
+                            value={item.orderStatus}
+                            options={STATUS_OPTIONS}
+                            onChange={(val) => handleStatusChange(item._id, val)}
+                            searchable={false}
+                        />
+                    </div>
                 );
             }
         }
@@ -150,33 +181,43 @@ const OrdersScreen = () => {
 
     return (
         <div className="orders-container">
-            <div className="orders-filters-row">
-                <LuxurySelect
-                    value={statusFilter}
-                    onChange={(val) => setStatusFilter(val)}
-                    options={[{ value: '', label: 'All Statuses' }, ...STATUS_OPTIONS]}
-                    searchable={false}
-                    placeholder="Filter by Status"
+            {stats && (
+                <div className="order-stats-grid">
+                    <LuxuryStatsCard title="Total Revenue" value={`$${stats.totalRevenue.toFixed(2)}`} icon="💰" />
+                    <LuxuryStatsCard title="Total Orders" value={stats.totalOrders} icon="📦" />
+                    <LuxuryStatsCard title="Pending" value={stats.pendingOrders} icon="⏳" />
+                    <LuxuryStatsCard title="Completed" value={stats.completedOrders} icon="✅" />
+                </div>
+            )}
+
+            <div className="orders-content-card">
+                <LuxuryTable<OrderData>
+                    columns={columns}
+                    data={orders}
+                    isLoading={isLoading}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    totalCount={totalCount}
+                    currentPage={currentPage}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setCurrentPage}
+                    onRowsPerPageChange={setRowsPerPage}
+                    sortConfig={sortConfig}
+                    onSortChange={setSortConfig}
+                    emptyIcon="📦"
+                    emptyTitle="No Orders Found"
+                    emptyDescription="Your fulfillment queue is currently empty."
+                    extraFilters={
+                        <LuxurySelect
+                            value={statusFilter}
+                            onChange={(val) => setStatusFilter(val)}
+                            options={[{ value: '', label: 'All Statuses' }, ...STATUS_OPTIONS]}
+                            searchable={false}
+                            placeholder="All Statuses"
+                        />
+                    }
                 />
             </div>
-            
-            <LuxuryTable<OrderData>
-                title="Order Archives"
-                subtitle="Monitor and manage all customer purchases."
-                columns={columns}
-                data={orders}
-                isLoading={isLoading}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                totalCount={totalCount}
-                currentPage={currentPage}
-                rowsPerPage={rowsPerPage}
-                onPageChange={setCurrentPage}
-                onRowsPerPageChange={setRowsPerPage}
-                emptyIcon="📦"
-                emptyTitle="No Orders Found"
-                emptyDescription="Your fulfillment queue is currently empty."
-            />
         </div>
     );
 };

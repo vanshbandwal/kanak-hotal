@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable from '../../../components/Common/LuxuryTable';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import { servicePartnerApi } from '../../../api/servicePartnerApi';
 import { useToast } from '../../../context/ToastContext';
@@ -19,7 +20,10 @@ const ServicePartnersScreen = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    
+    const [sortKey, setSortKey] = useState('createdAt');
+    const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+    const [stats, setStats] = useState<any>(null);
+
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [isViewOpen, setIsViewOpen] = useState(false);
     const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -31,7 +35,7 @@ const ServicePartnersScreen = () => {
         id: '',
         title: '',
         message: '',
-        onConfirm: () => {},
+        onConfirm: () => { },
         variant: 'warning' as 'danger' | 'warning' | 'info'
     });
 
@@ -41,7 +45,9 @@ const ServicePartnersScreen = () => {
             const params = {
                 keyword: searchTerm,
                 page: currentPage,
-                pageSize: rowsPerPage
+                pageSize: rowsPerPage,
+                sort: sortKey,
+                order: sortDir
             };
             const { data } = await servicePartnerApi.getAllPartners(params);
             if (data.success) {
@@ -53,11 +59,29 @@ const ServicePartnersScreen = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [searchTerm, currentPage, rowsPerPage, addToast]);
+    }, [searchTerm, currentPage, rowsPerPage, sortKey, sortDir, addToast]);
+
+    const fetchStats = useCallback(async () => {
+        try {
+            const { data } = await servicePartnerApi.getPartnerStats();
+            if (data?.success) {
+                setStats(data.data);
+            }
+        } catch (error) {
+            console.error('Failed to load partner stats', error);
+        }
+    }, []);
 
     useEffect(() => {
         fetchPartners();
-    }, [fetchPartners]);
+        fetchStats();
+    }, [fetchPartners, fetchStats]);
+
+    const sortConfig = { key: sortKey, direction: sortDir };
+    const handleSortChange = (cfg: { key: string; direction: 'asc' | 'desc' }) => {
+        setSortKey(cfg.key);
+        setSortDir(cfg.direction);
+    };
 
     const handleToggleStatus = (partner: any) => {
         setConfirmModal({
@@ -133,7 +157,7 @@ const ServicePartnersScreen = () => {
                     const cleanBase = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
                     return `${cleanBase}${cleanPath.replace(/\\/g, '/')}`;
                 };
-                
+
                 return (
                     <div className="partner-avatar-cell">
                         <div className="partner-avatar-mini">
@@ -150,6 +174,7 @@ const ServicePartnersScreen = () => {
         {
             key: 'name',
             header: 'Partner Info',
+            sortable: true,
             render: (item: any) => (
                 <div className="partner-info-cell">
                     <span className="partner-name">{item.name || 'Unnamed Partner'}</span>
@@ -158,8 +183,9 @@ const ServicePartnersScreen = () => {
             )
         },
         {
-            key: 'vehicle',
+            key: 'vehicle.type',
             header: 'Vehicle',
+            sortable: true,
             render: (item: any) => (
                 <div className="vehicle-cell">
                     <span className="vehicle-type">{item.vehicle?.type}</span>
@@ -170,6 +196,7 @@ const ServicePartnersScreen = () => {
         {
             key: 'kycStatus',
             header: 'KYC Status',
+            sortable: true,
             render: (item: any) => {
                 const variants: any = {
                     Verified: 'success',
@@ -181,10 +208,11 @@ const ServicePartnersScreen = () => {
             }
         },
         {
-            key: 'status',
+            key: 'isActive',
             header: 'Account Status',
+            sortable: true,
             render: (item: any) => (
-                <LuxuryToggle 
+                <LuxuryToggle
                     value={item.isActive}
                     onChange={() => handleToggleStatus(item)}
                 />
@@ -193,10 +221,11 @@ const ServicePartnersScreen = () => {
         {
             key: 'isOnline',
             header: 'Live Status',
+            sortable: true,
             render: (item: any) => (
-                <LuxuryStatusBadge 
-                    label={item.isOnline ? 'Online' : 'Offline'} 
-                    variant={item.isOnline ? 'success' : 'neutral'} 
+                <LuxuryStatusBadge
+                    label={item.isOnline ? 'Online' : 'Offline'}
+                    variant={item.isOnline ? 'success' : 'neutral'}
                 />
             )
         },
@@ -205,19 +234,19 @@ const ServicePartnersScreen = () => {
             header: 'Actions',
             render: (item: any) => (
                 <div className="table-actions">
-                    <LuxuryActionButton 
-                        type="view" 
-                        onClick={() => handleView(item)} 
+                    <LuxuryActionButton
+                        type="view"
+                        onClick={() => handleView(item)}
                         title="View Profile"
                     />
-                    <LuxuryActionButton 
-                        type="edit" 
-                        onClick={() => handleEdit(item)} 
+                    <LuxuryActionButton
+                        type="edit"
+                        onClick={() => handleEdit(item)}
                         title="Edit Details"
                     />
-                    <LuxuryActionButton 
-                        type="delete" 
-                        onClick={() => handleDelete(item)} 
+                    <LuxuryActionButton
+                        type="delete"
+                        onClick={() => handleDelete(item)}
                         title="Remove Partner"
                     />
                 </div>
@@ -227,35 +256,41 @@ const ServicePartnersScreen = () => {
 
     return (
         <div className="service-partners-container">
-            <div className="screen-header">
-                <button 
-                    className="add-partner-btn"
-                    onClick={() => {
+            {stats && (
+                <div className="service-partner-stats-grid">
+                    <LuxuryStatsCard title="Total Partners" value={stats.totalPartners} icon="🚚" />
+                    <LuxuryStatsCard title="Active Partners" value={stats.activePartners} icon="⚡" />
+                    <LuxuryStatsCard title="Verified Partners" value={stats.verifiedPartners} icon="🛡️" />
+                    <LuxuryStatsCard title="Online Now" value={stats.onlinePartners} icon="🟢" />
+                </div>
+            )}
+
+            <div className="service-partners-content-card">
+                <LuxuryTable
+                    title="Service Partner Fleet"
+                    subtitle="Manage and monitor your delivery personnel in real-time."
+                    data={partners}
+                    columns={columns}
+                    isLoading={isLoading}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    currentPage={currentPage}
+                    totalCount={totalCount}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setCurrentPage}
+                    onRowsPerPageChange={setRowsPerPage}
+                    sortConfig={sortConfig}
+                    onSortChange={handleSortChange}
+                    onAdd={() => {
                         setSelectedPartner(null);
                         setModalMode('create');
                         setIsRegisterOpen(true);
                     }}
-                >
-                    + Register New Partner
-                </button>
+                    addButtonLabel="Register New Partner"
+                />
             </div>
 
-            <LuxuryTable
-                title="Service Partner Fleet"
-                subtitle="Manage and monitor your delivery personnel in real-time."
-                data={partners}
-                columns={columns}
-                isLoading={isLoading}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                currentPage={currentPage}
-                totalCount={totalCount}
-                rowsPerPage={rowsPerPage}
-                onPageChange={setCurrentPage}
-                onRowsPerPageChange={setRowsPerPage}
-            />
-
-            <PartnerFormModal 
+            <PartnerFormModal
                 isOpen={isRegisterOpen}
                 onClose={() => setIsRegisterOpen(false)}
                 onSuccess={fetchPartners}
@@ -263,7 +298,7 @@ const ServicePartnersScreen = () => {
                 initialData={selectedPartner}
             />
 
-            <PartnerViewModal 
+            <PartnerViewModal
                 isOpen={isViewOpen}
                 onClose={() => setIsViewOpen(false)}
                 partner={selectedPartner}
