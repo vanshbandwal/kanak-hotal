@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { couponApi } from '../../../api/couponApi';
 import { useToast } from '../../../context/ToastContext';
 import LuxuryTable from '../../../components/Common/LuxuryTable';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
@@ -21,6 +22,7 @@ const CouponListScreen: React.FC = () => {
         key: 'createdAt',
         direction: 'desc'
     });
+    const [stats, setStats] = useState<any>(null);
 
     const [confirmAction, setConfirmAction] = useState<{
         isOpen: boolean;
@@ -42,6 +44,18 @@ const CouponListScreen: React.FC = () => {
     useEffect(() => {
         loadCoupons();
     }, [searchTerm, sortConfig, currentPage, rowsPerPage]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const { data } = await couponApi.getCouponStats();
+                if (data?.success) setStats(data.data);
+            } catch (error) {
+                console.error("Failed to fetch coupon stats", error);
+            }
+        };
+        fetchStats();
+    }, []);
 
     const loadCoupons = async () => {
         setIsLoading(true);
@@ -179,9 +193,18 @@ const CouponListScreen: React.FC = () => {
 
     return (
         <div className="coupon-list-container">
-            <LuxuryTable
-                title="Coupons Management"
-                subtitle="Create and manage discount codes for your customers."
+            {stats && (
+                <div className="service-partner-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+                    <LuxuryStatsCard title="Total Coupons" value={stats.total} icon="🎫" />
+                    <LuxuryStatsCard title="Active Coupons" value={stats.active} icon="⚡" />
+                    <LuxuryStatsCard title="Inactive Coupons" value={stats.inactive} icon="⏸️" />
+                    <LuxuryStatsCard title="Avg Discount" value={stats.total > 0 ? 'Various' : 'N/A'} icon="💰" />
+                </div>
+            )}
+            <div className="luxury-content-card">
+                <LuxuryTable
+                    title="Coupons Management"
+                    subtitle="Create and manage discount codes for your customers."
                 columns={columns}
                 data={coupons}
                 isLoading={isLoading}
@@ -200,6 +223,7 @@ const CouponListScreen: React.FC = () => {
                 emptyDescription="Start by creating your first promotional discount code."
                 emptyIcon="🎫"
             />
+            </div>
 
             {isFormOpen && (
                 <CouponFormModal

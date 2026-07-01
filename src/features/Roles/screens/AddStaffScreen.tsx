@@ -27,7 +27,7 @@ const AddStaffScreen = () => {
             if (error) {
                 console.error('Failed to fetch roles:', error);
             } else {
-                setRoles(data || []);
+                setRoles(data?.data || []);
             }
             setFetchingRoles(false);
         };

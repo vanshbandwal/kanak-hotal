@@ -14,6 +14,13 @@ export const queryApi = {
     },
 
     /**
+     * Fetch query stats
+     */
+    getQueryStats: async () => {
+        return await client.get(QUERY_ENDPOINTS.STATS);
+    },
+
+    /**
      * Get single query details with conversation history
      * @param {string} id 
      */

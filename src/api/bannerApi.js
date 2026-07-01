@@ -14,6 +14,13 @@ export const bannerApi = {
     },
 
     /**
+     * Fetch banner stats
+     */
+    getBannerStats: async () => {
+        return await client.get(BANNER_ENDPOINTS.STATS);
+    },
+
+    /**
      * Create a new banner
      * @param {FormData|Object} bannerData 
      */

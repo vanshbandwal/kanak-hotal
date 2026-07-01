@@ -43,14 +43,15 @@ const AddRoleScreen = () => {
                 addToast('error', 'Failed to load access data');
             } else {
                 // Group permissions by module
-                const grouped = (permRes.data || []).reduce((acc: any, perm: any) => {
+                const permissionsList = permRes.data?.data || [];
+                const grouped = permissionsList.reduce((acc: any, perm: any) => {
                     if (!acc[perm.module]) acc[perm.module] = [];
                     acc[perm.module].push(perm);
                     return acc;
                 }, {});
 
                 setPermissions(grouped);
-                setSidebarItems(sidebarRes.data || []);
+                setSidebarItems(sidebarRes.data?.data || []);
             }
             setLoading(false);
         };

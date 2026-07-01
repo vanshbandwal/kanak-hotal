@@ -48,14 +48,15 @@ const EditRoleScreen = () => {
                 addToast('error', 'The archive could not be accessed.');
             } else {
                 // Group permissions
-                const grouped = (permRes.data || []).reduce((acc: any, perm: any) => {
+                const permissionsList = permRes.data?.data || [];
+                const grouped = permissionsList.reduce((acc: any, perm: any) => {
                     if (!acc[perm.module]) acc[perm.module] = [];
                     acc[perm.module].push(perm);
                     return acc;
                 }, {});
 
                 setPermissions(grouped);
-                setSidebarItems(sidebarRes.data || []);
+                setSidebarItems(sidebarRes.data?.data || []);
 
                 const roleData = roleRes.data;
                 if (roleData) {

@@ -4,6 +4,7 @@ import { useToast } from '../../../context/ToastContext';
 import LuxuryPageHeader from '../../../components/Common/LuxuryPageHeader';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryTable from '../../../components/Common/LuxuryTable';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import LuxuryToggle from '../../../components/Common/LuxuryToggle';
@@ -24,6 +25,7 @@ const BannerManagement: React.FC = () => {
         key: 'order',
         direction: 'asc'
     });
+    const [stats, setStats] = useState<any>(null);
     const [confirmAction, setConfirmAction] = useState<{
         isOpen: boolean;
         title: string;
@@ -42,6 +44,18 @@ const BannerManagement: React.FC = () => {
     useEffect(() => {
         loadBanners();
     }, [searchTerm, sortConfig, currentPage, rowsPerPage]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const { data } = await bannerApi.getBannerStats();
+                if (data?.success) setStats(data.data);
+            } catch (error) {
+                console.error("Failed to fetch banner stats", error);
+            }
+        };
+        fetchStats();
+    }, []);
 
     const loadBanners = async () => {
         setIsLoading(true);
@@ -211,7 +225,15 @@ const BannerManagement: React.FC = () => {
 
     return (
         <div className="banner-management-container">
-            <div className="banner-content">
+            {stats && (
+                <div className="service-partner-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+                    <LuxuryStatsCard title="Total Banners" value={stats.total} icon="🖼️" />
+                    <LuxuryStatsCard title="Active Banners" value={stats.active} icon="⚡" />
+                    <LuxuryStatsCard title="Inactive Banners" value={stats.inactive} icon="⏸️" />
+                    <LuxuryStatsCard title="Featured" value={stats.active} icon="✨" />
+                </div>
+            )}
+            <div className="luxury-content-card">
                 <LuxuryTable
                     title="Banner Management"
                     subtitle="Update the visual promotions on your app and website."

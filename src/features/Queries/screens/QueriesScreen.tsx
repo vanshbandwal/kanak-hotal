@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LuxuryTable from '../../../components/Common/LuxuryTable';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import LuxuryConfirmModal from '../../../components/Common/LuxuryConfirmModal';
 import { queryApi } from '../../../api/queryApi';
 import { useToast } from '../../../context/ToastContext';
@@ -17,6 +18,7 @@ const QueriesScreen = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' as 'asc' | 'desc' });
+    const [stats, setStats] = useState<any>(null);
 
     // Modal State
     const [selectedQueryId, setSelectedQueryId] = useState<string | null>(null);
@@ -54,6 +56,18 @@ const QueriesScreen = () => {
     useEffect(() => {
         fetchQueries();
     }, [fetchQueries]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const { data } = await queryApi.getQueryStats();
+                if (data?.success) setStats(data.data);
+            } catch (error) {
+                console.error("Failed to fetch query stats", error);
+            }
+        };
+        fetchStats();
+    }, []);
 
     const handleViewDetails = (query: any) => {
         setSelectedQueryId(query._id);
@@ -160,9 +174,18 @@ const QueriesScreen = () => {
 
     return (
         <div className="queries-screen-container">
-            <LuxuryTable
-                title="Customer Query Management"
-                subtitle="Address and resolve support tickets from your luxury clientele."
+            {stats && (
+                <div className="service-partner-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+                    <LuxuryStatsCard title="Total Queries" value={stats.total} icon="📬" />
+                    <LuxuryStatsCard title="Open Queries" value={stats.open} icon="🔓" />
+                    <LuxuryStatsCard title="Pending Queries" value={stats.pending} icon="⏳" />
+                    <LuxuryStatsCard title="Resolved Queries" value={stats.resolved} icon="✅" />
+                </div>
+            )}
+            <div className="luxury-content-card">
+                <LuxuryTable
+                    title="Customer Query Management"
+                    subtitle="Address and resolve support tickets from your luxury clientele."
                 data={queries}
                 columns={columns}
                 isLoading={isLoading}
@@ -176,6 +199,7 @@ const QueriesScreen = () => {
                 sortConfig={sortConfig}
                 onSortChange={setSortConfig}
             />
+            </div>
 
             {isDetailsOpen && (
                 <QueryDetailsModal

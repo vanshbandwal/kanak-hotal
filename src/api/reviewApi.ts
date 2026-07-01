@@ -36,6 +36,11 @@ export const reviewApi = {
         return response.data;
     },
 
+    getReviewStats: async () => {
+        const response = await client.get(endpoints.review.STATS);
+        return response.data;
+    },
+
     replyToReview: async (id: string, reply: string) => {
         const response = await client.put(endpoints.review.REPLY(id), { reply });
         return response.data;

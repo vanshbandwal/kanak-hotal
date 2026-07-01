@@ -29,7 +29,7 @@ const RoleListScreen = () => {
         if (error) {
             addToast('error', 'Failed to load roles');
         } else {
-            setRoles(data || []);
+            setRoles(data?.data || []);
         }
         setLoading(false);
     };

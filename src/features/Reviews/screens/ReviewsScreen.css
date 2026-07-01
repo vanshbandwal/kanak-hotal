@@ -1,5 +1,5 @@
 .reviews-container {
-    padding: 24px;
+    /* padding: 24px; */
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -111,7 +111,8 @@
 }
 
 .reviews-star.active {
-    color: #f59e0b; /* Golden Amber */
+    color: #f59e0b;
+    /* Golden Amber */
 }
 
 .reviews-comment-cell {

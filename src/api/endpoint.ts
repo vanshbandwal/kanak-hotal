@@ -90,6 +90,7 @@ export const PERMISSION_ENDPOINTS = {
 
 export const BANNER_ENDPOINTS = {
     ALL: '/v1/banner',
+    STATS: '/v1/banner/stats',
     CREATE: '/v1/banner/create',
     UPDATE: (id: string) => `/v1/banner/update/${id}`,
     DELETE: (id: string) => `/v1/banner/delete/${id}`,
@@ -110,6 +111,7 @@ export const CUSTOMER_ENDPOINTS = {
 
 export const QUERY_ENDPOINTS = {
     ALL: '/v1/query',
+    STATS: '/v1/query/stats',
     BY_ID: (id: string) => `/v1/query/${id}`,
     STATUS: (id: string) => `/v1/query/${id}/status`,
     ASSIGN: (id: string) => `/v1/query/${id}/assign`,
@@ -134,6 +136,7 @@ export const SERVICE_PARTNER_ENDPOINTS = {
 
 export const COUPON_ENDPOINTS = {
     ALL: '/v1/coupon/all-coupons', 
+    STATS: '/v1/coupon/stats',
     CREATE: '/v1/coupon/create-coupon',
     UPDATE: (id: string) => `/v1/coupon/update-coupon/${id}`,
     PATCH: (id: string) => `/v1/coupon/patch-coupon/${id}`,
@@ -166,6 +169,7 @@ export const REPORT_ENDPOINTS = {
 
 export const REVIEW_ENDPOINTS = {
     ALL: '/v1/review',
+    STATS: '/v1/review/stats',
     REPLY: (id: string) => `/v1/review/reply/${id}`,
     DELETE: (id: string) => `/v1/review/delete/${id}`,
 };

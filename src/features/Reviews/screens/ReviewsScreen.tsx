@@ -3,6 +3,7 @@ import { reviewApi, Review } from '../../../api/reviewApi';
 import LuxuryPageHeader from '../../../components/Common/LuxuryPageHeader';
 import LuxuryTable, { ColumnDef } from '../../../components/Common/LuxuryTable';
 import LuxuryStatusBadge from '../../../components/Common/LuxuryStatusBadge';
+import LuxuryStatsCard from '../../../components/Common/LuxuryStatsCard';
 import LuxuryActionButton from '../../../components/Common/LuxuryActionButton';
 import LuxuryButton from '../../../components/Common/LuxuryButton';
 import LuxuryModal from '../../../components/Common/LuxuryModal';
@@ -43,6 +44,7 @@ const ReviewsScreen = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(50);
     const [totalCount, setTotalCount] = useState(0);
+    const [stats, setStats] = useState<any>(null);
 
     // Modal States
     const [replyModalOpen, setReplyModalOpen] = useState(false);
@@ -71,6 +73,18 @@ const ReviewsScreen = () => {
     useEffect(() => {
         fetchReviews();
     }, [currentPage, rowsPerPage]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const data = await reviewApi.getReviewStats();
+                if (data?.success) setStats(data.data);
+            } catch (error) {
+                console.error("Failed to fetch review stats", error);
+            }
+        };
+        fetchStats();
+    }, []);
 
     // Derived filtered data (simple frontend filtering for now)
     const filteredReviews = reviews.filter(r => 
@@ -238,12 +252,16 @@ const ReviewsScreen = () => {
 
     return (
         <div className="reviews-container">
-            <LuxuryPageHeader 
-                title="Reviews & Ratings"
-                subtitle="Moderate customer feedback and respond to reviews."
-            />
+            {stats && (
+                <div className="service-partner-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem', padding: '0 2rem' }}>
+                    <LuxuryStatsCard title="Total Reviews" value={stats.total} icon="📝" />
+                    <LuxuryStatsCard title="Avg Rating" value={stats.avgRating.toFixed(1)} icon="⭐" />
+                    <LuxuryStatsCard title="5-Star Reviews" value={stats.fiveStar} icon="🌟" />
+                    <LuxuryStatsCard title="1-Star Reviews" value={stats.oneStar} icon="⚠️" />
+                </div>
+            )}
 
-            <div className="reviews-table-section">
+            <div className="luxury-content-card">
                 <LuxuryTable
                     columns={columns}
                     data={filteredReviews}

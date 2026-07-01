@@ -14,6 +14,13 @@ export const couponApi = {
     },
 
     /**
+     * Fetch coupon stats
+     */
+    getCouponStats: async () => {
+        return await client.get(COUPON_ENDPOINTS.STATS);
+    },
+
+    /**
      * Create a new coupon
      * @param {Object} couponData 
      */
